@@ -3,8 +3,8 @@
 Fully vector, Times lettering. Panel B point clouds are simulated with a fixed
 seed and the actual rules from Sec. 3 (K-means regions fit on the reference only;
 trace-ratio spread; support threshold = calibrated reference quantile), so the
-picture is illustrative but internally consistent. If BioRender art becomes
-available it can replace the thumbnail tiles and network glyph (see make_tiles).
+picture is illustrative but internally consistent. Photo thumbnails and the network icon
+in panel A are BioRender art (scripts/br_assets.py); every label is typeset here in Times.
 """
 import os
 import numpy as np
@@ -87,6 +87,39 @@ def tile_grid(ax, x, y, n, s, gap, seed, frame):
     ax.add_patch(FancyBboxPatch((x - 0.035, y - 0.035), tot + 0.07, tot + 0.07, boxstyle="round,pad=0,rounding_size=0.03",
                                 fc="none", ec=frame, lw=1.1, zorder=5))
     return tot
+
+
+BR = os.path.join(os.path.dirname(__file__), "..", "figures", "biorender", "assets")
+
+
+def photo_grid(ax, x, y, prefix, rows, cols, s, gap, frame):
+    """Grid of BioRender photo thumbnails (scripts/br_assets.py); (x, y) is the lower-left corner."""
+    k = 0
+    for i in range(rows):
+        for j in range(cols):
+            img = plt.imread(os.path.join(BR, f"{prefix}_{k}.png"))
+            x0, y0 = x + j * (s + gap), y + (rows - 1 - i) * (s + gap)
+            ax.imshow(img, extent=(x0, x0 + s, y0, y0 + s), zorder=3, interpolation="lanczos", aspect="auto")
+            ax.add_patch(Rectangle((x0, y0), s, s, fc="none", ec="white", lw=0.4, zorder=4))
+            k += 1
+    tw, th = cols * s + (cols - 1) * gap, rows * s + (rows - 1) * gap
+    ax.add_patch(FancyBboxPatch((x - 0.035, y - 0.035), tw + 0.07, th + 0.07, boxstyle="round,pad=0,rounding_size=0.03",
+                                fc="white", ec=frame, lw=1.1, zorder=2))
+    return tw, th
+
+
+def label_pair(fig, ax, x, y, bold, small, sep=0.06):
+    """Bold label followed by a smaller gray descriptor, spaced by the bold text's rendered width."""
+    t = ax.text(x, y, bold, fontsize=FS, ha="left", va="center", fontweight="bold", color=S.INK, zorder=6)
+    bb = t.get_window_extent(renderer=fig.canvas.get_renderer()).transformed(ax.transData.inverted())
+    text(ax, bb.x1 + sep, y, small, ha="left", size=FSS, color=S.INK2)
+
+
+def network_br(ax, cx, cy, h):
+    """BioRender network icon (strokes recoloured to ink gray, transparent background)."""
+    img = plt.imread(os.path.join(BR, "network.png"))
+    w = h * img.shape[1] / img.shape[0]
+    ax.imshow(img, extent=(cx - w / 2, cx + w / 2, cy - h / 2, cy + h / 2), zorder=6, interpolation="lanczos", aspect="auto")
 
 
 def network(ax, cx, cy, w, h, color=S.INK2):
@@ -190,22 +223,21 @@ def main():
     # ---------------- (A)
     ax_w = 3.42
     panel(ax, 0.02, top_y, ax_w, top_h, PANEL_A, "A", "Reference-calibrated comparison")
-    s, gap = 0.105, 0.02
+    s, gap = 0.172, 0.014
     gx = 0.16
-    tot = tile_grid(ax, gx, top_y + 1.00, 3, s, gap, 3, S.REF)
-    text(ax, gx + tot + 0.10, top_y + 1.30, r"Reference $P$", ha="left", weight="bold", color=S.INK)
-    text(ax, gx + tot + 0.10, top_y + 1.16, "teacher or data", ha="left", size=FSS, color=S.INK2)
-    tile_grid(ax, gx, top_y + 0.13, 3, s, gap, 11, S.GEN)
-    text(ax, gx + tot + 0.10, top_y + 0.43, r"Candidate $Q_a$", ha="left", weight="bold", color=S.INK)
-    text(ax, gx + tot + 0.10, top_y + 0.29, "configuration $a$", ha="left", size=FSS, color=S.INK2)
+    ry, cy_ = top_y + 0.98, top_y + 0.10            # lower edges of the two photo grids
+    tot, th = photo_grid(ax, gx, ry, "ref", 2, 3, s, gap, S.REF)
+    label_pair(fig, ax, gx - 0.03, ry + th + 0.13, r"Reference $P$", "teacher or data")
+    photo_grid(ax, gx, cy_, "cand", 2, 3, s, gap, S.GEN)
+    label_pair(fig, ax, gx - 0.03, cy_ + th + 0.13, r"Candidate $Q_a$", "configuration $a$")
 
     fx, fy, fw, fh = 1.42, top_y + 0.52, 0.80, 0.86
     box(ax, fx, fy, fw, fh)
     text(ax, fx + fw / 2, fy + fh - 0.13, r"Feature map $φ$", weight="bold")
-    network(ax, fx + fw / 2, fy + 0.44, 0.44, 0.30)
+    network_br(ax, fx + fw / 2, fy + 0.44, 0.30)
     text(ax, fx + fw / 2, fy + 0.13, "pixels, latents,\nDINOv2, CLIP", size=FSS, color=S.INK2, linespacing=1.0)
-    elbow(ax, (gx + tot + 0.04, top_y + 1.03), (fx, fy + 0.62), color=S.REF, xm=1.28)
-    elbow(ax, (gx + tot + 0.04, top_y + 0.16), (fx, fy + 0.24), color=S.GEN, xm=1.28)
+    elbow(ax, (gx + tot + 0.035, ry + th / 2), (fx, fy + 0.62), color=S.REF, xm=1.34)
+    elbow(ax, (gx + tot + 0.035, cy_ + th / 2), (fx, fy + 0.24), color=S.GEN, xm=1.34)
 
     bx, bw = 2.40, 0.96
     b1y, bh = top_y + 1.10, 0.48
@@ -322,7 +354,8 @@ def main():
     text(ax, ox + ow / 2, cy0 + 0.13, "images unseen in\nfit, calibration, diagnosis", size=FSS - 0.4,
          color=S.INK2, style="italic", linespacing=1.0)
 
-    fig.savefig(os.path.join(OUT, "pipeline_overview.pdf"), bbox_inches=None, pad_inches=0)
+    ax.set_xlim(0, W); ax.set_ylim(0, H)
+    fig.savefig(os.path.join(OUT, "pipeline_overview.pdf"), dpi=600, bbox_inches=None, pad_inches=0)
     fig.savefig(os.path.join(OUT, "png", "pipeline_overview.png"), dpi=250, bbox_inches=None, pad_inches=0)
     plt.close(fig)
 

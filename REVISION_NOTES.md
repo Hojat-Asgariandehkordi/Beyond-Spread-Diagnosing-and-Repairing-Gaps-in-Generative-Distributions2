@@ -1,4 +1,8 @@
-# Paper 7 — Beyond Spread: revision notes (figures pass)
+# Paper 8 — Beyond Spread: revision notes (figures pass)
+
+Paper 8 repo: this repository (`...Generative-Distributions2`), Overleaf project of the same name.
+Starts from the uploaded `manuscript_byond.zip` (text byte-identical) plus the figure redraws
+first made for Paper 7, with BioRender art added to Fig. 1.
 
 **Scope of this pass:** figures only. No manuscript text, captions or numbers were changed.
 Both `manuscript/main.tex` and `manuscript/supplement.tex` compile with the CVPR 2027 author kit
@@ -41,21 +45,34 @@ Please replace the `[recovered]` values with the analysis output when convenient
 ```
 cd scripts
 python3 fig_results.py     # Figs. 2-8
+python3 -I br_assets.py    # cut BioRender art into figures/biorender/assets
 python3 fig_pipeline.py    # Fig. 1
 python3 -I recover/check_recovered.py
 cd ../manuscript && latexmk -pdf main.tex && latexmk -pdf supplement.tex
 ```
 
-## BioRender
-The BioRender generation for Fig. 1 was refused: the account has 0 AI credits (5 needed).
-Fig. 1 is complete without it. After a top-up, BioRender art can replace the stylised thumbnail
-tiles and the network glyph in panel A (`make_tiles` / `network` in `fig_pipeline.py`), with all
-lettering still typeset in Times.
+## BioRender (Fig. 1)
+- Generated in BioRender from the paper summary with the previous Fig. 1 as layout reference:
+  https://app.biorender.com/illustrations/b1c851eaaafec41f3d44c9e5
+  Full-resolution export (2752x1536): `figures/biorender/br_overview_v1.png`
+  (brought in via Overleaf "From external URL"; the sandbox cannot reach the BioRender CDN).
+- **Used:** the 12 photo thumbnails (6 reference, 6 candidate) and the network icon in panel A
+  (`scripts/br_assets.py` cuts them out; the icon's card background is made transparent and its
+  strokes recoloured to the figure's ink gray). Both seascapes are among the reference photos and
+  none appears among the candidates, so the art hints at a lost region.
+- **Not used, and why:** BioRender's lettering (sans-serif pixels; "teacher or data" printed twice);
+  its panel B (the region labelled A_j held candidate points and no reference points, the opposite
+  of depletion); its panel C (the reference decomposition was truncated to q/p_D = q/p_T).
+  Panels B and C remain code-generated with the paper's rules; every label is Times.
+- Fig. 1 PDF is saved at 600 dpi (photos ~500 ppi at print size); `pdffonts` lists only TeX Gyre Termes.
+- **Caption:** BioRender's licence requires a "Created in BioRender" credit. The caption was not
+  changed because the text is frozen. Add "Created in BioRender." to the Fig. 1 caption, and the
+  named citation (BioRender.com/xxxx) only at camera-ready to keep the review copy anonymous.
 
 ## Open items for the group
-1. **Page limit:** the body ends on page 9 (Sec. 5 spills ~1/6 column). This was already true of the
-   uploaded draft; the redrawn figures take the same space. Needs a text cut (not done: text frozen).
+1. **Page limit:** the body ends on page 9 (Sec. 5 spills ~1/6 column), against CVPR's 8 pages.
+   This was already true of the uploaded draft; the redrawn figures take the same space. Needs a text cut (not done: text frozen).
 2. Confirm the `[recovered]` intervals against the analysis output.
 3. Supplement figures (24) are unchanged; they already use a Times clone but the older colour scheme.
    They can be restyled the same way in a second pass.
-4. BioRender credits (see above).
+4. Add "Created in BioRender." to the Fig. 1 caption (see above).
