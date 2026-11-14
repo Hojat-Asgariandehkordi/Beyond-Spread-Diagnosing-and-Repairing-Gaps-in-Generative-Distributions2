@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Development configuration & DINO spread ratio & CLIP spread ratio & Preference $\psi$ \\
+\midrule
+DPM++8 (no CADS) & 0.97 [0.91, 1.04] & 1.01 [0.93, 1.08] & 0.458 [0.437, 0.480] \\
+$s=.25,\;(\tau_1,\tau_2)=(.6,.9)$ & 1.37 [1.20, 1.63] & 1.58 [1.36, 1.88] & 0.295 [0.260, 0.333] \\
+$s=.10,\;(\tau_1,\tau_2)=(.6,.9)$ & 1.23 [1.13, 1.38] & 1.33 [1.22, 1.50] & 0.374 [0.343, 0.405] \\
+$s=.10,\;(\tau_1,\tau_2)=(.8,1)$ & 1.16 [1.07, 1.29] & 1.24 [1.13, 1.38] & 0.398 [0.370, 0.425] \\
+$s=.25,\;(\tau_1,\tau_2)=(.8,1)$ & 1.16 [1.08, 1.27] & 1.26 [1.15, 1.41] & 0.383 [0.351, 0.416] \\
+\bottomrule
+\end{tabular}
+\caption{Complete exploratory CADS--DPM++8 sweep on the first 16 shuffled development prompts and eight paired seeds, relative to DDIM50 at CFG7.5. All arms use CFG7.5 and eight calls. Brackets are descriptive 95\% prompt-bootstrap intervals. The published annealing setting is the second row; the highest-preference tuned setting is retained as a secondary held-out arm. This table is development evidence, not a final outcome comparison.}
+\label{tab:t2i_cads_development}
+\end{table*}

@@ -1,0 +1,45 @@
+\section{Gaussian initialization--integration identity}
+\label{supp:gaussian}
+For a centered clean Gaussian coordinate with variance $\lambda>0$, isotropic
+variance-preserving noising gives variance $v_t=\bar\alpha_t\lambda+1-\bar\alpha_t$
+at timestep $t$, where $\bar\alpha_t$ is the cumulative signal coefficient.
+For a value $x_t$ of the noisy coordinate, the exact noise predictor is
+$\epsilon^*(x_t,t)=\sqrt{1-\bar\alpha_t}\,x_t/v_t$.
+Substituting into deterministic DDIM without clipping gives the multiplier
+from timestep $t$ to an earlier timestep $s$:
+\begin{equation}
+m_{st}=\frac{\sqrt{\bar\alpha_s\bar\alpha_t}\lambda+
+\sqrt{(1-\bar\alpha_s)(1-\bar\alpha_t)}}{v_t}.
+\label{eq:supp_ddim_step}
+\end{equation}
+With $u_t=(\sqrt{\bar\alpha_t\lambda},\sqrt{1-\bar\alpha_t})$,
+the numerator is $u_s^\top u_t$ and $\|u_t\|^2=v_t$. Thus
+$m_{st}=\sqrt{v_s/v_t}\cos\angle(u_s,u_t)$.
+Multiplying adjacent grid transitions telescopes the variance factors.
+Let $\nu_{\rm start}$ be the actual initial variance, $v_{\rm start}$ and
+$v_{\rm end}$ the noising variances at the grid endpoints, and
+$X_{\rm out}$ the output coordinate.
+\begin{equation}
+\frac{\operatorname{Var}(X_{\rm out})}{\lambda}
+=\frac{\nu_{\rm start}}{v_{\rm start}}
+\frac{v_{\rm end}}{\lambda}
+\prod_{t\rightarrow s}\cos^2\angle(u_s,u_t).
+\label{eq:supp_ddim_variance}
+\end{equation}
+The clean endpoint has $v_{\rm end}=\lambda$.
+Matched noisy-marginal initialization sets $\nu_{\rm start}=v_{\rm start}$;
+standard-normal initialization sets $\nu_{\rm start}=1$.
+The numerical oracle uses the checkpoint's actual alpha values and the
+scheduler's actual previous-timestep arithmetic. Learned samples keep the
+checkpoint's standard clipping behavior, so the exact Gaussian identity is a
+surrogate prediction, not an equality asserted for those samples.
+
+For a fixed start and endpoint and ordered angles in the first quadrant,
+splitting an angular interval reduces the product-of-cosines deficit because
+$\cos a\cos b\geq\cos(a+b)$ for $a,b\geq0$ with $a+b\leq\pi/2$.
+This refinement statement does not apply when a changed step count also changes
+the initial timestep, when clipping is active, or when the learned dynamics
+are nonlinear or noncommuting. Our intermediate-state measurements report
+projected off-diagonal mixing and regression residuals to assess these limits.
+We do not use a Gaussian integration rule in a covariance-dependent time
+coordinate as evidence for a learned-model solver's universal order.

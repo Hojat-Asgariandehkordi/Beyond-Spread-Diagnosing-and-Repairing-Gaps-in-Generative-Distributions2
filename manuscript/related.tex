@@ -1,0 +1,31 @@
+\section{Related work}
+\label{sec:related}
+Precision and recall, density and coverage, and authenticity quantify
+different aspects of fidelity and coverage~\cite{kynkaanniemi2019improved,naeem2020density,alaa2022faithful}.
+Vendi measures kernel diversity~\cite{friedman2023vendi}. Scendi separates
+prompt-associated variation~\cite{ospanov2025scendi}, and Conditional
+Vendi and Rényi kernel entropy distinguish prompt and model variation
+and use these measurements to guide generation~\cite{jalali2026conditional}.
+The number-of-statistically-different-bins test compares occupancy in
+fixed $K$-means regions~\cite{richardson2018ndb}. Its equality test can
+detect a change in occupancy even when the data cannot certify a
+practically meaningful depletion. We specify the magnitude to certify,
+then use separate measurements of conditional spread and fidelity to
+design an intervention test.
+
+Few-step interventions can change the solver, the generator, or the
+conditions at sampling time. DDIM, DPM-Solver++, and UniPC change how a
+fixed denoiser is integrated~\cite{song2021ddim,lu2022dpmpp,zhao2023unipc},
+while consistency and distribution-matching distillation change the
+learned generator~\cite{luo2024lcm,luo2023lcmlora,yin2024dmd2}.
+Data-dependent priors, starting-noise corrections, and schedule design
+address the match between initial noise and the sampler
+\cite{lee2022priorgrad,zheng2023truncated,hu2024onemore,lin2024flawed,sabour2024align}.
+Conditioning noise, early-step hybrids, covariance-aware sampling, and
+adaptive computation provide other intervention points
+\cite{sadat2024cads,gandikota2026diversity,schioppa2026covariance,zhang2025adadiff,li2024budgetfusion,binici2026adsc}.
+Exact Gaussian solutions and spectral transfer analyses distinguish
+initialization from integration error~\cite{pierret2025gaussian,benita2025spectral}.
+We use this distinction to test a covariance-only change on a fixed
+denoiser and time grid, and account separately for the cost of diagnosing
+a deficit and generating new images.

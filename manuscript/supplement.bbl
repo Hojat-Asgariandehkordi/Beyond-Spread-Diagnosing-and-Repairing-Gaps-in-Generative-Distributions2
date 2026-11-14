@@ -1,0 +1,204 @@
+\begin{thebibliography}{27}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Berger and Hsu(1996)]{berger1996intersection}
+Roger~L. Berger and Jason~C. Hsu.
+\newblock Bioequivalence trials, intersection--union tests and equivalence
+  confidence sets.
+\newblock \emph{Statistical Science}, 11\penalty0 (4):\penalty0 283--319, 1996.
+
+\bibitem[Bi{\'n}kowski et~al.(2018)Bi{\'n}kowski, Sutherland, Arbel, and
+  Gretton]{binkowski2018demystifying}
+Miko{\l}aj Bi{\'n}kowski, Danica~J. Sutherland, Michael Arbel, and Arthur
+  Gretton.
+\newblock Demystifying {MMD} {GANs}.
+\newblock In \emph{International Conference on Learning Representations}, 2018.
+
+\bibitem[Clopper and Pearson(1934)]{clopper1934confidence}
+C.~J. Clopper and E.~S. Pearson.
+\newblock The use of confidence or fiducial limits illustrated in the case of
+  the binomial.
+\newblock \emph{Biometrika}, 26\penalty0 (4):\penalty0 404--413, 1934.
+
+\bibitem[Friedman and Dieng(2023)]{friedman2023vendi}
+Dan Friedman and Adji~Bousso Dieng.
+\newblock The {Vendi Score}: A diversity evaluation metric for machine
+  learning.
+\newblock \emph{Transactions on Machine Learning Research}, 2023.
+
+\bibitem[Gandikota and Bau(2026)]{gandikota2026diversity}
+Rohit Gandikota and David Bau.
+\newblock Distilling diversity and control in diffusion models.
+\newblock In \emph{IEEE/CVF Winter Conference on Applications of Computer
+  Vision}, pages 1304--1313, 2026.
+
+\bibitem[Heusel et~al.(2017)Heusel, Ramsauer, Unterthiner, Nessler, and
+  Hochreiter]{heusel2017gans}
+Martin Heusel, Hubert Ramsauer, Thomas Unterthiner, Bernhard Nessler, and Sepp
+  Hochreiter.
+\newblock {GANs} trained by a two time-scale update rule converge to a local
+  nash equilibrium.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem[Jalali et~al.(2026)Jalali, Ospanov, Gohari, and
+  Farnia]{jalali2026conditional}
+Mohammad Jalali, Azim Ospanov, Amin Gohari, and Farzan Farnia.
+\newblock Conditional vendi score: Prompt-aware diversity evaluation for
+  generative {AI} models and {LLMs}.
+\newblock In \emph{Proceedings of the 29th International Conference on
+  Artificial Intelligence and Statistics}, pages 1369--1377, 2026.
+
+\bibitem[Karras et~al.(2022)Karras, Aittala, Aila, and Laine]{karras2022edm}
+Tero Karras, Miika Aittala, Timo Aila, and Samuli Laine.
+\newblock Elucidating the design space of diffusion-based generative models.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2022.
+
+\bibitem[Kirstain et~al.(2023)Kirstain, Polyak, Singer, Matiana, Penna, and
+  Levy]{kirstain2023pickapic}
+Yuval Kirstain, Adam Polyak, Uriel Singer, Shahbuland Matiana, Joe Penna, and
+  Omer Levy.
+\newblock Pick-a-pic: An open dataset of user preferences for text-to-image
+  generation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  36652--36663, 2023.
+
+\bibitem[Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2023flow}
+Yaron Lipman, Ricky T.~Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le.
+\newblock Flow matching for generative modeling.
+\newblock In \emph{International Conference on Learning Representations}, 2023.
+
+\bibitem[Liu et~al.(2023)Liu, Gong, and Liu]{liu2023rectified}
+Xingchao Liu, Chengyue Gong, and Qiang Liu.
+\newblock Flow straight and fast: Learning to generate and transfer data with
+  rectified flow.
+\newblock In \emph{International Conference on Learning Representations}, 2023.
+
+\bibitem[Luo et~al.(2023)Luo, Tan, Patil, Gu, von Platen, Passos, Huang, Li,
+  and Zhao]{luo2023lcmlora}
+Simian Luo, Yiqin Tan, Suraj Patil, Daniel Gu, Patrick von Platen,
+  Apolin{\'a}rio Passos, Longbo Huang, Jian Li, and Hang Zhao.
+\newblock {LCM-LoRA}: A universal stable-diffusion acceleration module.
+\newblock \emph{arXiv preprint arXiv:2311.05556}, 2023.
+
+\bibitem[Naeem et~al.(2020)Naeem, Oh, Uh, Choi, and Yoo]{naeem2020density}
+Muhammad~Ferjad Naeem, Seong~Joon Oh, Youngjung Uh, Yunjey Choi, and Jaejun
+  Yoo.
+\newblock Reliable fidelity and diversity metrics for generative models.
+\newblock In \emph{Proceedings of the 37th International Conference on Machine
+  Learning}, pages 7176--7185, 2020.
+
+\bibitem[Newcombe(1998)]{newcombe1998paired}
+Robert~G. Newcombe.
+\newblock Improved confidence intervals for the difference between binomial
+  proportions based on paired data.
+\newblock \emph{Statistics in Medicine}, 17\penalty0 (22):\penalty0 2635--2650,
+  1998.
+
+\bibitem[Oquab et~al.(2024)Oquab, Darcet, Moutakanni, Vo, Szafraniec, Khalidov,
+  Fernandez, Haziza, Massa, El-Nouby, Assran, Ballas, Galuba, Howes, Huang, Li,
+  Misra, Rabbat, Sharma, Synnaeve, Xu, J{\'e}gou, Mairal, Labatut, Joulin, and
+  Bojanowski]{oquab2024dinov2}
+Maxime Oquab, Timoth{\'e}e Darcet, Th{\'e}o Moutakanni, Huy Vo, Marc
+  Szafraniec, Vasil Khalidov, Pierre Fernandez, Daniel Haziza, Francisco Massa,
+  Alaaeldin El-Nouby, Mido Assran, Nicolas Ballas, Wojciech Galuba, Russell
+  Howes, Po-Yao Huang, Shang-Wen Li, Ishan Misra, Michael Rabbat, Vasu Sharma,
+  Gabriel Synnaeve, Hu Xu, Herv{\'e} J{\'e}gou, Julien Mairal, Patrick Labatut,
+  Armand Joulin, and Piotr Bojanowski.
+\newblock {DINOv2}: Learning robust visual features without supervision.
+\newblock \emph{Transactions on Machine Learning Research}, 2024.
+
+\bibitem[Ospanov et~al.(2025)Ospanov, Jalali, and Farnia]{ospanov2025scendi}
+Azim Ospanov, Mohammad Jalali, and Farzan Farnia.
+\newblock {Scendi} score: Prompt-aware diversity evaluation via schur
+  complement of {CLIP} embeddings.
+\newblock In \emph{Proceedings of the IEEE/CVF International Conference on
+  Computer Vision}, pages 16927--16937, 2025.
+
+\bibitem[Radford et~al.(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal,
+  Sastry, Askell, Mishkin, Clark, Krueger, and Sutskever]{radford2021clip}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+  Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark,
+  Gretchen Krueger, and Ilya Sutskever.
+\newblock Learning transferable visual models from natural language
+  supervision.
+\newblock In \emph{Proceedings of the 38th International Conference on Machine
+  Learning}, pages 8748--8763, 2021.
+
+\bibitem[Recht et~al.(2018)Recht, Roelofs, Schmidt, and
+  Shankar]{recht2018cifar10}
+Benjamin Recht, Rebecca Roelofs, Ludwig Schmidt, and Vaishaal Shankar.
+\newblock Do {CIFAR-10} classifiers generalize to {CIFAR-10}?
+\newblock \emph{arXiv preprint arXiv:1806.00451}, 2018.
+
+\bibitem[Richardson and Weiss(2018)]{richardson2018ndb}
+Eitan Richardson and Yair Weiss.
+\newblock On {GANs} and {GMMs}.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2018.
+
+\bibitem[Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and
+  Ommer]{rombach2022ldm}
+Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj{\"o}rn
+  Ommer.
+\newblock High-resolution image synthesis with latent diffusion models.
+\newblock In \emph{IEEE/CVF Conference on Computer Vision and Pattern
+  Recognition}, pages 10684--10695, 2022.
+
+\bibitem[Sadat et~al.(2024)Sadat, Buhmann, Bradley, Hilliges, and
+  Weber]{sadat2024cads}
+Seyedmorteza Sadat, Jakob Buhmann, Derek Bradley, Otmar Hilliges, and Romann~M.
+  Weber.
+\newblock {CADS}: Unleashing the diversity of diffusion models through
+  condition-annealed sampling.
+\newblock In \emph{International Conference on Learning Representations}, 2024.
+
+\bibitem[Schioppa and Salimans(2026)]{schioppa2026covariance}
+Andrea Schioppa and Tim Salimans.
+\newblock Covariance-aware sampling for diffusion models.
+\newblock \emph{arXiv preprint arXiv:2605.13910}, 2026.
+
+\bibitem[Vovk(2013)]{vovk2013conditional}
+Vladimir Vovk.
+\newblock Conditional validity of inductive conformal predictors.
+\newblock \emph{Machine Learning}, 92\penalty0 (2--3):\penalty0 349--376, 2013.
+
+\bibitem[Xie et~al.(2025)Xie, Chen, Chen, Cai, Tang, Lin, Zhang, Li, Zhu, Lu,
+  and Han]{xie2025sana}
+Enze Xie, Junsong Chen, Junyu Chen, Han Cai, Haotian Tang, Yujun Lin, Zhekai
+  Zhang, Muyang Li, Ligeng Zhu, Yao Lu, and Song Han.
+\newblock {SANA}: Efficient high-resolution text-to-image synthesis with linear
+  diffusion transformers.
+\newblock In \emph{International Conference on Learning Representations}, 2025.
+
+\bibitem[Xu et~al.(2023)Xu, Liu, Wu, Tong, Li, Ding, Tang, and
+  Dong]{xu2023imagereward}
+Jiazheng Xu, Xiao Liu, Yuchen Wu, Yuxuan Tong, Qinkai Li, Ming Ding, Jie Tang,
+  and Yuxiao Dong.
+\newblock {ImageReward}: Learning and evaluating human preferences for
+  text-to-image generation.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  15903--15935, 2023.
+
+\bibitem[Yin et~al.(2024)Yin, Gharbi, Park, Zhang, Shechtman, Durand, and
+  Freeman]{yin2024dmd2}
+Tianwei Yin, Micha{\"e}l Gharbi, Taesung Park, Richard Zhang, Eli Shechtman,
+  Fr{\'e}do Durand, and William~T. Freeman.
+\newblock Improved distribution matching distillation for fast image synthesis.
+\newblock In \emph{Advances in Neural Information Processing Systems}, pages
+  47455--47487, 2024.
+
+\bibitem[Yu et~al.(2022)Yu, Xu, Koh, Luong, Baid, Wang, Vasudevan, Ku, Yang,
+  Ayan, Hutchinson, Han, Parekh, Li, Zhang, Baldridge, and Wu]{yu2022parti}
+Jiahui Yu, Yuanzhong Xu, Jing~Yu Koh, Thang Luong, Gunjan Baid, Zirui Wang,
+  Vijay Vasudevan, Alexander Ku, Yinfei Yang, Burcu~Karagol Ayan, Ben
+  Hutchinson, Wei Han, Zarana Parekh, Xin Li, Han Zhang, Jason Baldridge, and
+  Yonghui Wu.
+\newblock Scaling autoregressive models for content-rich text-to-image
+  generation.
+\newblock \emph{Transactions on Machine Learning Research}, 2022.
+
+\end{thebibliography}

@@ -1,0 +1,210 @@
+\section{Complete intervention-policy outcomes}
+\label{supp:policy_outcomes}
+Every frozen policy is evaluated with outcome replicas 8--23. Coverage in
+the original tables compares coupled initial-noise samples; the independent-
+noise sensitivity below keeps cardinality fixed and reports its different
+estimand separately. The four primary contrasts retain their original within-study multiplicity adjustment. The two secondary assignment contrasts are a separate family. No policy is chosen from these outcomes.
+\paragraph{SD1.5.}
+The original policy reaches learned preference 0.482 at 14.06 calls per image.
+The complete absolute outcomes and adjusted contrasts are reported below.
+\begin{table*}[t]\centering\small
+\caption{All SD1.5 policies. Spread ratios are ratios of mean within-prompt variances. Intervals for all policies are descriptive; only the frozen audit receives the primary intersection--union interpretation. Inc.: inconclusive.}
+\begin{tabular}{lcccccc}\toprule
+Policy & Calls & $\psi$ & DINO spread & CLIP spread & Paired cov. & Gate \\\midrule
+Audit & 14.06 & 0.482 [0.477, 0.488] & 1.000 [0.988, 1.010] & 1.003 [0.987, 1.019] & 0.979 & pass \\
+Preference + alignment & 12.62 & 0.477 [0.472, 0.483] & 1.008 [0.994, 1.021] & 1.012 [0.995, 1.030] & 0.970 & pass \\
+Quality + Vendi & 12.62 & 0.477 [0.472, 0.482] & 1.009 [0.996, 1.022] & 1.010 [0.993, 1.029] & 0.968 & pass \\
+Vendi only & 8.00 & 0.444 [0.436, 0.452] & 1.022 [1.005, 1.039] & 1.038 [1.017, 1.061] & 0.945 & inc. \\
+PRDC harmonic & 8.00 & 0.447 [0.439, 0.455] & 1.017 [1.001, 1.034] & 1.029 [1.008, 1.052] & 0.944 & inc. \\
+Random shortlist & 15.25 & 0.487 [0.482, 0.492] & 1.001 [0.987, 1.017] & 1.015 [0.998, 1.034] & 0.984 & pass \\
+Exhaustive & 13.38 & 0.482 [0.477, 0.488] & 1.007 [0.994, 1.019] & 1.002 [0.984, 1.020] & 0.968 & pass \\
+Fixed DPM++8 & 8.00 & 0.448 [0.440, 0.456] & 1.014 [0.998, 1.032] & 1.031 [1.011, 1.054] & 0.949 & inc. \\
+Fixed UniPC8 & 8.00 & 0.440 [0.432, 0.448] & 1.027 [1.011, 1.045] & 1.037 [1.016, 1.061] & 0.939 & fail \\
+Fixed DPM++16 & 16.00 & 0.490 [0.485, 0.494] & 0.994 [0.983, 1.005] & 1.010 [0.996, 1.025] & 0.990 & pass \\
+Fixed UniPC16 & 16.00 & 0.488 [0.483, 0.493] & 1.004 [0.992, 1.016] & 1.021 [1.006, 1.036] & 0.987 & pass \\
+Shuffled audit & 14.06 & 0.476 [0.469, 0.483] & 1.005 [0.992, 1.018] & 1.021 [1.005, 1.038] & 0.975 & pass \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table}[t]\centering\small
+\caption{SD1.5 audit-minus-baseline contrasts. Intervals are Bonferroni-adjusted within the four primary or two secondary comparisons. Assignment-control inference is approximate conditional on the realized permutation.}
+\begin{tabular}{p{.52\columnwidth}r}\toprule
+Contrast & Difference [interval] \\\midrule
+Preference vs. DPM++8 & 0.034 [0.025, 0.044] \\
+Calls vs. DPM++16 & -1.938 [-2.688, -1.250] \\
+Calls vs. random shortlist & -1.188 [-1.938, -0.500] \\
+Coverage vs. quality + Vendi & 0.011 [0.003, 0.021] \\
+\midrule
+Preference vs. shuffled audit & 0.007 [-0.001, 0.014] \\
+Low-preference rate vs. shuffled audit & -0.039 [-0.094, 0.008] \\
+\bottomrule\end{tabular}\end{table}
+\paragraph{Sana.}
+The unchanged decision rule reaches learned preference 0.502 at 14.28 calls
+per image. Its stronger 20-call fallback remains an explicit comparator.
+\begin{table*}[t]\centering\small
+\caption{All Sana policies. Spread ratios are ratios of mean within-prompt variances. Intervals for all policies are descriptive; only the frozen audit receives the primary intersection--union interpretation. Inc.: inconclusive.}
+\begin{tabular}{lcccccc}\toprule
+Policy & Calls & $\psi$ & DINO spread & CLIP spread & Paired cov. & Gate \\\midrule
+Audit & 14.28 & 0.502 [0.498, 0.506] & 1.043 [1.022, 1.066] & 1.076 [1.047, 1.107] & 0.950 & pass \\
+Preference + alignment & 11.94 & 0.505 [0.500, 0.510] & 1.053 [1.028, 1.080] & 1.074 [1.040, 1.113] & 0.910 & pass \\
+Quality + Vendi & 11.94 & 0.504 [0.499, 0.509] & 1.060 [1.034, 1.088] & 1.083 [1.048, 1.122] & 0.903 & pass \\
+Vendi only & 8.00 & 0.478 [0.470, 0.486] & 1.140 [1.102, 1.181] & 1.158 [1.110, 1.210] & 0.812 & pass \\
+PRDC harmonic & 8.00 & 0.480 [0.472, 0.488] & 1.127 [1.093, 1.166] & 1.159 [1.119, 1.204] & 0.876 & pass \\
+Random shortlist & 14.84 & 0.503 [0.499, 0.507] & 1.040 [1.020, 1.063] & 1.072 [1.042, 1.106] & 0.953 & pass \\
+Exhaustive & 14.28 & 0.502 [0.498, 0.506] & 1.043 [1.022, 1.066] & 1.076 [1.047, 1.107] & 0.950 & pass \\
+Fixed DPM++8 & 8.00 & 0.479 [0.471, 0.487] & 1.134 [1.097, 1.174] & 1.164 [1.123, 1.209] & 0.882 & pass \\
+Fixed Euler8 & 8.00 & 0.475 [0.466, 0.484] & 1.118 [1.080, 1.158] & 1.146 [1.097, 1.203] & 0.761 & pass \\
+Fixed native20 & 20.00 & 0.510 [0.508, 0.513] & 1.001 [0.992, 1.010] & 1.018 [1.002, 1.034] & 0.998 & pass \\
+Shuffled audit & 14.28 & 0.495 [0.488, 0.502] & 1.060 [1.031, 1.092] & 1.091 [1.058, 1.128] & 0.939 & pass \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table}[t]\centering\small
+\caption{Sana audit-minus-baseline contrasts. Intervals are Bonferroni-adjusted within the four primary or two secondary comparisons. Assignment-control inference is approximate conditional on the realized permutation.}
+\begin{tabular}{p{.52\columnwidth}r}\toprule
+Contrast & Difference [interval] \\\midrule
+Preference vs. DPM++8 & 0.023 [0.013, 0.034] \\
+Calls vs. native20 & -5.719 [-7.031, -4.312] \\
+Calls vs. random shortlist & -0.562 [-1.219, -0.094] \\
+Coverage vs. quality + Vendi & 0.047 [0.018, 0.081] \\
+\midrule
+Preference vs. shuffled audit & 0.007 [-0.002, 0.017] \\
+Low-preference rate vs. shuffled audit & -0.047 [-0.102, 0.000] \\
+\bottomrule\end{tabular}\end{table}
+
+\input{policy_table}
+
+\subsection{Sensitivity to sampling coupling}
+\label{sec:t2i-coupling-sensitivity}
+Two secondary sensitivity protocols were specified after access to the original outcome analyses; the original paired-seed results remain the primary record. Neither changes an intervention, routing threshold, candidate pool, or saved decision. Their uncertainty remains approximate prompt-bootstrap inference.
+
+\paragraph{Coverage at fixed cardinality.}
+For each of the 128 held-out prompts, divide the 16 outcome seeds into
+$A=\{8,\ldots,15\}$ and $B=\{16,\ldots,23\}$.
+Write $R_A,R_B$ for the reference samples and $Q_A,Q_B$ for candidate
+samples from the two halves. Paired coverage averages $(R_A,Q_A)$ and
+$(R_B,Q_B)$, while disjoint coverage averages $(R_A,Q_B)$ and $(R_B,Q_A)$.
+Both use eight reference and eight candidate samples and the third-nearest
+reference neighbor, preserving cardinality while changing coupling.
+We retain all 29 SD1.5 and seven Sana arms, both feature representations,
+all four PRDC measurements, and all 23 frozen policies. The bootstrap
+resamples whole prompts, preserving dependence between the two directions.
+The eight declared DINO-coverage contrasts use 99.375\% percentile
+intervals with Bonferroni allocation across both families. The saved
+percentile levels are .003125/.996875.
+
+Let $\widehat C$ be the fraction of $n$ reference points whose
+$k$-nearest-neighbor ball contains at least one of the $m$ candidate points,
+where $1\leq k<n$. For independent reference and candidate draws from the
+same continuous distribution with no distance ties, its expectation is
+known~\cite[Lemma~2]{naeem2020density}:
+\begin{equation}
+ \mathbb E[\widehat C]=1-\prod_{\ell=1}^{k}\frac{n-\ell}{m+n-\ell}.
+\label{eq:supp_expected_coverage}
+\end{equation}
+At $n=m=8,k=3$ it is $12/13\approx.9231$, whereas using the identical image set as both inputs gives one. Independent reference-self coverage is .9302 on SD1.5 (descriptive 95\% interval $[.9155,.9443]$) and .9097 on Sana ($[.8911,.9272]$). Thus neither a shortfall from one nor agreement with this finite-sample expectation quantifies missing population support. The observed audit--shuffle disjoint-coverage differences are .0010 on SD1.5 ($[-.0132,.0161]$) and $-.0039$ on Sana ($[-.0453,.0365]$), with the declared adjusted intervals. The SD1.5 audit--quality+Vendi interval includes zero; Sana retains a positive difference at increased cost.
+
+\paragraph{Independent-noise preference.}
+Let $a_i,b_i$ be candidate and reference PickScore logits for outcome seed $i$ at one prompt, and let $\sigma$ denote the sigmoid. The original score is $\widehat\psi_{\rm pair}=m^{-1}\sum_i\sigma(a_i-b_i)$, with $m=16$. We additionally compute
+\begin{equation}
+ \widehat\psi_{\rm ind}=\frac{1}{m(m-1)}\sum_{i\ne j}\sigma(a_i-b_j).
+\label{eq:supp_independent_preference}
+\end{equation}
+This is a symmetrized order-two U-statistic over independent paired seed units and estimates preference between independent draws from the two conditional distributions. Its 240 within-prompt cross-pairs are dependent; only the 128 prompt units are bootstrapped (10,000 repetitions, fixed seed 74117). For the same reference, both estimators equal one half. Original diagonal policy means reproduce exactly. All 94 arm/reference comparisons (SD 29 against three references, Sana 7 against its reference), all 23 frozen policies, and every audit-minus-other-policy contrast are reported in the saved CSV/JSON records. No outcome is used to reroute a prompt.
+
+The ten declared preference contrasts use 99.5\% intervals across both families. Audit independent-minus-paired preference is .00156 on SD1.5 ($[.00075,.00251]$) and $-.00020$ on Sana ($[-.00055,.00020]$). Independent-noise audit--shuffle differences remain unresolved: .00625 ($[-.00251,.01497]$) and .00685 ($[-.00384,.01900]$). Mean raw ImageReward differences are unchanged by pairing, by linearity; no rescoring is needed. These checks identify which conclusions depend on coupling without presenting the exploratory sensitivities as untouched confirmation.
+
+
+
+\begin{table*}[tp]
+\centering\small
+\caption{Complete independent-noise preference sensitivity for all 23 frozen policies. The final-column intervals are descriptive 95\% paired-prompt bootstrap intervals for independent minus paired preference.}
+\begin{tabular}{llrrrr}
+\toprule Family & Policy & NFE & Paired & Independent & Difference [95\% CI] \\ \midrule
+SD1.5 & Audit & 14.06 & 0.4825 & 0.4840 & +0.0016 [0.0010, 0.0022]\\
+SD1.5 & Preference + alignment & 12.62 & 0.4774 & 0.4791 & +0.0017 [0.0011, 0.0024]\\
+SD1.5 & Quality + Vendi & 12.62 & 0.4769 & 0.4787 & +0.0017 [0.0012, 0.0024]\\
+SD1.5 & Vendi only & 8.00 & 0.4441 & 0.4473 & +0.0032 [0.0024, 0.0040]\\
+SD1.5 & PRDC harmonic & 8.00 & 0.4469 & 0.4501 & +0.0032 [0.0024, 0.0040]\\
+SD1.5 & Random shortlist & 15.25 & 0.4866 & 0.4877 & +0.0011 [0.0006, 0.0017]\\
+SD1.5 & Exhaustive & 13.38 & 0.4825 & 0.4840 & +0.0016 [0.0010, 0.0022]\\
+SD1.5 & Fixed DPM++8 & 8.00 & 0.4481 & 0.4513 & +0.0032 [0.0024, 0.0040]\\
+SD1.5 & Fixed UniPC8 & 8.00 & 0.4403 & 0.4438 & +0.0035 [0.0027, 0.0043]\\
+SD1.5 & Fixed DPM++16 & 16.00 & 0.4895 & 0.4906 & +0.0011 [0.0005, 0.0017]\\
+SD1.5 & Fixed UniPC16 & 16.00 & 0.4880 & 0.4892 & +0.0011 [0.0005, 0.0018]\\
+SD1.5 & Same-count shuffle & 14.06 & 0.4758 & 0.4778 & +0.0020 [0.0013, 0.0027]\\
+Sana & Audit & 14.28 & 0.5023 & 0.5021 & -0.0002 [-0.0004, 0.0001]\\
+Sana & Preference + alignment & 11.94 & 0.5051 & 0.5047 & -0.0004 [-0.0008, -0.0001]\\
+Sana & Quality + Vendi & 11.94 & 0.5039 & 0.5035 & -0.0004 [-0.0007, -0.0001]\\
+Sana & Vendi only & 8.00 & 0.4781 & 0.4782 & +0.0001 [-0.0003, 0.0005]\\
+Sana & PRDC harmonic & 8.00 & 0.4800 & 0.4802 & +0.0003 [-0.0001, 0.0007]\\
+Sana & Random shortlist & 14.84 & 0.5028 & 0.5026 & -0.0002 [-0.0005, 0.0001]\\
+Sana & Exhaustive & 14.28 & 0.5023 & 0.5021 & -0.0002 [-0.0004, 0.0001]\\
+Sana & Fixed DPM++8 & 8.00 & 0.4794 & 0.4797 & +0.0003 [-0.0001, 0.0007]\\
+Sana & Fixed Euler8 & 8.00 & 0.4749 & 0.4750 & +0.0001 [-0.0004, 0.0006]\\
+Sana & Fixed native20 & 20.00 & 0.5101 & 0.5097 & -0.0005 [-0.0007, -0.0003]\\
+Sana & Same-count shuffle & 14.28 & 0.4954 & 0.4953 & -0.0002 [-0.0005, 0.0002]\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[tp]
+\centering\small
+\caption{All ten declared independent-noise preference contrasts. Bonferroni percentile intervals are 99.5\% each across the ten-contrast family; all policies remain unchanged.}
+\begin{tabular}{llrr}
+\toprule Family & Contrast & Difference & Adjusted interval \\ \midrule
+SD1.5 & Audit: independent minus paired & +0.0016 & [+0.00075, +0.00251]\\
+SD1.5 & Quality+Vendi: independent minus paired & +0.0017 & [+0.00094, +0.00271]\\
+SD1.5 & Independent audit minus DPM++8 & +0.0327 & [+0.02320, +0.04206]\\
+SD1.5 & Independent audit minus quality+Vendi & +0.0053 & [+0.00185, +0.00975]\\
+SD1.5 & Independent audit minus same-count shuffle & +0.0063 & [-0.00251, +0.01497]\\
+Sana & Audit: independent minus paired & -0.0002 & [-0.00055, +0.00020]\\
+Sana & Quality+Vendi: independent minus paired & -0.0004 & [-0.00089, +0.00004]\\
+Sana & Independent audit minus DPM++8 & +0.0225 & [+0.01167, +0.03440]\\
+Sana & Independent audit minus quality+Vendi & -0.0014 & [-0.00568, +0.00235]\\
+Sana & Independent audit minus same-count shuffle & +0.0068 & [-0.00384, +0.01900]\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[tp]
+\centering\small
+\caption{All frozen policies under the fixed-cardinality coverage sensitivity. DINO coverage uses eight samples in each set and $k=3$. Shared-seed and disjoint-seed comparisons each average their two outcome halves. Brackets are descriptive 95\% paired-prompt bootstrap intervals.}
+\begin{tabular}{llcc}
+\toprule Family & Policy & Shared-seed coverage & Disjoint-seed coverage \\ \midrule
+SD1.5 & Audit & 0.991 [0.986, 0.995] & 0.913 [0.897, 0.928]\\
+SD1.5 & Preference + alignment & 0.992 [0.988, 0.996] & 0.903 [0.885, 0.921]\\
+SD1.5 & Quality + Vendi & 0.991 [0.986, 0.995] & 0.902 [0.883, 0.920]\\
+SD1.5 & Vendi only & 0.975 [0.966, 0.982] & 0.882 [0.858, 0.903]\\
+SD1.5 & PRDC harmonic & 0.974 [0.966, 0.981] & 0.888 [0.869, 0.906]\\
+SD1.5 & Random shortlist & 0.993 [0.986, 0.998] & 0.921 [0.906, 0.936]\\
+SD1.5 & Exhaustive & 0.985 [0.978, 0.991] & 0.908 [0.891, 0.925]\\
+SD1.5 & Fixed DPM++8 & 0.983 [0.977, 0.989] & 0.895 [0.876, 0.913]\\
+SD1.5 & Fixed UniPC8 & 0.970 [0.961, 0.978] & 0.866 [0.841, 0.889]\\
+SD1.5 & Fixed DPM++16 & 0.997 [0.995, 0.999] & 0.927 [0.914, 0.940]\\
+SD1.5 & Fixed UniPC16 & 0.996 [0.993, 0.999] & 0.914 [0.897, 0.930]\\
+SD1.5 & Same-count shuffle & 0.991 [0.986, 0.995] & 0.912 [0.897, 0.927]\\
+Sana & Audit & 0.968 [0.955, 0.979] & 0.840 [0.810, 0.867]\\
+Sana & Preference + alignment & 0.938 [0.915, 0.958] & 0.787 [0.750, 0.820]\\
+Sana & Quality + Vendi & 0.930 [0.902, 0.954] & 0.789 [0.750, 0.825]\\
+Sana & Vendi only & 0.870 [0.836, 0.901] & 0.708 [0.667, 0.746]\\
+Sana & PRDC harmonic & 0.928 [0.906, 0.946] & 0.772 [0.738, 0.805]\\
+Sana & Random shortlist & 0.971 [0.958, 0.982] & 0.837 [0.806, 0.866]\\
+Sana & Exhaustive & 0.968 [0.955, 0.979] & 0.840 [0.810, 0.867]\\
+Sana & Fixed DPM++8 & 0.934 [0.917, 0.950] & 0.775 [0.743, 0.807]\\
+Sana & Fixed Euler8 & 0.837 [0.800, 0.871] & 0.666 [0.624, 0.705]\\
+Sana & Fixed native20 & 0.999 [0.998, 1.000] & 0.906 [0.889, 0.922]\\
+Sana & Same-count shuffle & 0.964 [0.951, 0.977] & 0.844 [0.816, 0.870]\\
+\bottomrule\end{tabular}
+\end{table*}
+\begin{table*}[tp]
+\centering\small
+\caption{All eight declared coverage sensitivity contrasts. Percentile intervals are 99.375\% each across the eight-comparison family. These secondary sensitivities were specified after access to earlier outcomes and evaluate unchanged policy decisions.}
+\begin{tabular}{llc}
+\toprule Family & Contrast & Difference [adjusted interval] \\ \midrule
+SD1.5 & Audit: disjoint minus shared seeds & -0.0776 [-0.0991, -0.0571]\\
+SD1.5 & Quality + Vendi: disjoint minus shared seeds & -0.0884 [-0.1143, -0.0649]\\
+SD1.5 & Disjoint audit minus quality + Vendi & +0.0107 [-0.0015, +0.0269]\\
+SD1.5 & Disjoint audit minus same-count shuffle & +0.0010 [-0.0132, +0.0161]\\
+Sana & Audit: disjoint minus shared seeds & -0.1279 [-0.1610, -0.0973]\\
+Sana & Quality + Vendi: disjoint minus shared seeds & -0.1406 [-0.1742, -0.1089]\\
+Sana & Disjoint audit minus quality + Vendi & +0.0508 [+0.0148, +0.0947]\\
+Sana & Disjoint audit minus same-count shuffle & -0.0039 [-0.0453, +0.0365]\\
+\bottomrule\end{tabular}
+\end{table*}

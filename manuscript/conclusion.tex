@@ -1,0 +1,20 @@
+\section{Discussion and conclusion}
+\label{sec:discussion}
+A distribution repair needs a target that survives changes in how
+samples are pooled and compared. Fixing the reference and a meaningful
+effect size makes regional probability loss testable. Conditional spread
+and fidelity then show whether changes in variation serve that target.
+The crossed probes illustrate the distinction: longer sampling improves
+some short-sampler deficits, while the missing digit persists across
+adequate samplers when training withholds it.
+
+The two controlled tests establish partial repairs at matched budgets.
+Starting-covariance matching improves two-call agreement with real data
+on one pretrained model, even though most teacher-defined regions remain
+depleted. Ordinary continuation improves the full distribution of digit
+classifier outcomes across three paired seeds, including rejection in
+the measure. Its rejection rate still exceeds that of real data. A second
+pretrained checkpoint would test transfer of the initialization result,
+and independent labels for generated digits would test whether the
+classifier findings track human judgments. The matched-cost prompt
+shuffle leaves the advantage of per-prompt selection unresolved.

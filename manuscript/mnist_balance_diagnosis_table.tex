@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\centering\small
+\caption{Every signed-mass checkpoint decision. E/D denotes persistent excess/depletion of the listed digit across all three resolved samplers; B denotes all-ten-digit equivalence at the stated resolution; ? denotes inconclusive. Fidelity lists the two-gate conjunction for DDIM25/DDIM50/DPM++25: P (pass), F (fail), I (inconclusive), A (structural reference anchor). Anchors do not certify absolute quality. The primary absolute mass tolerance is $\delta=0.03$; the other columns use the same bounds for prespecified sensitivity analysis.}
+\label{tab:mnist_balance_diagnosis}
+\begin{tabular}{llcccc}
+\toprule
+Checkpoint & Seed & Fidelity (25/50/DPM) & $\delta=0.02$ & $\delta=0.03$ & $\delta=0.04$ \\
+\midrule
+Targeted parent & 10 & P/P/P & E(3) & E(3) & ? \\
+Ordinary continuation & 10 & P/P/P & ? & ? & B \\
+Targeted continuation & 10 & P/P/P & E(3) & E(3) & E(3) \\
+Full-data anchor & 10 & A/A/A & ? & ? & B \\
+Targeted parent & 11 & P/P/P & E(3) & E(3) & E(3) \\
+Ordinary continuation & 11 & P/P/P & ? & ? & B \\
+Targeted continuation & 11 & P/P/P & E(3) & E(3) & E(3) \\
+Full-data anchor & 11 & A/A/A & ? & ? & B \\
+Targeted parent & 12 & P/P/P & E(3) & E(3) & E(3) \\
+Ordinary continuation & 12 & P/P/P & ? & ? & ? \\
+Targeted continuation & 12 & P/P/P & E(3) & E(3) & E(3) \\
+Full-data anchor & 12 & A/A/A & ? & ? & ? \\
+\bottomrule
+\end{tabular}
+\end{table*}

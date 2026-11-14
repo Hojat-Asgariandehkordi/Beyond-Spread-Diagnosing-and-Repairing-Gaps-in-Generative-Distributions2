@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\small
+\begin{tabular}{llrrrrr}
+\toprule
+Family / reference & Pool & Images & Image-NFE & CFG examples & Gen. s & Features s \\
+\midrule
+SD CFG7.5 & Fit & 512 & 25,600 & 51,200 & 202.1 & 6.9 \\
+SD CFG1.75 & Fit & 512 & 25,600 & 51,200 & 201.6 & 6.6 \\
+SD CFG1 & Fit & 512 & 25,600 & 25,600 & 111.4 & 6.6 \\
+SD CFG7.5 & Calibration & 256 & 12,800 & 25,600 & 101.2 & 3.5 \\
+SD CFG1.75 & Calibration & 256 & 12,800 & 25,600 & 100.5 & 3.3 \\
+SD CFG1 & Calibration & 256 & 12,800 & 12,800 & 55.6 & 3.3 \\
+Sana CFG5 & Fit & 512 & 25,600 & 51,200 & 413.4 & 7.1 \\
+Sana CFG5 & Calibration & 256 & 12,800 & 25,600 & 192.0 & 3.7 \\
+\bottomrule
+\end{tabular}
+\caption{Recorded reference preparation costs. Every fit pool has 32 prompts with 16 images each; every calibration pool has 256 independent prompts with one image each. The frozen policy in each family requires one named reference pool, costing 38,400 per-image denoiser calls. The other two SD guidance references serve research sensitivity analyses. CFG examples count conditional and unconditional branches separately. Timings are observed shared-hardware totals, not controlled method comparisons; generation includes text encoding and image decoding. The machine-readable ledger separately retains re-encoding, PickScore, CPU support fitting/scoring, and controlled repeated timing.}
+\label{tab:t2i_preparation_cost}
+\end{table*}

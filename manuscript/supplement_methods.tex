@@ -1,0 +1,173 @@
+\section{Statistical targets and guarantees}
+\label{supp:statistics}
+
+\subsection{Fixed regions and independent evaluation}
+A region is a fixed measurable event for an image. A validated semantic
+classifier can define it, or it can be fitted in feature space using the
+reference-fit pool $R_{\rm fit}$.
+Conditional on this fit, its probability is a fixed population quantity.
+For independently sampled evaluation rows, each region count has a binomial
+marginal distribution. The regions, representations, and configurations can be
+dependent; the union-bound construction does not require independence between
+their counts. Independence of the evaluation rows from the fitted regions is
+essential. Fitting a clustering model and evaluating its reference occupancy on
+the same rows does not meet this condition.
+
+When semantic labels are used, the same labeling function, confidence threshold,
+and rejection category are applied to real and generated images. The estimated
+probabilities then concern those declared classifier regions. Accuracy measured
+on held-out real images validates that domain, but does not establish equal
+accuracy on every generated-image distribution. We therefore retain rejected
+images in the denominator, report feature fidelity, and include uncurated
+qualitative checks. A full feature-space partition has no unassigned mass;
+this does not make a fitted Gaussian mixture's latent-component error zero.
+
+\subsection{Exact regional mass intervals}
+For $k$ successes in $n$ independent Bernoulli trials and one-tail error
+$\varepsilon$, let $L$ and $U$ be the lower and upper
+Clopper--Pearson endpoints~\cite{clopper1934confidence}.
+Here $\operatorname{Beta}^{-1}(u;a,b)$ is the $u$-quantile of a beta
+law with shape parameters $a,b$.
+\begin{align}
+L(k,n;\varepsilon)&=\begin{cases}0,&k=0,\\
+\operatorname{Beta}^{-1}(\varepsilon;k,n-k+1),&k>0,
+\end{cases}\label{eq:cp_lower}\\
+U(k,n;\varepsilon)&=\begin{cases}1,&k=n,\\
+\operatorname{Beta}^{-1}(1-\varepsilon;k+1,n-k),&k<n.
+\end{cases}\label{eq:cp_upper}
+\end{align}
+Each endpoint has noncoverage probability at most $\varepsilon$.
+Let $p,q$ be the reference and candidate masses of a fixed region,
+with bounds denoted by superscripts $-$ and $+$.
+For $M$ prespecified region/configuration/condition/representation comparisons
+and family error budget $\alpha_{\rm occ}$, set $\varepsilon=\alpha_{\rm occ}/(4M)$.
+A union bound over both endpoints of both
+distributions gives an event of probability at least $1-\alpha_{\rm occ}$ on
+which every $p$ and $q$ is in its interval. On that event, for $p>0$,
+\begin{equation}
+q^-/p^+\leq q/p\leq q^+/p^-.
+\label{eq:supp_occupancy}
+\end{equation}
+The right endpoint is defined to be infinite when $p^-=0$.
+Thresholding these simultaneous intervals remains valid when several deficits
+are reported together or when a fixed-sample comparison is stopped after its
+first passing candidate. The guarantee does not license optional stopping
+within an adaptively sized arm without additional sequential inference.
+
+An absolute mass target uses the same endpoints to bound
+$q-p\in[q^- -p^+,q^+-p^-]$. For a prespecified tolerance $\delta$,
+intervals wholly above $\delta$ certify excess, wholly below $-\delta$
+certify depletion, and wholly inside $[-\delta,\delta]$ certify equivalence.
+Other cases are inconclusive. Section~\ref{sec:support-mass-balance} gives
+the shared-reference allocation and persistence rule used in the signed audit.
+
+\paragraph{A useful zero-count planning relation.}
+With zero observed counts among $n_Q$ candidate draws, the upper
+probability bound is $q^+=1-\varepsilon^{1/n_Q}$.
+For an eligible region and a ratio threshold $\rho$ with
+$0<\rho p^-<1$, certifying $q/p<\rho$ requires
+\begin{equation}
+n_Q>\frac{\log\varepsilon}{\log(1-\rho p^-)}.
+\label{eq:zerocount}
+\end{equation}
+For small $\rho p^-$, this is approximately
+$\log(4M/\alpha_{\rm occ})/(\rho p^-)$.
+Reference uncertainty also matters: a small or ineligible $p^-$ can make the
+test inconclusive despite zero generated counts. This relation explains why
+the method reports a resolution and sample requirement rather than treating
+zero observed categories as an unconditional claim of deletion.
+
+\subsection{Support calibration and excess-tail uncertainty}
+Let $S$ be the support score, fitted independently of the calibration
+pool $R_{\rm cal}$. For $n_{\rm cal}$ reference calibration samples,
+set $\tau$ to the score at rank $\lceil(n_{\rm cal}+1)(1-\eta)\rceil$,
+in ascending order. The target tail level is $\eta=0.05$ by default.
+Exchangeability with a new reference draw gives marginal split-conformal
+tail control~\cite{vovk2013conditional}. If the rank exceeds the
+calibration size, set $\tau=\infty$ and mark calibration uninformative.
+For reference and candidate laws $P,Q$, independent evaluation rows
+estimate tail probabilities $p_{\rm tail}=P(S>\tau)$ and
+$q_{\rm tail}=Q(S>\tau)$.
+Four exact binomial endpoints yield
+\begin{equation}
+q_{\rm tail}^- - p_{\rm tail}^+
+\leq q_{\rm tail}-p_{\rm tail}
+\leq q_{\rm tail}^+-p_{\rm tail}^-.
+\label{eq:supp_tail_excess}
+\end{equation}
+These bounds account for reference-tail uncertainty rather than assuming its
+observed rate is exactly five percent. Multiplicity is allocated across all
+prespecified configurations, conditions, and representations. The feature-only
+default allocates 0.025 each to occupancy and support. The fresh digit
+routing and signed-balance studies instead allocate 0.025 to mass, 0.0125
+to paired fidelity, and 0.0125 to support; each declared exact family totals
+0.05. The original digit experiment separately allocates 0.025 to semantic
+occupancy and 0.0125 each to feature occupancy and support; its fidelity
+intervals use a three-training-seed Student-$t$ approximation.
+This joint exact statement does not include the approximate spread intervals
+or arbitrary external perceptual metrics.
+
+\subsection{Conditional spread intervals}
+For a feature sample $x_1,\ldots,x_n$ with mean $\bar x$ and sample
+covariance trace $\hat v$, let $d_i=\|x_i-\bar x\|^2$.
+Subscripts $P,Q$ index the reference and candidate samples, including
+their sizes $n_P,n_Q$ and squared-distance vectors $d_P,d_Q$.
+The estimated ratio is $\hat r=\hat v_Q/\hat v_P$.
+The two-sample influence-function approximation
+below assumes independent reference and candidate rows. For shared-noise
+pairs in the crossed MNIST probes (Sec.~\ref{supp:mnist_routing}), we instead
+estimate the variance of the paired influence-function differences, accounting
+for covariance even when the two members enter different regions. For independent
+samples, the log variance ratio uses
+\begin{equation}
+\widehat{\operatorname{se}}^2(\log\hat r)=
+\frac{\widehat{\operatorname{Var}}(d_P)}{n_P\hat v_P^2}
++\frac{\widehat{\operatorname{Var}}(d_Q)}{n_Q\hat v_Q^2}.
+\label{eq:supp_spread_se}
+\end{equation}
+Here $\widehat{\operatorname{se}}$ denotes estimated standard error.
+The log-normal interval uses the prespecified Bonferroni level for the spread
+family. It is approximate, especially in small, heavy-tailed cells. The code
+also provides an independent-row percentile bootstrap. Cells with fewer than
+30 samples in either distribution are unresolved. Null simulations and the
+reported sensitivity results assess the actual approximation in the tested
+settings; they do not establish distribution-free coverage.
+
+\subsection{Prompt-level inference}
+For prompt $c$, let $v_{Pc}$ and $v_{Qc}$ denote within-prompt trace covariance
+estimates. A bar denotes the average over prompts. The primary ratio is
+$\bar v_Q/\bar v_P$, rather than the average of $v_{Qc}/v_{Pc}$.
+Matched prompts are resampled as units in the bootstrap, preserving all their
+seeds and arm pairings. The same principle applies to alignment, preference,
+and per-prompt nearest-neighbor metrics. Calibration of a population tail uses
+one score-blind seed per independent calibration prompt. Pooling all images
+from repeated prompts into an independent-row binomial calculation would
+overstate the evidence. With only a few seeds per prompt, semantic occupancy
+tests generally lack power; they do not establish absence of prompt-specific
+depletion.
+
+\section{Controlled comparisons identify useful interventions}
+\label{supp:causality}
+Let $Z\sim\mathcal N(0,I_d)$ be a standard Gaussian in $\mathbb R^d$,
+where $I_d$ is the identity, and let $\gamma\in(0,1)$.
+In one world, the learned resolved generator outputs $Z$ and an approximate
+sampler outputs $\gamma Z$. In another, the learned generator outputs
+$\gamma Z$ and its sampler is exact. Both observed distributions are
+$\mathcal N(0,\gamma^2 I_d)$, with full support $\mathbb R^d$.
+Every final-sample statistic has the same law in the two worlds. Analogously,
+a sampler that reweights a two-component teacher can have the same output
+mixture as a model trained with those weights and sampled exactly. Therefore,
+regional depletion or contraction alone cannot determine whether a sampling,
+conditioning, or training intervention will help. The two-reference procedure
+adds information and measures the response to controlled changes. These elementary identification limits motivate the intervention comparisons.
+
+For a feature vector $X$ with mean $\mu$ and regional index $J$, let
+$\mu_J$ be its mean conditional on $J$. The total-covariance identity
+follows by writing
+$X-\mu=(X-\mu_J)+(\mu_J-\mu)$ and conditioning on $J$. The cross terms vanish
+because $\mathbb E[X-\mu_J\mid J]=0$. Taking traces separates the contributions
+of within-region covariance and between-region means, each weighted by regional
+mass. A rotation of an anisotropic conditional distribution preserves its trace
+but may change a reference-support tail. This motivates the rotation control
+and the distinction between support departure and expansion.
+

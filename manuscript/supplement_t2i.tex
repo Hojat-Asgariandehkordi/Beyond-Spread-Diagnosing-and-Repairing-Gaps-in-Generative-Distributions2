@@ -1,0 +1,391 @@
+\section{Conditioning and reference matching resolve diversity reversals}
+\label{sec:supp_t2i}
+
+\subsection{Independent prompts, random streams, and evaluation units}
+We use the complete public PartiPrompts~\cite{yu2022parti} prompt list, retaining its category and
+challenge annotations. A fixed permutation (NumPy seed 20261015) selects 32
+representation-fit prompts, 48 development prompts, 128 evaluation prompts, and
+256 separate calibration prompts. Selection precedes generation and does not
+inspect prompt wording or image outcomes. All 464 selected rows have unique
+identifiers and unique casefolded, whitespace-normalized prompt strings, with
+no exact text duplicate across splits. The reference fit pool contains 16
+images per prompt; calibration uses one independently seeded image per prompt.
+Development uses eight images per prompt. Evaluation uses eight diagnosis seeds
+and 16 separate outcome seeds per prompt. All arm-level headline results use
+only the 16 outcome seeds, giving 2,048 images per arm and 128 independent prompt
+units. The eight diagnosis images implement a frozen action-selection rule;
+they never enter the outcome estimate.
+
+The initial seed is the split-specific offset plus 1,000 times the original
+PartiPrompts row index plus the replicate index. Noise is drawn in CPU FP32 and
+then converted to the model's native precision. Every method within a family
+receives the same initial noise. Separate random streams, offset by $10^8$,
+$2\!\times\!10^8$, and $3\!\times\!10^8$, supply stochastic scheduler updates,
+conditional CADS perturbations, and unconditional CADS perturbations. The
+Stable Diffusion evaluation offset is $10^7$; Sana uses $2\!\times\!10^7$.
+The fit, calibration, development, and reference-refinement streams are disjoint
+from evaluation. Saved configuration files list every prompt and seed; a
+collision audit checks the generated initial-noise streams.
+
+Let $p$ index the $N_{\rm p}$ evaluation prompts, and let $X$ and
+$X_{\rm ref}$ denote candidate and reference images at that prompt.
+For a representation $\phi$, the primary conditional spread ratio
+uses sample covariances within prompts:
+\begin{equation}
+ R_\phi=\frac{N_{\rm p}^{-1}\sum_{p=1}^{N_{\rm p}}\operatorname{tr}
+ \widehat{\operatorname{Cov}}(\phi(X)\mid p)}
+ {N_{\rm p}^{-1}\sum_{p=1}^{N_{\rm p}}\operatorname{tr}
+ \widehat{\operatorname{Cov}}(\phi(X_{\rm ref})\mid p)}.
+\label{eq:supp_prompt_spread}
+\end{equation}
+Each prompt is centered separately and receives equal weight. This differs from
+both a pooled covariance, which includes differences between prompts, and the
+mean of promptwise variance ratios. We retain these alternatives as sensitivity
+analyses. Intervals resample paired prompt units, preserving all seeds and all
+methods within each sampled prompt. Arm and representation intervals are
+descriptive 95\% intervals; the frozen policy's four primary contrasts use
+98.75\% intervals. Fixed-prompt occupancy inference is kept separate from this
+population-over-prompts analysis.
+The saved representation analysis additionally retains an approximate simultaneous
+95\% max-standardized-log-ratio bootstrap check across its 20 fixed contrasts.
+A directional interval excluding 1 does not by itself pass the operational
+0.9/1.1 contraction/expansion margins or the accompanying quality/support gates.
+
+To explain a pooled/conditional reversal, we retain the exact balanced-design
+ANOVA decomposition. With $N_{\rm p}$ prompts and $m$ samples per prompt,
+let $W$ be the mean within-prompt sample covariance trace and $B_{\rm obs}$
+the sample covariance trace of prompt means. The sample covariance trace
+$T_{\rm pooled}$ across all images is
+\begin{equation}
+ T_{\rm pooled}=\frac{N_{\rm p}(m-1)}{N_{\rm p}m-1}W
+              +\frac{m(N_{\rm p}-1)}{N_{\rm p}m-1}B_{\rm obs}.
+\label{eq:supp_prompt_anova}
+\end{equation}
+We verify this identity numerically for every arm and representation. The
+classical correction $B_{\rm obs}-W/m$ removes estimated finite-seed noise
+from the prompt-mean covariance under independent seed draws; negative
+estimates are retained. This is a descriptive variance-component analysis,
+not a new estimator or a decision gate. The extension that retains both additive terms and this correction was
+specified after access to the DDIM4 outcome contrast. It covers all 29 SD
+and seven Sana arms using the same 128 prompts and 16 outcome seeds. The complete tables normalize both contributions by the common reference's
+pooled trace and retain paired prompt-bootstrap intervals for between-prompt
+ratios. For DINO, reference within/between contributions 0.400/0.600 become
+0.523/0.396 under DDIM4. Their sum is the pooled ratio 0.919; dividing
+within-prompt variation by the reference within component gives 1.306.
+This secondary descriptive decomposition explains the reversal without
+changing any primary comparison or gate.
+
+\subsection{Native model configurations}
+\paragraph{Stable Diffusion.}
+All images are $512\!\times\!512$ pixels. The base model is SD1.5
+\cite{rombach2022ldm}; DINOv2-base \cite{oquab2024dinov2} and CLIP ViT-L/14-336
+\cite{radford2021clip} provide independent image representations. DINO uses the
+raw 768-dimensional final class token; CLIP uses its normalized 768-dimensional
+image embedding. CLIP prompt--image cosine similarity is computed with the
+same frozen encoder. All 464 selected prompts fit both tokenizers: the maximum
+is 63 tokens, including start/end tokens, below the 77-token limit.
+The reference sampler is 50-step leading-schedule DDIM, with guidance 7.5 as the
+common comparison. Additional reference pools at guidance 1.75 and 1 support
+explicitly identified reference-sensitivity analyses.
+
+\paragraph{Native distillation.}
+LCM-LoRA \cite{luo2023lcmlora} uses its native LCMScheduler at four or eight
+steps, with external guidance disabled. Its external guidance value of 1 does
+not identify the effective guidance embedded during distillation; comparison
+with a CFG-1 base reference is therefore a numerical-guidance sensitivity.
+The official adapter card does not identify a unique fixed training guidance;
+the official LCM-LoRA training example samples a range of teacher guidance
+values while validating with external guidance 1. DMD2
+\cite{yin2024dmd2} uses the released SD1.5
+\texttt{fid8.35\_checkpoint\_model\_041000} checkpoint. In the native
+recipe, $z$ is the starting noise latent, $c$ the prompt conditioning,
+$\epsilon_\theta$ the noise predictor with frozen checkpoint parameters $\theta$,
+and $z_0$ the clean
+latent estimate. The decoder $\operatorname{Dec}$ maps the rescaled
+latent to image $x$. The single prediction at timestep 999 uses
+cumulative signal coefficient 0.0047 and latent scale 0.18215:
+\begin{equation}
+ \begin{aligned}
+ z_0&=\frac{z-\sqrt{1-0.0047}\,\epsilon_\theta(z,999,c)}{\sqrt{0.0047}},\\
+ x&=\operatorname{Dec}(z_0/0.18215).
+ \end{aligned}
+\label{eq:supp_dmd2_step}
+\end{equation}
+We strictly load every checkpoint tensor and use freshly loaded FP32 text
+encoder, denoiser, and VAE weights, with TF32 enabled as in the official
+implementation. The matched teacher guidance is 1.75;
+common-reference guidance 7.5 and guidance 1 are also reported. A multi-step
+LCM schedule is not an eligible implementation of this DMD2 checkpoint.
+
+\paragraph{Learned flow.}
+Sana-600M \cite{xie2025sana} is evaluated at its native 512-pixel resolution,
+with a Gemma text encoder, deep-compression autoencoder, and guidance 5. The
+pinned public checkpoint is
+\texttt{Sana\_600M\_512px\_diffusers}, revision
+\texttt{83d7a190bfd1fd070570\allowbreak{}a793d2dab5c7a3231b9d}. Its native Flow-DPM++
+configuration uses flow prediction, second-order midpoint updates, flow-shift
+3, and a zero terminal sigma. We compare its 50-step reference, native
+20-step setting, four/eight-step Flow-DPM++, four/eight-step shifted Euler, and
+eight-step CADS--Flow-DPM++. Euler uses its native shifted time grid; this is a
+comparison of practical solver configurations, not an isolated change in order.
+The transformer uses FP16 and the text encoder and autoencoder use BF16, as in
+the public recipe. We retain the native complex-instruction prefix and
+300-token text-encoder limit; the exact instruction is saved with the run.
+Independent Sana reference samples fit and calibrate its
+support scores; SD feature thresholds are not reused across model families.
+The numerical decision margins and routing rule transfer without retuning.
+
+\subsection{Interventions and closest comparisons}
+\begin{table*}[t]
+\centering\small
+\begin{tabular}{llll}
+\toprule
+SD1.5 comparison & Sequential denoiser calls & Guidance & Configuration \\
+\midrule
+DDIM reference & 50 & 7.5, 1.75, 1 & Leading schedule \\
+DDIM & 4, 8 & 7.5 & Leading schedule, deterministic \\
+DDIM trailing & 4, 8, 16 & 7.5 & Trailing schedule \\
+Stochastic DDIM & 4, 8 & 7.5 & $\eta=1$ \\
+Reduced guidance & 4, 8 & 3 & Leading DDIM \\
+DPM++ / UniPC & 4, 8, 16 & 7.5 & Order 2, linspace schedule \\
+CADS--DDIM & 4, 8 & 7.5 & Published annealing parameters \\
+CADS--DPM++ & 4, 8, 16 & 7.5 & Published annealing parameters \\
+Tuned CADS--DPM++ & 8 & 7.5 & Secondary frozen development choice \\
+LCM-LoRA & 4, 8 & External 1 & Native LCM scheduler \\
+Hybrid LCM-LoRA & 4, 8 & First 5; then external 1 & First step uses base denoiser \\
+DMD2 & 1 & Distilled 1.75 & Native epsilon-to-$z_0$ conversion \\
+\bottomrule
+\end{tabular}
+\caption{Complete SD evaluation: 28 primary arms, including three named
+references, and one separately frozen tuned-CADS arm. Guided base samplers use
+two denoiser example evaluations per sequential call. Native LCM uses one;
+hybrid LCM uses five/nine examples for four/eight calls; DMD2 uses one.}
+\label{tab:t2i_arms}
+\end{table*}
+
+CADS \cite{sadat2024cads} follows the original equations and algorithm: every
+step perturbs the original text embedding, with independent noise on both CFG
+branches, then restores its mean and standard deviation. Published SD
+annealing parameters are $(\tau_1,\tau_2,s,\psi)=(0.6,0.9,0.25,1)$.
+We hold guidance at 7.5 for controlled SD comparisons; this is not a reproduction
+of the paper's longer-schedule, guidance-9 headline experiment. A compact
+development sweep evaluates $(s,\tau_1,\tau_2)=(0.1,0.6,0.9)$,
+$(0.1,0.8,1)$, and $(0.25,0.8,1)$ alongside the published setting, using the
+first 16 development prompts and their eight paired seeds. All four settings
+are retained. The strongest development preference, $s=0.1$ and
+$(\tau_1,\tau_2)=(0.8,1)$, is frozen as a secondary held-out comparison;
+it does not change the primary policy. Full sweep results are included below.
+For Sana, CADS applies the same published perturbation parameters to the native
+conditioning embeddings while preserving the original attention masks; this
+flow-family adaptation receives no additional parameter tuning.
+
+The hybrid LCM comparison adapts the official first-base-step procedure of
+Gandikota and Bau \cite{gandikota2026diversity} from SDXL to SD1.5 LCM-LoRA.
+It preserves the LCM timestep sequence, uses the base denoiser at the first
+step with the official CLI guidance of 5, and then uses LCM with external
+guidance disabled. We explicitly identify this model-family adaptation.
+The additional base step's CFG branch is counted in computational cost.
+This hybrid has no single guidance-matched teacher; its primary comparison uses
+the common CFG-7.5 reference.
+
+\subsection{Quality, support, and competing diversity measures}
+PickScore \cite{kirstain2023pickapic} supplies a frozen human-preference
+\emph{proxy}, distinct from the generator and the DINO/CLIP audit encoders.
+Let $s$ index $N_{\rm s}$ seeds per prompt and let $X_{p,s},X^{\rm ref}_{p,s}$
+be the matched candidate and reference images. The quality statistic is
+\begin{equation}
+ \begin{aligned}
+ \psi&=\frac{1}{N_{\rm p}}\sum_p\frac{1}{N_{\rm s}}\sum_s
+ \operatorname{sigmoid}(\Delta\ell_{p,s}),\\
+ \Delta\ell_{p,s}&=\ell(X_{p,s},p)-\ell(X^{\rm ref}_{p,s},p),
+ \end{aligned}
+\label{eq:supp_pickscore_preference}
+\end{equation}
+where $\ell$ is the model's scaled cosine logit. This averages probabilities
+directly; sigmoid of an averaged logit difference is a different statistic.
+A preference floor of 0.45 allows five percentage points below model
+indifference. The lower confidence bound must meet that floor for a quality
+pass; an interval spanning the threshold remains unresolved. This is not a
+human-study equivalence claim. CLIP alignment has a separately fixed loss
+tolerance of 0.01. Sensitivities use preference floors 0.475/0.45/0.40,
+alignment tolerances 0.005/0.01/0.02, support-tail excess margins
+0.025/0.05/0.10, and spread retention 0.95/0.90/0.80.
+
+Each image representation fits a 32-dimensional reference PCA, ten support
+regions, and a nearest-reference support score using the fit pool only.
+The independent 256-prompt calibration pool determines the 95th-percentile
+support threshold. The population outcome analysis averages support-tail
+excess within prompts and bootstraps prompt units. Fixed-prompt regional mass
+bounds instead use simultaneous exact binomial bounds, with a declared family
+over regions, prompts, representations, arms, and references. Sixteen images
+per prompt generally cannot resolve rare regional probability loss; an
+inconclusive occupancy test is never evidence that deletion is absent.
+PartiPrompts contains prompts, not a paired image population, so support and
+coverage here are relative to the named generator reference.
+
+\paragraph{Native reference gates.}
+Against the common CFG-7.5 reference, LCM4, LCM8, and DMD2 pass both feature
+support gates but fail the preference floor. DMD2 against its matched CFG-1.75
+teacher passes support and reaches preference 0.558, while its DINO/CLIP spread
+ratios of 0.901/0.907 remain unresolved at the 0.9 contraction margin.
+Against the CFG-1 sensitivity reference, LCM4/8 improve preference to
+0.731/0.712 but fail CLIP support compatibility: their support-tail excess
+intervals are [0.143, 0.226]/[0.165, 0.249], exceeding the 0.05 margin.
+DINO support passes in both cases. These reference-compatibility failures
+coexist with improved preference; we report spread directions without a joint
+contraction assignment. All intervals in this paragraph are descriptive
+95\% paired prompt-bootstrap intervals.
+
+Scendi \cite{ospanov2025scendi} measures prompt-aware diversity through the
+Schur complement of CLIP embeddings. Together with Conditional Vendi, it
+addresses the important distinction between prompt variation and image
+variation. The audit builds on this established distinction by jointly specifying a
+named reference, an effect-size resolution, quality/support requirements,
+and an independently evaluated intervention comparison.
+
+Conventional PRDC \cite{naeem2020density} uses Euclidean DINO distances with
+$k=3$ neighbors within each prompt. We report both within-prompt Vendi
+\cite{friedman2023vendi} and the distinct Conditional Vendi/Conditional RKE
+definitions of Jalali et al.\ \cite{jalali2026conditional}, using image/text
+cosine Gram matrices and their Hadamard product. The latter are computed on
+the complete outcome subset and match the official implementation numerically.
+For a single fixed prompt its text kernel is rank one, so Conditional Vendi
+reduces to ordinary within-prompt Vendi; this is the quantity available to a
+promptwise routing baseline. Averaging such scores is not the global
+cross-prompt Conditional Vendi statistic.
+Delete-one-prompt sensitivity and jackknife standard errors describe their
+stability. We do not report naive row-bootstrap intervals for these nonlinear
+Gram statistics: duplicated prompt blocks alter their finite-sample entropy.
+
+\subsection{Reference refinement and numerical validation}
+Before evaluation, the first 16 shuffled development prompts receive eight
+paired images from DDIM100 at each reference guidance and from DPM++50 at
+guidance 7.5. Relative to DDIM50, DDIM100 gives conditional DINO ratios
+0.962 [0.897, 1.014], 1.006 [0.994, 1.018], and 1.006 [0.992, 1.018] at
+guidance 7.5, 1.75, and 1, respectively. The paired preference at guidance
+7.5 is 0.500 [0.490, 0.509]. Full sampling-latent spread increases by about
+6\%, so these checks support semantic-reference stability without asserting
+that every latent statistic has converged. The main representation/reference
+reversals persist against the refined references. Sana has an independently
+seeded 50-versus-100-step check on the same fixed 16 development prompts:
+its conditional ratios are 1.006 [0.998, 1.020] in DINO,
+1.024 [0.999, 1.046] in CLIP, 1.0008 [0.9984, 1.0036] in complete sampling
+latents, and 1.0005 [0.9981, 1.0034] after image re-encoding. The alignment
+change is $-0.00015$ [$-0.00068$, $0.00031$].
+Its paired preference is 0.4953 [0.4919, 0.4985], a small shift favoring
+50 steps that remains within the predeclared practical quality tolerance.
+
+Our manual DDIM, stochastic DDIM, DPM++, UniPC, and LCM samplers match stock
+diffusers within one saved 8-bit pixel quantization unit. The DMD2 conversion
+matches the official formula exactly. Disabling the complete CADS perturbation
+gives exact identity; moment restoration has maximum mean error
+$6.1\!\times\!10^{-9}$ and zero standard-deviation error in FP32.
+Setting only its noise scale to zero is not generally an identity when the
+annealing coefficient is zero. Manual Sana DPM and Euler four-step latent
+outputs match their native pipelines exactly. On a fixed 16-sample numerical
+check, Conditional Vendi and RKE match the archived official source within
+$6.3\!\times\!10^{-15}$.
+
+A paired DMD2 precision audit compares freshly loaded FP32 auxiliary weights
+with the preserved exploratory implementation that had cast FP16-rounded
+weights back to FP32. Conditional DINO and CLIP ratios between these versions
+are 1.0001 [0.9994, 1.0007] and 0.9994 [0.9977, 1.0010]. Final evaluation
+nevertheless uses the exact original FP32 recipe. Checkpoints are pinned;
+strict loading, tensor compatibility, source hashes, scheduler configurations,
+and environment versions are retained with each run. A separate 64-image
+development check applies the same VAE weights in FP16 and FP32 to identical
+saved reference and DMD2 images: the DMD2/reference re-encoded spread ratio
+changes by only 0.00245\%, demonstrating insensitivity to this precision
+change in the paired development check.
+
+\subsection{Representations, artifacts, and cost accounting}
+We save all 16,384 final SD latent coordinates and all 8,192 final Sana latent
+coordinates. Re-encoding the decoded 8-bit image supplies a complementary
+representation: the SD VAE posterior mode, or the deterministic Sana
+autoencoder output, multiplied by the model's scaling factor. This comparison
+separates the sampled latent state from the state reconstructed from the
+visible image. Lower-dimensional pooled latent summaries and adjacent-pixel
+gradient energy are retained as descriptive checks. Per-image spatial
+standard-deviation trajectories are not treated as cross-seed covariance
+trajectories or as evidence for a Gaussian covariance theorem.
+
+Lossless WebP files preserve the exact images used for feature extraction.
+Every batch records prompt IDs, seeds, replicate IDs, image paths, features,
+alignment, latent representations, and generation/feature/re-encoding times.
+The experiment manifest checks completed sample counts, unique keys, seed
+matching, and all image paths. Generation uses at most eight CPU threads per
+process. SD initially runs on one H200; Sana runs concurrently on a shared H200 with an
+11-GiB PyTorch allocation cap, leaving room for CUDA context memory.
+Four-image autoencoder chunks keep the 16-image Sana denoiser batch below the
+memory budget. Shared-GPU timings are descriptive; controlled inference cost
+uses sequential denoiser calls and effective CFG branch evaluations.
+Parallel SD jobs use disjoint output directories; additional workers use atomic
+batch commits and guards against overlapping writers. Jobs on the shared H200 have an
+18-GiB allocation cap. Concurrent-job
+parity is exact on 64 development images; cross-H200 parity is exact for latents,
+pixels, features, alignment, and re-encodings on 128 additional development
+images spanning four configurations. Batch size, model settings, seed streams,
+and sampling source are fixed. Controlled timing runs on GPU0 after its other
+jobs finish, with background activity on the other H200 recorded. It recomputes
+prompt encodings for both families and reports text, decoding, feature
+extraction, and preference scoring separately.
+
+Audit overhead includes all diagnosis calls, feature extraction, and support
+scoring. Online search costs replay the frozen access rule on the complete
+offline matrix. Fixed samplers have no online diagnostic cost. Fit and
+calibration costs are reported separately. The SD display uses the three
+smallest held-out prompt IDs and first four outcome seeds. Sana uses the
+first four shuffled prompts and their first outcome seed. All indices
+are fixed without image ranking or replacement.
+
+\input{generated_tables/t2i/t2i_confirmed_tables.tex}
+\input{generated_tables/t2i/t2i_cads_sweep_table.tex}
+\input{generated_tables/t2i/cost_ledger_table.tex}
+\input{generated_tables/t2i/cost_controlled_timing_table.tex}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\textwidth]{../figures/t2i_multiseed_0026.pdf}
+\caption{Predetermined multi-seed comparison for prompt 26 (``emotion'').
+The three displayed prompts are the smallest held-out original prompt IDs;
+columns are outcome replicas 8--11, paired across configurations. The index
+rule was recorded before opening images for this display. Every image is
+retained without ranking, replacement, or cropping. These abstract prompts
+illustrate variation and do not establish semantic coverage.}
+\label{fig:t2i_multiseed_26}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\textwidth]{../figures/t2i_multiseed_0032.pdf}
+\caption{Predetermined multi-seed comparison for prompt 32 (``0'').
+The three displayed prompts are the smallest held-out original prompt IDs;
+columns are outcome replicas 8--11, paired across configurations. The index
+rule was recorded before opening images for this display. Every image is
+retained without ranking, replacement, or cropping. These abstract prompts
+illustrate variation and do not establish semantic coverage.}
+\label{fig:t2i_multiseed_32}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\textwidth]{../figures/t2i_multiseed_0040.pdf}
+\caption{Predetermined multi-seed comparison for prompt 40 (``concurrent lines'').
+The three displayed prompts are the smallest held-out original prompt IDs;
+columns are outcome replicas 8--11, paired across configurations. The index
+rule was recorded before opening images for this display. Every image is
+retained without ranking, replacement, or cropping. These abstract prompts
+illustrate variation and do not establish semantic coverage.}
+\label{fig:t2i_multiseed_40}
+\end{figure*}
+
+\begin{figure*}[tp]
+\centering
+\includegraphics[width=\textwidth]{../figures/t2i_flow_qualitative.pdf}
+\caption{Predetermined Sana comparison. Rows are the first four prompts in the
+frozen shuffled evaluation order, using outcome replica 8. Columns share
+initial noise. The 50-step reference and native20 setting are retained;
+all seven configurations, including Euler4, remain in the numerical tables.
+Images are neither ranked nor replaced.}
+\label{fig:flow_qualitative}
+\end{figure*}

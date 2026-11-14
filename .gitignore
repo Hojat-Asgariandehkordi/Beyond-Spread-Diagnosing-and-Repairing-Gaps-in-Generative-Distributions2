@@ -1,0 +1,15 @@
+*.aux
+*.log
+*.fls
+*.out
+*.blg
+*.brf
+*.fdb_latexmk
+*.synctex.gz
+__pycache__/
+# never commit raw data / model outputs
+*.npz
+*.npy
+*.pt
+*.ckpt
+data/

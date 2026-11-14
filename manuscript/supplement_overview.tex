@@ -1,0 +1,75 @@
+\section*{Study overview and navigation}
+The supplement follows the paper's scientific argument: measurement and
+resolution (Secs.~\ref{supp:statistics}--\ref{supp:supportcontrols}),
+initialization and numerical interventions
+(Secs.~\ref{supp:gaussian}--\ref{sec:supp_additional_cifar}), signed semantic
+repair (Sec.~\ref{supp:mnist}), conditioning and reference comparisons
+(Sec.~\ref{sec:supp_t2i}), and policy outcomes and costs
+(Secs.~\ref{supp:policy_protocol}--\ref{supp:imagereward}).
+Table~\ref{tab:supp_study_map} distinguishes the independent studies and their
+evaluation units. Complete comparisons, rejection accounting, and source
+identifiers are retained in the corresponding sections.
+
+\paragraph{Reading the evidence.}
+Exact regional-probability and support bounds concern fixed regions and
+independent evaluation rows. Generated-panel, training-seed, and
+prompt-bootstrap intervals answer different questions and retain their stated
+approximations. A fresh generated panel from one checkpoint is not an
+independently trained model. A reference sensitivity reuses the generated
+outputs. A secondary analysis specified after access to earlier outcomes
+retains that status even when its analysis rule is subsequently frozen.
+
+\paragraph{Independent repairs.}
+The fresh two-call initializer confirmation is separate from both the original
+CIFAR policy and its initializer ablation. The equal-update signed semantic
+repair continues the original targeted parents; it is separate from the
+original missing-digit restoration and crossed-probe routing study. None of
+these follow-ups replaces an earlier policy outcome. Artifact-level source
+and uncertainty mappings accompany the manuscript in the evidence ledger.
+
+\begin{table*}[t]
+\centering\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{>{\raggedright\arraybackslash}p{.22\textwidth}>{\raggedright\arraybackslash}p{.39\textwidth}>{\raggedright\arraybackslash}p{.33\textwidth}}
+\toprule
+Study and navigation & Reference and controlled comparison & Evaluation unit and evidence status \\
+\midrule
+Measurement validation, Sec.~\ref{supp:supportcontrols}
+& Fixed Gaussian populations and cached teacher-feature populations; planted regional, spread, and support changes.
+& Independent trials; frozen original controls, with separately identified secondary robustness analyses. \\
+CIFAR original, Sec.~\ref{supp:cifar}
+& DDIM100 teacher and fixed CIFAR-10 test data; complete sampler, output-map, and frozen-selector comparisons.
+& Five generated panels from one checkpoint; original confirmation. \\
+Initializer ablation and fresh confirmation, Sec.~\ref{supp:cifar_initializer}
+& Mean, covariance, and full moments at two calls; covariance versus five alternatives in the fresh study.
+& Original-seed ablation, then five fresh paired panels; five adjusted KID contrasts. \\
+External reference, Sec.~\ref{supp:cifar101}
+& Unchanged generated outputs against untouched CIFAR-10.1v6; all 32 arms and four prespecified KID contrasts.
+& Five generated panels sharing the external reference; separately frozen reference evaluation. \\
+EDM and natural-image controls, Sec.~\ref{sec:supp_additional_cifar}
+& Eight call-matched Euler/Heun arms; 20 sampler/training arms with matched 3,000-update continuations.
+& One noise panel per arm; one adaptation seed for training controls; descriptive development evidence. \\
+Original semantic restoration, Sec.~\ref{supp:mnist}
+& Real MNIST consensus regions; withholding, ordinary restoration, targeted restoration, and full-data control.
+& Three independent training seeds; original equal-update confirmation. \\
+Signed semantic repair, Sec.~\ref{sec:mnist_balance_supp}
+& Ordinary versus targeted continuation of the same targeted parents; equal 8,000-update branches.
+& Three paired training seeds; separate fresh confirmation; two prespecified 97.5\% effect intervals. \\
+Crossed semantic probes, Sec.~\ref{supp:mnist_routing}
+& Same-checkpoint resolved teacher and real data; 75 arms, eight policies, separate diagnosis/outcome samples.
+& Three existing trained seeds; separately frozen routing evaluation. \\
+Conditioning and references, Sec.~\ref{sec:supp_t2i}
+& 29 SD1.5 and seven Sana arms; common, matched, and sensitivity references, explicitly distinguished.
+& 128 prompts; original outcome comparisons. Extended variance decomposition is secondary after outcome access. \\
+Frozen policies and coupling, Sec.~\ref{supp:policy_outcomes}
+& All 23 policies; fixed solvers, quality plus Vendi, same-count shuffle, and fallbacks.
+& 128 prompts; original independent outcomes and separately identified post-outcome coupling sensitivities. \\
+Independent reward check, Sec.~\ref{supp:imagereward}
+& ImageReward on the same held-out images; all arms/policies and four adjusted fixed/fallback contrasts.
+& 128 prompts; secondary outcome check specified before held-out outcome analysis; no policy selection use. \\
+\bottomrule
+\end{tabular}
+\caption{Study map. Units and evidence status are part of each claim. Complete protocols below retain the declared references, uncertainty, and adjustment families.}
+\label{tab:supp_study_map}
+\end{table*}

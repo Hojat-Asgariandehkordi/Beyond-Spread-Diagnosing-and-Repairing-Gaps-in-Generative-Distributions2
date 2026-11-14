@@ -1,0 +1,20 @@
+\subsection{Frozen policies expose the quality--coverage--cost operating point}
+\label{sec:policy}
+The original CIFAR selector attains mean KID 0.0790 across two/four/eight-call
+budgets, versus 0.1039 for leading DDIM and 0.0784 for both Vendi and
+teacher-feature Fr\'echet selection. The selector chose full-moment initialization at two calls. The later
+centered-covariance confirmation tests a particular intervention separately
+from the comparison of selection rules.
+
+For text-to-image, the rule screens two fast samplers on eight diagnosis
+seeds per prompt. It requires preference of at least 0.475, CLIP alignment loss
+at most 0.01, DINO and CLIP spread ratios at least 0.9, DINO coverage at least 0.8,
+and both support-tail excesses at most 0.05. It picks the highest-coverage
+eligible sampler or uses the 16-call SD or 20-call Sana fallback. Sixteen
+independent seeds per prompt evaluate each frozen choice. The six outcome
+gates use one-sided 95\% prompt-bootstrap intervals for preference, alignment,
+spread, and support, with preference floor 0.45. Coverage is reported
+separately. Both audits pass, as do quality plus Vendi and fixed Sana
+DPM++8 (Supp.~Secs.~J--K).
+
+\input{policy_results}

@@ -1,0 +1,152 @@
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{All three prespecified paired effects at DPM++25, in percentage points. Digit-3 consensus-region mass uses Bonferroni 98.333\% intervals for this three-test family; mass error and feature coverage use descriptive 95\% intervals. Lower class-mass error is better. Intervals are approximate Student-$t$ intervals over three training seeds, conditional on the fixed real reference.}
+\label{tab:mnist_primary_contrasts}
+\begin{tabular}{lccc}
+\toprule
+Paired contrast & $\Delta$ digit-3 mass & $\Delta$ class-mass error & $\Delta$ coverage \\
+\midrule
+Targeted $-$ Continue & $16.09\,[14.02,18.17]$ & $0.68\,[0.04,1.32]$ & $4.87\,[4.05,5.70]$ \\
+Restore $-$ Continue & $8.66\,[7.68,9.64]$ & $-0.52\,[-0.91,-0.12]$ & $4.97\,[4.42,5.51]$ \\
+Targeted $-$ Restore & $7.43\,[4.50,10.37]$ & $1.20\,[0.84,1.55]$ & $-0.09\,[-1.07,0.88]$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Resolved-sampler fidelity relative to the full-data DPM++25 model. Differences and paired 95\% intervals are in percentage points. A pass requires both lower bounds to exceed $-5$; an upper bound below $-5$ fails, and other cases are inconclusive. These are separate per-comparison conjunctions, not an all-phase simultaneous guarantee.}
+\label{tab:mnist_quality}
+\begin{tabular}{lccc}
+\toprule
+Phase & $\Delta$ precision & $\Delta$ acceptance & Joint gate \\
+\midrule
+Initial withheld (25k) & $-0.70\,[-1.42,0.02]$ & $-0.43\,[-1.70,0.84]$ & Pass \\
+Continue withheld (33k) & $0.39\,[-1.01,1.80]$ & $0.25\,[-0.64,1.15]$ & Pass \\
+Restore data (33k) & $-1.01\,[-2.13,0.10]$ & $-0.93\,[-2.50,0.63]$ & Pass \\
+Targeted restoration (33k) & $-0.45\,[-1.46,0.57]$ & $-0.49\,[-1.48,0.51]$ & Pass \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Initial withheld (25k): all eleven frozen samplers. All entries are percentages, reported as mean $\pm$ the approximate 95\% interval half-width over three training seeds. MAD is the mean absolute difference across the ten unconditional semantic-region probabilities. The final column compares precision and acceptance with the full-data model at the same sampler, using the frozen five-percentage-point noninferiority margin. These all-arm intervals are descriptive.}
+\label{tab:mnist_all_withheld}
+\begin{tabular}{lcccccc}
+\toprule
+Sampler & Digit-3 mass & MAD$\downarrow$ & Precision & Coverage & Acceptance & Fidelity \\
+\midrule
+Leading DDIM 2 & $0.07\pm0.03$ & $6.14\pm0.65$ & $68.56\pm1.00$ & $10.63\pm2.80$ & $34.04\pm6.46$ & Pass \\
+Leading DDIM 4 & $0.21\pm0.03$ & $2.82\pm0.13$ & $74.09\pm0.36$ & $61.09\pm4.16$ & $68.83\pm2.71$ & Pass \\
+Trailing DDIM 4 & $0.19\pm0.08$ & $2.72\pm0.10$ & $75.11\pm1.07$ & $60.95\pm4.30$ & $68.71\pm2.19$ & Pass \\
+Trailing DDIM 8 & $0.19\pm0.10$ & $1.71\pm0.17$ & $74.03\pm1.37$ & $70.09\pm1.17$ & $80.11\pm3.07$ & Pass \\
+Trailing DDIM 10 & $0.17\pm0.13$ & $1.60\pm0.14$ & $74.24\pm1.00$ & $70.95\pm1.99$ & $81.75\pm2.88$ & Pass \\
+Trailing DDIM 25 & $0.09\pm0.14$ & $1.51\pm0.33$ & $74.39\pm0.63$ & $71.95\pm1.63$ & $85.29\pm2.39$ & Pass \\
+Trailing DDIM 50 & $0.09\pm0.14$ & $1.50\pm0.33$ & $74.15\pm0.98$ & $72.02\pm1.86$ & $86.19\pm2.18$ & Pass \\
+DPM++ 4 & $0.15\pm0.08$ & $2.33\pm0.09$ & $74.99\pm0.38$ & $66.36\pm3.29$ & $72.75\pm3.35$ & Pass \\
+DPM++ 8 & $0.17\pm0.08$ & $1.51\pm0.25$ & $74.00\pm1.17$ & $72.28\pm1.66$ & $83.70\pm3.02$ & Pass \\
+DPM++ 10 & $0.13\pm0.08$ & $1.52\pm0.28$ & $74.26\pm1.35$ & $72.06\pm2.13$ & $84.85\pm2.39$ & Pass \\
+DPM++ 25 & $0.10\pm0.13$ & $1.49\pm0.38$ & $74.39\pm0.51$ & $72.04\pm1.69$ & $86.71\pm1.99$ & Pass \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Continue withheld (33k): all eleven frozen samplers. All entries are percentages, reported as mean $\pm$ the approximate 95\% interval half-width over three training seeds. MAD is the mean absolute difference across the ten unconditional semantic-region probabilities. The final column compares precision and acceptance with the full-data model at the same sampler, using the frozen five-percentage-point noninferiority margin. These all-arm intervals are descriptive.}
+\label{tab:mnist_all_continue_withheld}
+\begin{tabular}{lcccccc}
+\toprule
+Sampler & Digit-3 mass & MAD$\downarrow$ & Precision & Coverage & Acceptance & Fidelity \\
+\midrule
+Leading DDIM 2 & $0.08\pm0.05$ & $6.18\pm0.51$ & $68.74\pm2.48$ & $11.31\pm2.14$ & $35.56\pm4.26$ & Pass \\
+Leading DDIM 4 & $0.20\pm0.05$ & $2.75\pm0.16$ & $74.13\pm0.62$ & $62.62\pm1.71$ & $70.21\pm2.60$ & Pass \\
+Trailing DDIM 4 & $0.19\pm0.10$ & $2.69\pm0.25$ & $75.34\pm0.78$ & $61.73\pm3.33$ & $69.60\pm2.34$ & Pass \\
+Trailing DDIM 8 & $0.12\pm0.15$ & $1.72\pm0.15$ & $74.71\pm0.76$ & $71.09\pm1.96$ & $80.31\pm2.12$ & Pass \\
+Trailing DDIM 10 & $0.11\pm0.17$ & $1.61\pm0.25$ & $74.99\pm1.57$ & $72.10\pm2.98$ & $82.31\pm1.89$ & Pass \\
+Trailing DDIM 25 & $0.09\pm0.16$ & $1.49\pm0.20$ & $75.36\pm1.13$ & $72.79\pm1.86$ & $85.68\pm1.72$ & Pass \\
+Trailing DDIM 50 & $0.08\pm0.17$ & $1.52\pm0.20$ & $75.23\pm1.63$ & $72.86\pm1.85$ & $86.80\pm1.30$ & Pass \\
+DPM++ 4 & $0.14\pm0.05$ & $2.30\pm0.26$ & $75.54\pm1.70$ & $66.95\pm3.30$ & $73.39\pm2.97$ & Pass \\
+DPM++ 8 & $0.10\pm0.18$ & $1.49\pm0.29$ & $74.77\pm0.51$ & $73.23\pm3.03$ & $84.42\pm1.62$ & Pass \\
+DPM++ 10 & $0.11\pm0.20$ & $1.47\pm0.33$ & $75.01\pm1.09$ & $73.03\pm2.67$ & $85.45\pm2.05$ & Pass \\
+DPM++ 25 & $0.09\pm0.20$ & $1.47\pm0.31$ & $75.48\pm1.55$ & $72.74\pm1.77$ & $87.40\pm1.52$ & Pass \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Restore data (33k): all eleven frozen samplers. All entries are percentages, reported as mean $\pm$ the approximate 95\% interval half-width over three training seeds. MAD is the mean absolute difference across the ten unconditional semantic-region probabilities. The final column compares precision and acceptance with the full-data model at the same sampler, using the frozen five-percentage-point noninferiority margin. These all-arm intervals are descriptive.}
+\label{tab:mnist_all_restore_data}
+\begin{tabular}{lcccccc}
+\toprule
+Sampler & Digit-3 mass & MAD$\downarrow$ & Precision & Coverage & Acceptance & Fidelity \\
+\midrule
+Leading DDIM 2 & $5.86\pm1.34$ & $6.08\pm0.32$ & $69.99\pm0.53$ & $11.61\pm2.08$ & $34.61\pm3.22$ & Pass \\
+Leading DDIM 4 & $8.82\pm0.70$ & $2.75\pm0.32$ & $74.08\pm1.58$ & $65.77\pm4.24$ & $67.99\pm3.32$ & Pass \\
+Trailing DDIM 4 & $8.62\pm0.35$ & $2.82\pm0.34$ & $74.74\pm1.13$ & $63.93\pm6.20$ & $67.27\pm3.38$ & Pass \\
+Trailing DDIM 8 & $8.87\pm0.30$ & $1.67\pm0.23$ & $73.79\pm0.85$ & $75.12\pm2.94$ & $78.79\pm2.34$ & Pass \\
+Trailing DDIM 10 & $8.93\pm0.35$ & $1.48\pm0.20$ & $73.93\pm0.50$ & $76.36\pm2.80$ & $80.63\pm2.04$ & Pass \\
+Trailing DDIM 25 & $8.72\pm0.39$ & $1.11\pm0.11$ & $73.77\pm1.45$ & $77.53\pm1.18$ & $84.41\pm1.13$ & Pass \\
+Trailing DDIM 50 & $8.70\pm0.52$ & $0.99\pm0.17$ & $73.85\pm1.33$ & $77.77\pm1.92$ & $85.71\pm1.18$ & Pass \\
+DPM++ 4 & $8.39\pm0.55$ & $2.43\pm0.30$ & $75.09\pm0.73$ & $70.77\pm4.00$ & $71.17\pm2.99$ & Pass \\
+DPM++ 8 & $8.81\pm0.10$ & $1.26\pm0.17$ & $73.54\pm0.67$ & $77.89\pm2.42$ & $82.83\pm1.74$ & Pass \\
+DPM++ 10 & $8.97\pm0.19$ & $1.15\pm0.24$ & $73.29\pm1.19$ & $77.77\pm1.65$ & $83.99\pm2.39$ & Pass \\
+DPM++ 25 & $8.75\pm0.37$ & $0.95\pm0.25$ & $74.07\pm1.23$ & $77.71\pm1.45$ & $86.21\pm2.06$ & Pass \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Targeted restoration (33k): all eleven frozen samplers. All entries are percentages, reported as mean $\pm$ the approximate 95\% interval half-width over three training seeds. MAD is the mean absolute difference across the ten unconditional semantic-region probabilities. The final column compares precision and acceptance with the full-data model at the same sampler, using the frozen five-percentage-point noninferiority margin. These all-arm intervals are descriptive.}
+\label{tab:mnist_all_targeted_restore}
+\begin{tabular}{lcccccc}
+\toprule
+Sampler & Digit-3 mass & MAD$\downarrow$ & Precision & Coverage & Acceptance & Fidelity \\
+\midrule
+Leading DDIM 2 & $10.73\pm2.86$ & $6.04\pm0.36$ & $71.21\pm0.93$ & $11.89\pm0.67$ & $37.09\pm2.05$ & Pass \\
+Leading DDIM 4 & $16.67\pm1.51$ & $3.90\pm0.19$ & $74.89\pm0.85$ & $64.81\pm3.45$ & $70.17\pm2.25$ & Pass \\
+Trailing DDIM 4 & $16.40\pm1.35$ & $3.94\pm0.27$ & $75.91\pm0.37$ & $63.60\pm2.12$ & $69.15\pm2.36$ & Pass \\
+Trailing DDIM 8 & $16.42\pm1.85$ & $2.86\pm0.28$ & $74.01\pm0.52$ & $74.60\pm2.33$ & $80.02\pm2.28$ & Pass \\
+Trailing DDIM 10 & $16.50\pm1.61$ & $2.70\pm0.28$ & $74.40\pm1.50$ & $75.94\pm1.77$ & $81.80\pm1.84$ & Pass \\
+Trailing DDIM 25 & $16.27\pm1.63$ & $2.32\pm0.40$ & $74.55\pm0.55$ & $77.54\pm0.65$ & $85.10\pm2.17$ & Pass \\
+Trailing DDIM 50 & $16.19\pm1.38$ & $2.18\pm0.30$ & $74.54\pm0.53$ & $77.64\pm1.15$ & $86.39\pm1.31$ & Pass \\
+DPM++ 4 & $16.43\pm1.18$ & $3.55\pm0.25$ & $75.54\pm0.60$ & $70.33\pm3.82$ & $73.16\pm2.67$ & Pass \\
+DPM++ 8 & $16.52\pm1.72$ & $2.49\pm0.45$ & $74.11\pm1.20$ & $77.53\pm1.37$ & $83.99\pm1.90$ & Pass \\
+DPM++ 10 & $16.47\pm1.47$ & $2.37\pm0.36$ & $74.14\pm1.27$ & $77.78\pm0.33$ & $85.01\pm0.99$ & Pass \\
+DPM++ 25 & $16.18\pm1.30$ & $2.15\pm0.35$ & $74.64\pm0.74$ & $77.61\pm1.28$ & $86.66\pm1.69$ & Pass \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\caption{Full data (33k): all eleven frozen samplers. All entries are percentages, reported as mean $\pm$ the approximate 95\% interval half-width over three training seeds. MAD is the mean absolute difference across the ten unconditional semantic-region probabilities. The final column compares precision and acceptance with the full-data model at the same sampler, using the frozen five-percentage-point noninferiority margin. These all-arm intervals are descriptive.}
+\label{tab:mnist_all_full_data}
+\begin{tabular}{lcccccc}
+\toprule
+Sampler & Digit-3 mass & MAD$\downarrow$ & Precision & Coverage & Acceptance & Fidelity \\
+\midrule
+Leading DDIM 2 & $6.29\pm0.10$ & $6.02\pm0.46$ & $70.19\pm2.86$ & $11.65\pm3.80$ & $35.21\pm4.56$ & Reference \\
+Leading DDIM 4 & $9.59\pm0.69$ & $2.63\pm0.37$ & $74.49\pm0.63$ & $66.17\pm5.02$ & $69.13\pm3.66$ & Reference \\
+Trailing DDIM 4 & $9.33\pm1.47$ & $2.71\pm0.46$ & $75.43\pm0.55$ & $64.67\pm6.12$ & $68.42\pm4.69$ & Reference \\
+Trailing DDIM 8 & $9.47\pm1.63$ & $1.58\pm0.29$ & $74.40\pm2.12$ & $75.71\pm3.24$ & $79.81\pm2.77$ & Reference \\
+Trailing DDIM 10 & $9.54\pm1.35$ & $1.42\pm0.22$ & $74.65\pm2.44$ & $76.77\pm2.56$ & $81.41\pm2.09$ & Reference \\
+Trailing DDIM 25 & $9.47\pm0.95$ & $1.04\pm0.05$ & $74.87\pm0.80$ & $78.38\pm1.00$ & $85.07\pm0.48$ & Reference \\
+Trailing DDIM 50 & $9.45\pm0.86$ & $0.91\pm0.11$ & $74.49\pm1.05$ & $78.59\pm0.77$ & $86.43\pm1.00$ & Reference \\
+DPM++ 4 & $9.18\pm0.76$ & $2.33\pm0.26$ & $75.51\pm2.41$ & $71.67\pm2.14$ & $72.14\pm2.60$ & Reference \\
+DPM++ 8 & $9.44\pm1.08$ & $1.20\pm0.15$ & $74.15\pm1.78$ & $78.17\pm1.41$ & $83.47\pm1.54$ & Reference \\
+DPM++ 10 & $9.51\pm0.77$ & $1.06\pm0.16$ & $74.45\pm1.77$ & $78.34\pm1.59$ & $84.86\pm1.65$ & Reference \\
+DPM++ 25 & $9.47\pm0.94$ & $0.85\pm0.11$ & $75.09\pm1.02$ & $78.81\pm1.22$ & $87.15\pm0.72$ & Reference \\
+\bottomrule
+\end{tabular}
+\end{table*}

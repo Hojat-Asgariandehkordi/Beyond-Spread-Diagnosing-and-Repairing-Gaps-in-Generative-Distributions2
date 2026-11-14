@@ -1,0 +1,71 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[review]{cvpr}
+\usepackage{array}
+\usepackage{microtype}
+\definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
+\usepackage[pagebackref,breaklinks,colorlinks,allcolors=cvprblue]{hyperref}
+\usepackage[capitalize]{cleveref}
+\def\confName{CVPR}
+\def\confYear{2027}
+\title{Beyond Spread: Diagnosing and Repairing Gaps in Generative Distributions}
+\author{}
+\hypersetup{pdftitle={Beyond Spread: Diagnosing and Repairing Gaps in Generative Distributions},pdfauthor={}}
+\raggedbottom
+\setlength{\hfuzz}{0.5pt}
+\begin{document}
+\maketitle
+\begin{abstract}
+A fast image generator can match overall variation while losing an entire
+region of the image distribution. We introduce an audit that fixes a
+reference, measures changes in regional probability and within-region
+variation, and tests whether targeted interventions improve the intended
+outcome on fresh samples. A finite-sample bound certifies when a regional loss
+exceeds a declared magnitude. On a fixed natural-image model,
+changing the covariance of the starting noise lowers a feature-based
+distribution discrepancy by 32\% at two denoising calls per image and
+raises coverage of real-image feature neighborhoods from 20.6\% to 28.8\%.
+In a handwritten-digit experiment, ordinary training corrects a digit
+overshoot at the same update budget, reducing mean digit-frequency error
+by 59\% across three training seeds. Including images rejected by the
+digit classifiers, the discrepancy across the full set of outcomes falls
+by 42\%. In text-to-image generation, the same audit explains how pooled
+variation can fall while variation within individual prompts rises.
+\end{abstract}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth,pagebox=cropbox]{../figures/pipeline_overview.pdf}
+\caption{Reference-calibrated diagnosis and repair.
+(A) Reference and generated images use the same feature map $\phi$.
+Fit regions on $R_{\rm fit}$, calibrate the support threshold on
+$R_{\rm cal}$, and apply the frozen regions to the reference evaluation
+pool and candidate samples. (B) The diagnostics measure regional mass,
+within-region spread, and departure from reference support. In region
+$j$, $p_j$ and $q_j$ are reference and candidate masses. The depletion
+criterion is $q_j^+/p_j^-<0.5$ at the illustrated threshold, where $+$
+and $-$ denote upper and lower confidence bounds. Contraction requires
+the spread interval to lie below 0.9. (C) Compare the targeted change
+with its control on independent outcomes and record fidelity and cost.
+Images and point clouds are illustrative.}
+\label{fig:pipeline}
+\end{figure*}
+
+\input{introduction}
+\input{related}
+\input{method}
+\input{support_experiments}
+\section{Controlled repairs and interpretable comparisons}
+\label{sec:experiments}
+\input{repair_summary}
+\input{cifar_experiments}
+\input{mnist_experiments}
+\input{t2i_experiments}
+\input{policy_summary}
+\input{conclusion}
+\label{audit:lastbodypage}
+\clearpage
+\input{llm_usage}
+{\small
+\bibliographystyle{ieeenat_fullname}
+\bibliography{references}}
+\end{document}

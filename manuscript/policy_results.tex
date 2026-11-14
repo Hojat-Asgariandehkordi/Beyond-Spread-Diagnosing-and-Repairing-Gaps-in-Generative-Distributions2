@@ -1,0 +1,17 @@
+Table~\ref{tab:policy} reports secondary checks on the frozen choices.
+Relative to quality plus Vendi, Sana gains 0.0508 [0.0148,0.0947] in
+disjoint-seed teacher coverage at 2.34 extra calls per image.
+Both adjusted preference and coverage intervals include zero against the
+same-count shuffle in both families, leaving prompt assignment unresolved.
+A second reward model, ImageReward, also favors the selected policies
+over fixed DPM++8. On Sana it favors the 20-call fallback over the audit,
+with audit-minus-fallback reward $-0.0261$ [$-0.0461,-0.0093$].
+The original preference gate passes, and no ImageReward equivalence margin
+was declared (Supp.~Sec.~L).
+
+Audit inference costs 14.06/14.28 calls per SD/Sana image. Diagnosis costs
+528 calls per prompt, and reusable preparation costs 38,400 per family.
+Allocating that preparation across 128 prompts, call-only break-even
+versus the respective fallbacks is 428 SD or 145 Sana images per prompt,
+assuming equal output counts. This excludes feature and reward computation.
+Supp.~Secs.~K--L give the coupling and ImageReward checks.

@@ -1,0 +1,222 @@
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Calls & \shortstack{DINO spread\\ratio} & \shortstack{CLIP spread\\ratio} & \shortstack{Learned preference\\$\psi$} & \shortstack{CLIP alignment\\$\Delta$} \\
+\midrule
+DDIM50 (CFG7.5) & 50 & 1.00 [1.00, 1.00] & 1.00 [1.00, 1.00] & 0.500 [0.500, 0.500] & 0.000 [0.000, 0.000] \\
+DDIM4 & 4 & 1.31 [1.24, 1.38] & 1.16 [1.09, 1.25] & 0.247 [0.227, 0.268] & -0.031 [-0.035, -0.026] \\
+DDIM8 & 8 & 1.08 [1.05, 1.12] & 1.09 [1.05, 1.14] & 0.417 [0.403, 0.430] & -0.005 [-0.007, -0.003] \\
+Trailing DDIM4 & 4 & 1.13 [1.10, 1.17] & 1.05 [1.00, 1.10] & 0.330 [0.314, 0.347] & -0.011 [-0.015, -0.008] \\
+Trailing DDIM8 & 8 & 1.01 [0.99, 1.03] & 1.01 [0.99, 1.04] & 0.452 [0.443, 0.460] & -0.001 [-0.003, 0.000] \\
+Stochastic DDIM4 & 4 & 1.37 [1.30, 1.45] & 1.12 [1.04, 1.20] & 0.205 [0.186, 0.224] & -0.038 [-0.043, -0.033] \\
+Stochastic DDIM8 & 8 & 1.07 [1.03, 1.10] & 1.07 [1.03, 1.12] & 0.392 [0.378, 0.406] & -0.005 [-0.008, -0.003] \\
+CFG3 DDIM4 & 4 & 1.34 [1.26, 1.42] & 1.10 [1.03, 1.18] & 0.197 [0.178, 0.216] & -0.050 [-0.056, -0.045] \\
+CFG3 DDIM8 & 8 & 1.27 [1.21, 1.32] & 1.21 [1.15, 1.28] & 0.331 [0.314, 0.348] & -0.021 [-0.024, -0.018] \\
+DPM++4 & 4 & 1.13 [1.10, 1.17] & 1.07 [1.03, 1.12] & 0.326 [0.309, 0.343] & -0.012 [-0.015, -0.009] \\
+DPM++8 & 8 & 1.01 [1.00, 1.03] & 1.03 [1.01, 1.05] & 0.448 [0.440, 0.456] & -0.002 [-0.003, -0.001] \\
+UniPC4 & 4 & 1.15 [1.11, 1.19] & 1.07 [1.03, 1.12] & 0.321 [0.303, 0.338] & -0.013 [-0.016, -0.010] \\
+UniPC8 & 8 & 1.03 [1.01, 1.04] & 1.04 [1.02, 1.06] & 0.440 [0.432, 0.448] & -0.002 [-0.003, -0.001] \\
+CADS--DDIM4 & 4 & 1.38 [1.31, 1.46] & 1.22 [1.14, 1.31] & 0.229 [0.209, 0.249] & -0.036 [-0.040, -0.031] \\
+CADS--DDIM8 & 8 & 1.32 [1.27, 1.38] & 1.32 [1.25, 1.40] & 0.335 [0.318, 0.352] & -0.015 [-0.018, -0.012] \\
+CADS--DPM++4 & 4 & 1.46 [1.38, 1.54] & 1.34 [1.26, 1.43] & 0.224 [0.205, 0.243] & -0.034 [-0.038, -0.029] \\
+CADS--DPM++8 & 8 & 1.39 [1.33, 1.45] & 1.40 [1.33, 1.47] & 0.314 [0.298, 0.329] & -0.018 [-0.021, -0.015] \\
+DDIM50 (CFG1.75) & 50 & 1.39 [1.33, 1.45] & 1.38 [1.32, 1.46] & 0.327 [0.312, 0.342] & -0.028 [-0.031, -0.025] \\
+DDIM50 (CFG1) & 50 & 1.58 [1.50, 1.67] & 1.54 [1.44, 1.64] & 0.208 [0.192, 0.225] & -0.062 [-0.067, -0.057] \\
+LCM4 & 4 & 1.10 [1.06, 1.14] & 1.11 [1.07, 1.15] & 0.418 [0.403, 0.432] & -0.016 [-0.019, -0.013] \\
+LCM8 & 8 & 1.09 [1.05, 1.13] & 1.12 [1.07, 1.17] & 0.404 [0.385, 0.422] & -0.022 [-0.025, -0.018] \\
+Hybrid LCM4 & 4 & 1.22 [1.18, 1.25] & 1.21 [1.16, 1.26] & 0.410 [0.396, 0.424] & -0.014 [-0.018, -0.011] \\
+Hybrid LCM8 & 8 & 1.14 [1.10, 1.18] & 1.14 [1.10, 1.19] & 0.423 [0.406, 0.440] & -0.019 [-0.022, -0.016] \\
+DMD2 one step & 1 & 1.25 [1.21, 1.30] & 1.26 [1.20, 1.31] & 0.385 [0.370, 0.399] & -0.018 [-0.021, -0.015] \\
+DPM++16 & 16 & 0.99 [0.98, 1.01] & 1.01 [1.00, 1.03] & 0.490 [0.485, 0.494] & 0.000 [-0.001, 0.001] \\
+UniPC16 & 16 & 1.00 [0.99, 1.02] & 1.02 [1.01, 1.04] & 0.488 [0.483, 0.493] & -0.001 [-0.002, 0.000] \\
+Trailing DDIM16 & 16 & 0.99 [0.98, 1.00] & 1.00 [0.99, 1.01] & 0.498 [0.493, 0.503] & 0.000 [0.000, 0.001] \\
+CADS--DPM++16 & 16 & 1.27 [1.22, 1.32] & 1.30 [1.24, 1.35] & 0.394 [0.381, 0.407] & -0.009 [-0.011, -0.007] \\
+Tuned CADS--DPM++8 & 8 & 1.15 [1.11, 1.18] & 1.17 [1.13, 1.21] & 0.403 [0.391, 0.414] & -0.005 [-0.007, -0.004] \\
+\bottomrule
+\end{tabular}
+\caption{Complete SD comparisons against the common DDIM50, CFG7.5 reference. DMD2's separate matched-CFG1.75 comparison is retained in the reference-sensitivity analysis. All rows use 128 held-out prompts and 16 outcome seeds per prompt; brackets are descriptive 95\% paired prompt-bootstrap intervals. No diagnosis samples enter these results.}
+\label{tab:t2i_all_outcomes}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Calls & \shortstack{DINO spread\\ratio} & \shortstack{CLIP spread\\ratio} & \shortstack{Learned preference\\$\psi$} & \shortstack{CLIP alignment\\$\Delta$} \\
+\midrule
+Flow-DPM++50 & 50 & 1.00 [1.00, 1.00] & 1.00 [1.00, 1.00] & 0.500 [0.500, 0.500] & 0.000 [0.000, 0.000] \\
+Flow-DPM++20 & 20 & 1.00 [0.99, 1.01] & 1.02 [1.00, 1.03] & 0.510 [0.508, 0.513] & 0.000 [-0.001, 0.000] \\
+DPM++4 & 4 & 1.57 [1.46, 1.69] & 1.55 [1.42, 1.69] & 0.292 [0.271, 0.314] & -0.016 [-0.020, -0.012] \\
+DPM++8 & 8 & 1.13 [1.10, 1.17] & 1.16 [1.12, 1.21] & 0.479 [0.471, 0.487] & -0.002 [-0.004, -0.001] \\
+Euler4 & 4 & 1.75 [1.60, 1.92] & 1.57 [1.41, 1.75] & 0.209 [0.187, 0.232] & -0.031 [-0.037, -0.026] \\
+Euler8 & 8 & 1.12 [1.08, 1.16] & 1.15 [1.10, 1.20] & 0.475 [0.466, 0.484] & -0.002 [-0.004, -0.001] \\
+CADS--DPM++8 & 8 & 1.97 [1.83, 2.12] & 2.12 [1.93, 2.34] & 0.354 [0.339, 0.369] & -0.015 [-0.018, -0.012] \\
+\bottomrule
+\end{tabular}
+\caption{Complete learned-flow comparisons against native Flow-DPM++50, CFG5. The 20-step method is the frozen fallback; it does not replace the reference after evaluation. All rows use 128 held-out prompts and 16 outcome seeds per prompt; brackets are descriptive 95\% paired prompt-bootstrap intervals. No diagnosis samples enter these results.}
+\label{tab:flow_all_outcomes}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Calls & \shortstack{DINO spread\\ratio} & \shortstack{CLIP spread\\ratio} & \shortstack{Learned preference\\$\psi$} & \shortstack{CLIP alignment\\$\Delta$} \\
+\midrule
+DMD2 one step vs CFG7.5 & 1 & 1.25 [1.21, 1.30] & 1.26 [1.20, 1.31] & 0.385 [0.370, 0.399] & -0.018 [-0.021, -0.015] \\
+DMD2 one step vs CFG1.75 matched & 1 & 0.90 [0.87, 0.93] & 0.91 [0.88, 0.94] & 0.558 [0.545, 0.571] & 0.010 [0.007, 0.012] \\
+DMD2 one step vs CFG1 sensitivity & 1 & 0.79 [0.76, 0.82] & 0.82 [0.78, 0.85] & 0.708 [0.691, 0.724] & 0.044 [0.040, 0.048] \\
+LCM4 vs CFG7.5 & 4 & 1.10 [1.07, 1.14] & 1.11 [1.07, 1.15] & 0.418 [0.403, 0.432] & -0.016 [-0.019, -0.013] \\
+LCM4 vs CFG1 sensitivity & 4 & 0.70 [0.65, 0.74] & 0.72 [0.67, 0.77] & 0.731 [0.710, 0.751] & 0.046 [0.042, 0.051] \\
+LCM4 vs native LCM8 & 4 & 1.01 [0.99, 1.03] & 0.99 [0.97, 1.02] & 0.519 [0.509, 0.530] & 0.006 [0.004, 0.007] \\
+\bottomrule
+\end{tabular}
+\caption{Native distilled-model reference sensitivity. Each row changes only the named comparison reference. External CFG1 for LCM does not establish a matched teacher; its CFG1 row is explicitly a sensitivity. All rows use 128 held-out prompts and 16 outcome seeds per prompt; brackets are descriptive 95\% paired prompt-bootstrap intervals. No diagnosis samples enter these results.}
+\label{tab:t2i_native_references}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & \shortstack{Pooled\\$R$} & \shortstack{Within-prompt\\$R$} & \shortstack{PRDC\\coverage} & \shortstack{Prompt\\Vendi} & \shortstack{Conditional\\Vendi} & \shortstack{Conditional\\RKE} \\
+\midrule
+DDIM50 (CFG7.5) & 1.00 & 1.00 & 1.00 [1.00, 1.00] & 5.06 & 17.34 & 35.96 $\pm$ 3.20 \\
+DDIM4 & 0.92 & 1.31 & 0.22 [0.18, 0.25] & 7.48 & 24.07 & 38.76 $\pm$ 2.73 \\
+DDIM8 & 0.98 & 1.08 & 0.79 [0.76, 0.82] & 5.68 & 19.34 & 38.32 $\pm$ 3.41 \\
+Trailing DDIM4 & 0.96 & 1.13 & 0.54 [0.49, 0.59] & 6.06 & 20.47 & 38.13 $\pm$ 2.94 \\
+Trailing DDIM8 & 0.99 & 1.01 & 0.93 [0.92, 0.95] & 5.23 & 17.78 & 36.07 $\pm$ 3.12 \\
+Stochastic DDIM4 & 0.89 & 1.37 & 0.15 [0.12, 0.17] & 8.03 & 25.09 & 34.12 $\pm$ 1.98 \\
+Stochastic DDIM8 & 0.97 & 1.07 & 0.65 [0.61, 0.68] & 5.59 & 18.87 & 36.66 $\pm$ 3.09 \\
+CFG3 DDIM4 & 0.86 & 1.34 & 0.11 [0.09, 0.14] & 7.96 & 23.67 & 29.11 $\pm$ 1.85 \\
+CFG3 DDIM8 & 0.95 & 1.27 & 0.39 [0.35, 0.44] & 7.07 & 23.47 & 42.73 $\pm$ 3.53 \\
+DPM++4 & 0.96 & 1.13 & 0.55 [0.51, 0.60] & 6.08 & 20.47 & 37.40 $\pm$ 2.86 \\
+DPM++8 & 0.99 & 1.01 & 0.95 [0.94, 0.96] & 5.26 & 17.85 & 35.78 $\pm$ 3.12 \\
+UniPC4 & 0.95 & 1.15 & 0.53 [0.48, 0.57] & 6.20 & 20.81 & 37.64 $\pm$ 2.88 \\
+UniPC8 & 0.98 & 1.03 & 0.94 [0.92, 0.95] & 5.35 & 18.16 & 36.11 $\pm$ 3.13 \\
+CADS--DDIM4 & 0.91 & 1.38 & 0.18 [0.14, 0.21] & 8.12 & 25.59 & 39.25 $\pm$ 2.65 \\
+CADS--DDIM8 & 0.96 & 1.32 & 0.48 [0.45, 0.52] & 7.32 & 24.31 & 45.23 $\pm$ 3.88 \\
+CADS--DPM++4 & 0.90 & 1.46 & 0.20 [0.17, 0.24] & 8.76 & 27.76 & 41.01 $\pm$ 2.61 \\
+CADS--DPM++8 & 0.96 & 1.39 & 0.46 [0.42, 0.50] & 7.80 & 25.82 & 47.01 $\pm$ 3.85 \\
+DDIM50 (CFG1.75) & 0.95 & 1.39 & 0.39 [0.35, 0.43] & 8.03 & 26.72 & 49.47 $\pm$ 4.15 \\
+DDIM50 (CFG1) & 0.88 & 1.58 & 0.12 [0.10, 0.15] & 10.23 & 31.85 & 46.15 $\pm$ 3.21 \\
+LCM4 & 1.00 & 1.10 & 0.51 [0.46, 0.56] & 5.70 & 19.10 & 38.61 $\pm$ 3.21 \\
+LCM8 & 0.99 & 1.09 & 0.42 [0.37, 0.48] & 5.53 & 18.30 & 36.07 $\pm$ 2.85 \\
+Hybrid LCM4 & 0.99 & 1.22 & 0.46 [0.41, 0.50] & 6.41 & 21.82 & 43.94 $\pm$ 3.61 \\
+Hybrid LCM8 & 0.99 & 1.14 & 0.46 [0.42, 0.51] & 5.79 & 19.39 & 38.68 $\pm$ 3.12 \\
+DMD2 one step & 0.98 & 1.25 & 0.37 [0.33, 0.41] & 6.87 & 23.11 & 45.06 $\pm$ 3.82 \\
+DPM++16 & 0.99 & 0.99 & 0.99 [0.98, 0.99] & 5.09 & 17.31 & 35.38 $\pm$ 3.16 \\
+UniPC16 & 0.99 & 1.00 & 0.99 [0.98, 0.99] & 5.16 & 17.51 & 35.75 $\pm$ 3.16 \\
+Trailing DDIM16 & 1.00 & 0.99 & 0.99 [0.99, 1.00] & 5.05 & 17.20 & 35.46 $\pm$ 3.19 \\
+CADS--DPM++16 & 0.98 & 1.27 & 0.69 [0.65, 0.72] & 6.80 & 22.93 & 44.30 $\pm$ 3.90 \\
+Tuned CADS--DPM++8 & 0.98 & 1.15 & 0.76 [0.73, 0.80] & 6.09 & 20.62 & 39.87 $\pm$ 3.47 \\
+\bottomrule
+\end{tabular}
+\caption{SD diversity diagnostics on the same 128 held-out prompts and 16 outcome seeds, using DINOv2 features. Pooled and within-prompt spread ratios and PRDC coverage compare with DDIM50, CFG7.5. Coverage brackets are descriptive 95\% paired prompt-bootstrap intervals. Prompt Vendi averages the within-prompt score; Conditional Vendi and Conditional RKE instead use the full 2,048-image/text Gram matrices. RKE reports a delete-one-prompt jackknife standard error, not a confidence interval. Entropy scores are descriptive and never establish sample quality. All methods and seeds are retained.}
+\label{tab:test_competing_diagnostics}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & \shortstack{Pooled\\$R$} & \shortstack{Within-prompt\\$R$} & \shortstack{PRDC\\coverage} & \shortstack{Prompt\\Vendi} & \shortstack{Conditional\\Vendi} & \shortstack{Conditional\\RKE} \\
+\midrule
+Flow-DPM++50 & 1.00 & 1.00 & 1.00 [1.00, 1.00] & 2.76 & 9.61 & 23.42 $\pm$ 2.13 \\
+Flow-DPM++20 & 1.00 & 1.00 & 1.00 [1.00, 1.00] & 2.77 & 9.62 & 23.39 $\pm$ 2.14 \\
+DPM++4 & 0.95 & 1.57 & 0.19 [0.15, 0.24] & 4.16 & 13.99 & 26.81 $\pm$ 2.02 \\
+DPM++8 & 1.00 & 1.13 & 0.88 [0.86, 0.91] & 3.06 & 10.52 & 24.39 $\pm$ 2.16 \\
+Euler4 & 0.91 & 1.75 & 0.08 [0.05, 0.11] & 4.73 & 15.23 & 25.10 $\pm$ 1.65 \\
+Euler8 & 1.00 & 1.12 & 0.76 [0.72, 0.80] & 3.02 & 10.44 & 24.41 $\pm$ 2.17 \\
+CADS--DPM++8 & 0.97 & 1.97 & 0.17 [0.14, 0.20] & 5.26 & 17.44 & 32.75 $\pm$ 2.87 \\
+\bottomrule
+\end{tabular}
+\caption{Sana diversity diagnostics on the same 128 held-out prompts and 16 outcome seeds, using DINOv2 features. Pooled and within-prompt spread ratios and PRDC coverage compare with Flow-DPM++50, CFG5. Coverage brackets are descriptive 95\% paired prompt-bootstrap intervals. Prompt Vendi averages the within-prompt score; Conditional Vendi and Conditional RKE instead use the full 2,048-image/text Gram matrices. RKE reports a delete-one-prompt jackknife standard error, not a confidence interval. Entropy scores are descriptive and never establish sample quality. All methods and seeds are retained.}
+\label{tab:flow_test_competing_diagnostics}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrrr}
+\toprule
+Method and reference & Sampling latent & Image re-encoding & DINOv2 & CLIP \\
+\midrule
+\shortstack[l]{DDIM4\\CFG7.5 reference} & 0.41 [0.40, 0.43] & 0.48 [0.46, 0.50] & 1.31 [1.20, 1.42] & 1.16 [1.05, 1.28] \\[2pt]
+\shortstack[l]{LCM4\\CFG7.5 reference} & 0.97 [0.94, 1.01] & 0.97 [0.94, 1.00] & 1.10 [1.05, 1.16] & 1.11 [1.05, 1.17] \\[2pt]
+\shortstack[l]{LCM4\\CFG1 sensitivity} & 1.36 [1.30, 1.41] & 1.28 [1.24, 1.33] & 0.70 [0.64, 0.76] & 0.72 [0.66, 0.80] \\[2pt]
+\shortstack[l]{DMD2 one step\\CFG7.5 reference} & 1.17 [1.11, 1.22] & 1.17 [1.12, 1.23] & 1.25 [1.19, 1.32] & 1.26 [1.18, 1.34] \\[2pt]
+\shortstack[l]{DMD2 one step\\CFG1.75 matched} & 1.59 [1.53, 1.66] & 1.52 [1.47, 1.59] & 0.90 [0.86, 0.94] & 0.91 [0.87, 0.95] \\[2pt]
+\bottomrule
+\end{tabular}
+\caption{Simultaneous check for the 20 prespecified representation/reference contrasts in the main figure. Entries show conditional spread ratios with approximate 95\% simultaneous intervals from the maximum standardized absolute bootstrap log-ratio deviation, using 10,000 shared paired-prompt resamples. These wider intervals are distinct from the descriptive marginal intervals in the figure. Excluding 1 identifies a directional change; passing 0.9/1.1 operational margins and quality/support gates is a separate requirement.}
+\label{tab:t2i_simultaneous}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & \shortstack{Within\\contribution} & \shortstack{Between\\contribution} & \shortstack{Pooled\\$R$} & \shortstack{Observed\\between $R$} & \shortstack{Noise-corrected\\between $R$} \\
+\midrule
+DDIM50 (CFG7.5) & 0.400 & 0.600 & 1.000 & 1.00 [1.00, 1.00] & 1.00 [1.00, 1.00] \\
+DDIM4 & 0.523 & 0.396 & 0.919 & 0.66 [0.62, 0.69] & 0.63 [0.59, 0.67] \\
+DDIM8 & 0.434 & 0.549 & 0.983 & 0.92 [0.90, 0.93] & 0.91 [0.89, 0.93] \\
+Trailing DDIM4 & 0.453 & 0.510 & 0.963 & 0.85 [0.83, 0.87] & 0.84 [0.81, 0.86] \\
+Trailing DDIM8 & 0.405 & 0.587 & 0.991 & 0.98 [0.97, 0.99] & 0.98 [0.96, 0.99] \\
+Stochastic DDIM4 & 0.549 & 0.343 & 0.891 & 0.57 [0.54, 0.61] & 0.53 [0.50, 0.57] \\
+Stochastic DDIM8 & 0.428 & 0.546 & 0.974 & 0.91 [0.89, 0.93] & 0.90 [0.88, 0.93] \\
+CFG3 DDIM4 & 0.536 & 0.328 & 0.864 & 0.55 [0.51, 0.59] & 0.51 [0.47, 0.55] \\
+CFG3 DDIM8 & 0.507 & 0.446 & 0.953 & 0.74 [0.72, 0.77] & 0.72 [0.69, 0.75] \\
+DPM++4 & 0.454 & 0.503 & 0.957 & 0.84 [0.82, 0.86] & 0.83 [0.80, 0.85] \\
+DPM++8 & 0.406 & 0.580 & 0.987 & 0.97 [0.96, 0.98] & 0.97 [0.95, 0.98] \\
+UniPC4 & 0.460 & 0.495 & 0.955 & 0.83 [0.80, 0.85] & 0.81 [0.79, 0.83] \\
+UniPC8 & 0.411 & 0.573 & 0.985 & 0.96 [0.95, 0.97] & 0.95 [0.94, 0.97] \\
+CADS--DDIM4 & 0.553 & 0.356 & 0.909 & 0.59 [0.56, 0.63] & 0.56 [0.52, 0.60] \\
+CADS--DDIM8 & 0.529 & 0.432 & 0.961 & 0.72 [0.69, 0.75] & 0.69 [0.66, 0.72] \\
+CADS--DPM++4 & 0.583 & 0.320 & 0.903 & 0.53 [0.50, 0.57] & 0.49 [0.46, 0.53] \\
+CADS--DPM++8 & 0.555 & 0.401 & 0.956 & 0.67 [0.64, 0.70] & 0.64 [0.61, 0.67] \\
+DDIM50 (CFG1.75) & 0.556 & 0.397 & 0.953 & 0.66 [0.64, 0.68] & 0.63 [0.60, 0.65] \\
+DDIM50 (CFG1) & 0.634 & 0.250 & 0.884 & 0.42 [0.39, 0.44] & 0.36 [0.34, 0.39] \\
+LCM4 & 0.441 & 0.556 & 0.997 & 0.93 [0.90, 0.95] & 0.92 [0.89, 0.95] \\
+LCM8 & 0.436 & 0.554 & 0.990 & 0.92 [0.90, 0.95] & 0.92 [0.89, 0.95] \\
+Hybrid LCM4 & 0.487 & 0.507 & 0.995 & 0.85 [0.82, 0.87] & 0.83 [0.80, 0.85] \\
+Hybrid LCM8 & 0.456 & 0.537 & 0.994 & 0.90 [0.87, 0.92] & 0.89 [0.86, 0.91] \\
+DMD2 one step & 0.501 & 0.482 & 0.983 & 0.80 [0.78, 0.83] & 0.78 [0.75, 0.81] \\
+DPM++16 & 0.398 & 0.596 & 0.994 & 0.99 [0.99, 1.00] & 0.99 [0.99, 1.00] \\
+UniPC16 & 0.402 & 0.592 & 0.994 & 0.99 [0.98, 1.00] & 0.99 [0.98, 1.00] \\
+Trailing DDIM16 & 0.395 & 0.602 & 0.997 & 1.00 [1.00, 1.01] & 1.00 [1.00, 1.01] \\
+CADS--DPM++16 & 0.508 & 0.469 & 0.977 & 0.78 [0.76, 0.81] & 0.76 [0.73, 0.79] \\
+Tuned CADS--DPM++8 & 0.460 & 0.517 & 0.977 & 0.86 [0.84, 0.88] & 0.85 [0.83, 0.87] \\
+\bottomrule
+\end{tabular}
+\caption{SD DINO trace-covariance decomposition on all 128 held-out prompts and 16 outcome seeds. The two additive contributions are divided by the same reference pooled trace; their sum is the pooled ratio, up to rounding. The reference within/between shares are 0.400/0.600. Observed between variation is the trace covariance of prompt means; the classical noise correction subtracts $W/16$ without clipping, where $W$ is mean within-prompt trace covariance. Between ratios include descriptive 95\% paired prompt-bootstrap intervals. The exact ANOVA identity is verified for every arm and representation. This secondary descriptive decomposition was specified after inspecting the DDIM4 contrast; it does not change any selected method, gate, or primary comparison.}
+\label{tab:test_anova}
+\end{table*}
+
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & \shortstack{Within\\contribution} & \shortstack{Between\\contribution} & \shortstack{Pooled\\$R$} & \shortstack{Observed\\between $R$} & \shortstack{Noise-corrected\\between $R$} \\
+\midrule
+Flow-DPM++50 & 0.209 & 0.791 & 1.000 & 1.00 [1.00, 1.00] & 1.00 [1.00, 1.00] \\
+Flow-DPM++20 & 0.209 & 0.790 & 1.000 & 1.00 [1.00, 1.00] & 1.00 [1.00, 1.00] \\
+DPM++4 & 0.328 & 0.621 & 0.950 & 0.79 [0.76, 0.81] & 0.77 [0.75, 0.80] \\
+DPM++8 & 0.237 & 0.758 & 0.995 & 0.96 [0.95, 0.97] & 0.96 [0.94, 0.97] \\
+Euler4 & 0.366 & 0.546 & 0.913 & 0.69 [0.66, 0.72] & 0.67 [0.64, 0.71] \\
+Euler8 & 0.234 & 0.762 & 0.995 & 0.96 [0.95, 0.97] & 0.96 [0.95, 0.97] \\
+CADS--DPM++8 & 0.411 & 0.555 & 0.967 & 0.70 [0.68, 0.72] & 0.68 [0.66, 0.70] \\
+\bottomrule
+\end{tabular}
+\caption{Sana DINO trace-covariance decomposition on all 128 held-out prompts and 16 outcome seeds. The two additive contributions are divided by the same reference pooled trace; their sum is the pooled ratio, up to rounding. The reference within/between shares are 0.209/0.791. Observed between variation is the trace covariance of prompt means; the classical noise correction subtracts $W/16$ without clipping, where $W$ is mean within-prompt trace covariance. Between ratios include descriptive 95\% paired prompt-bootstrap intervals. The exact ANOVA identity is verified for every arm and representation. This secondary descriptive decomposition was specified after inspecting the DDIM4 contrast; it does not change any selected method, gate, or primary comparison.}
+\label{tab:flow_test_anova}
+\end{table*}

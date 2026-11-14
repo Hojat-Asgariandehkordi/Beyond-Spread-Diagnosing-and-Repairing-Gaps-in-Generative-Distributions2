@@ -1,0 +1,41 @@
+\section{Reproducibility: display names and artifact identifiers}
+\label{supp:identifiers}
+Tables use readable method names. The mapping below preserves the identifiers
+in the immutable result records; $K$ denotes the recorded step/call suffix,
+with CAS ceilings interpreted as specified in Sec.~\ref{supp:cifar}.
+The accompanying identifier CSV lists each relabeled reward-table entry.
+Model revisions, exact sampling configurations, seed streams, and complete
+resource ledgers remain in the study sections and source manifests.
+
+\begin{minipage}{\textwidth}
+\centering\footnotesize
+\captionsetup{hypcap=false}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lll}
+\toprule
+Study & Recorded identifier(s) & Display name or interpretation \\
+\midrule
+CIFAR & \texttt{leading\_K}, \texttt{trailing\_K} & Leading / trailing DDIM $K$ \\
+CIFAR & \texttt{dpmtr\_K}, \texttt{unipctr\_K} & DPM++ / UniPC $K$ \\
+CIFAR & \texttt{eta\_K}, \texttt{bures\_K} & Stochastic DDIM / output covariance $K$ \\
+CIFAR & \texttt{initfix\_K}, \texttt{initcov\_K}, \texttt{initmean\_K} & Initial mean+covariance / covariance / mean $K$ \\
+CIFAR & \texttt{cas\_4}, \texttt{cas\_8} & CAS at 4/8-call ceilings (3/7 actual calls) \\
+SD1.5 & \texttt{reference75}, \texttt{reference175}, \texttt{reference10} & DDIM50 at CFG7.5 / CFG1.75 / CFG1 \\
+SD1.5 & \texttt{ddimK}, \texttt{trailingK}, \texttt{etaK}, \texttt{cfg3\_K} & DDIM / trailing / stochastic / CFG3 DDIM $K$ \\
+SD1.5/Sana & \texttt{dpmK}, \texttt{unipcK}, \texttt{eulerK} & DPM++ / UniPC / Euler $K$ in the named family \\
+SD1.5/Sana & \texttt{cadsK}, \texttt{cads\_dpmK} & CADS--DDIM / CADS--DPM++ $K$ \\
+SD1.5 & \texttt{cads\_dpm8\_s10\_t810} & Tuned CADS--DPM++8 \\
+SD1.5 & \texttt{lcmK}, \texttt{hybrid\_lcmK}, \texttt{dmd2} & LCM $K$ / hybrid LCM $K$ / DMD2 \\
+Sana & \texttt{reference}, \texttt{native20} & Flow-DPM++50 / Flow-DPM++20 \\
+\midrule
+Policies & \texttt{audit}, \texttt{exhaustive} & Audit / exhaustive \\
+Policies & \texttt{quality\_only}, \texttt{quality\_vendi} & Preference + alignment / quality + Vendi \\
+Policies & \texttt{vendi\_only}, \texttt{prdc\_only} & Vendi only / PRDC harmonic \\
+Policies & \texttt{random\_shortlist}, \texttt{shuffled\_audit} & Random shortlist / same-count shuffle \\
+Policies & \texttt{fixed\_dpmK}, \texttt{fixed\_unipcK}, \texttt{fixed\_eulerK} & Fixed DPM++ / UniPC / Euler $K$ \\
+Policies & \texttt{fixed\_native20} & Fixed Sana 20-call fallback \\
+\bottomrule
+\end{tabular}
+\captionof{table}{Reproducibility key. Readable method names map to the immutable result-record keys.}
+\label{tab:supp_identifiers}
+\end{minipage}

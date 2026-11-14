@@ -1,0 +1,21 @@
+\subsection{What the audit establishes about choosing a sampler}
+\label{sec:policy}
+The original CIFAR selection rule averages KID 0.0790 across two, four,
+and eight calls, compared with 0.1039 for leading DDIM and 0.0784 for
+both Vendi and teacher-feature Fr\'echet selection. It chose full-moment
+initialization at two calls. The later centered-covariance result tests
+the intervention itself on fresh samples.
+
+In text-to-image generation, a frozen rule screens two fast samplers
+and uses a longer fallback when neither meets the diagnosis thresholds.
+Its independent outcomes pass the declared fidelity and spread gates,
+as do quality plus Vendi and fixed Sana DPM++8. At the same inference
+cost, permuting the audit's choices across prompts leaves the coverage
+and learned preference differences unresolved in both families.
+The audit uses 14.06 and 14.28 denoising calls per image for Stable
+Diffusion and Sana, plus 528 diagnosis calls per prompt and 38,400
+reusable reference calls per family. The Sana audit also scores below
+the 20-call fallback on ImageReward by 0.0261, with adjusted interval
+[$-0.0461,-0.0093$]. These controls locate the operating point and the
+cost of diagnosis. The full thresholds, policy table, and call-only
+amortization are in Supp.~Secs.~J--L.

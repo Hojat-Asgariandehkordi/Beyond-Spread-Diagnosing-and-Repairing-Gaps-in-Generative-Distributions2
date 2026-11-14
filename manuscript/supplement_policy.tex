@@ -1,0 +1,51 @@
+\section{Frozen intervention-policy protocol}
+\label{supp:policy_protocol}
+We turn the audit into a frozen prompt-level decision rule and evaluate the
+selected configurations on new samples. For each of 128 held-out prompts,
+eight diagnosis seeds compare two numerical candidates with the reference.
+A candidate is eligible when mean predicted preference is at least 0.475,
+CLIP alignment loss is at most 0.01, DINO and CLIP spread ratios are at least
+0.9, DINO coverage is at least 0.8, and both support-tail excesses are at most
+0.05. Among eligible candidates, the rule chooses higher DINO coverage, then
+higher preference, then a fixed solver order. It otherwise uses the frozen
+higher-budget fallback. These small-sample point criteria select an action;
+independent outcomes determine whether that action is adequate.
+
+The SD1.5 shortlist is DPM++8/UniPC8 with DPM++16 fallback. The flow transfer
+uses DPM++8/Euler8 with native20 fallback and exactly the same numerical
+thresholds. Reference fit and calibration are model-specific. Sixteen separate
+outcome seeds per prompt evaluate each policy. An approximate fixed-policy intersection--union
+test\cite{berger1996intersection} requires all one-sided 95\% prompt-bootstrap constraints to pass:
+preference at least 0.45, alignment loss at most 0.01, both spread ratios at
+least 0.9, and both support excesses at most 0.05. The fallback receives the
+same evaluation. All-arm intervals are descriptive; four prespecified paired
+policy contrasts use Bonferroni intervals within each study. The original
+coverage criterion uses shared initial-noise seeds. The secondary
+independent-noise sensitivity specified after outcome access below evaluates the same saved decisions with
+disjoint outcome halves; it does not retrospectively change eligibility or gates.
+
+The comparators include fixed strong solvers, preference-and-alignment selection,
+quality-constrained Vendi, Vendi alone, PRDC harmonic selection, a random
+shortlist of the same size, and exhaustive search over the declared eight-step
+candidate pool. The full matrix is generated for fair comparison, while policy
+costs count only the candidates observed by that policy. A two-candidate audit
+requires $8(50+8+8)=528$ denoiser calls per prompt before outcome generation,
+plus feature extraction and scoring. Fixed solvers have no online diagnostic
+cost. We report inference savings and their amortization separately from
+this overhead.
+Preparing the support audit also generates $(32\times16+256)\times50=38{,}400$
+reference calls per family for its named policy reference. This reusable
+fitting/calibration pool is separate from per-prompt diagnosis. Charging it
+across the 128 evaluation prompts adds 300 calls per prompt: the lower-bound
+cold-start break-even is then 428 outputs for SD1.5 and 145 for Sana, rather
+than the prepared-audit bounds of 273 and 93. All bounds exclude feature and
+reward computation. Additional reference pools, development runs, and the full
+comparison matrix belong to the research cost ledger rather than a claim of
+realized deployment savings.
+An additional prespecified assignment control randomly permutes the audit's
+selected actions across prompts, preserving their exact counts and inference
+cost. It tests prompt-specific assignment using independent outcome preference
+and the fraction of prompts whose observed 16-seed preference falls below 0.4.
+This secondary replay receives the same diagnostic cost; its conditional
+bootstrap intervals are approximate because the permutation couples prompts.
+\input{supplement_policy_results.tex}

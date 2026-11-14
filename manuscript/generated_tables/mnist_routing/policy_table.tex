@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Fresh routing outcomes. All policies were frozen on independent diagnosis seeds. Mean $\pm$95\% Student-$t$ interval over three trained seeds, averaging the two short settings within each seed. Precision uses the fixed real-neighborhood event. Continued withholding is the matched 8,000-update control. These complete secondary comparisons do not assert simultaneous policy superiority.}
+\label{tab:mnist_routing_policies}
+\begin{tabular}{lrrrrr}
+\toprule
+Policy & Digit-3 mass & Mass error $\downarrow$ & Precision $\uparrow$ & Consensus $\uparrow$ & Calls \\
+\midrule
+Audit & $0.086\pm0.011$ & $0.012\pm0.001$ & $0.894\pm0.009$ & $0.865\pm0.025$ & $25.0$ \\
+Occupancy only & $0.076\pm0.013$ & $0.046\pm0.002$ & $0.868\pm0.007$ & $0.517\pm0.019$ & $3.0$ \\
+Numerical & $0.001\pm0.001$ & $0.015\pm0.004$ & $0.905\pm0.020$ & $0.875\pm0.010$ & $25.0$ \\
+Restore data & $0.076\pm0.013$ & $0.046\pm0.002$ & $0.868\pm0.007$ & $0.517\pm0.019$ & $3.0$ \\
+Restore + numerical & $0.086\pm0.011$ & $0.012\pm0.001$ & $0.894\pm0.009$ & $0.865\pm0.025$ & $25.0$ \\
+Targeted & $0.137\pm0.017$ & $0.051\pm0.001$ & $0.871\pm0.013$ & $0.534\pm0.023$ & $3.0$ \\
+Targeted + numerical & $0.165\pm0.015$ & $0.023\pm0.002$ & $0.888\pm0.013$ & $0.867\pm0.016$ & $25.0$ \\
+Continue withheld & $0.001\pm0.001$ & $0.045\pm0.001$ & $0.875\pm0.007$ & $0.527\pm0.008$ & $3.0$ \\
+\bottomrule
+\end{tabular}
+\end{table*}

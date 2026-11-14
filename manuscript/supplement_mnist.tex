@@ -1,0 +1,664 @@
+\section{Signed semantic measurements and independent repairs}
+\label{supp:mnist}
+
+\paragraph{Study structure.}
+Validated semantic regions make missing mass and overcorrection separately
+measurable. The original restoration study tests a withheld digit; the
+separate equal-update follow-up repairs excess mass in targeted parents.
+A third study crosses existing checkpoints with numerical probes. All three
+retain their own diagnosis samples, outcome samples, and comparison families. The training
+set is the official 60,000-image MNIST training split. We withhold every image
+of digit 3 in the initial phase. The 10,000 official test images are reserved
+for evaluation and measurement validation. The generator is unconditional;
+its training code does not use digit labels except to construct the declared
+training subsets. Digit 3 and the branch definitions are fixed before any
+confirmatory training seed is initialized.
+
+Three independent training seeds (10, 11, 12) each train for 25,000 updates on
+the withheld dataset. From the same model, EMA, and optimizer checkpoint,
+three equal-compute branches perform 8,000 further updates: continue on the
+withheld data, restore the full training data, or restore it with digit-3
+examples duplicated once. The targeted branch's duplication weight is two,
+chosen in a separate seed-98 pilot. A fourth baseline trains on the full data
+from initialization for 33,000 updates. All continuation branches use the
+same branch RNG seed, initial state, optimizer settings, and number of updates.
+The targeted branch is an explicit sensitivity to restoring more missing-class
+mass; its effects on every other class remain in the evaluation.
+
+\paragraph{Network and optimization.}
+The denoiser is a \texttt{diffusers.UNet2DModel} for $28\times28$ single-channel
+images, with block widths 32/64/64, two layers per block, middle-resolution
+attention, and GroupNorm with eight groups. The forward diffusion has 1,000
+steps and the library's linear beta schedule. Each update samples 128 training
+examples with replacement and independent uniform timesteps; the objective is
+mean squared epsilon-prediction error. AdamW uses learning rate $2\times10^{-4}$
+and weight decay $10^{-4}$. Gradients are clipped at norm one. Model forward
+passes use BF16 autocast; optimization and EMA states remain FP32. The EMA decay
+at zero-indexed global update $u$ is
+$\min(0.999,(1+u)/(10+u))$, avoiding a long contribution from the untrained
+initialization in short runs. Checkpoints preserve the model, EMA, optimizer,
+update count, configuration, and CUDA RNG state. Training-loss and runtime logs
+are retained for every branch.
+
+\paragraph{Independent semantic measurement.}
+Two separately initialized convolutional classifiers use seeds 2801 and 2802.
+Each has convolution widths 32/64/64, two max-pooling stages, a 128-dimensional
+fully connected feature layer, and a ten-class head. For each seed, a random
+50,000/10,000 split of the official training data supplies six epochs of
+cross-entropy training and temperature calibration, respectively. Temperature
+is optimized on the held-out validation logits; test images do not tune it.
+Official test accuracies are 99.08\% and 99.09\%.
+
+The semantic cell for digit $j$ contains images on which both classifiers
+predict $j$ with probabilities at least 0.9. All other images enter an explicit
+rejection cell. This same function is applied to real and generated images;
+true test labels are used to validate the function, never as different regions
+for the real sample. On test data, the consensus cells cover 95.46\% of images
+and classify 99.916\% of accepted images correctly (eight errors among 9,546).
+The digit-3 cell contains 983 test images, of which 982 have true label 3.
+These are held-out real-image validation results. Generated-image fidelity is
+assessed separately, and uncurated sample grids permit inspection of failures.
+Rejected generated images remain in every probability denominator.
+
+\paragraph{Sampling and representation.}
+For each of five model states and each training seed, all eleven prespecified
+samplers generate 5,000 images: leading DDIM at 2/4 steps; trailing DDIM at
+4/8/10/25/50 steps; and trailing DPM-Solver++2M at 4/8/10/25 steps. The primary
+resolved probe is DPM++25. Each image receives its own initial-noise generator
+with seed $6{,}100{,}000+10{,}000s+i$ for training seed $s$ and image index $i$.
+Noise is paired across all states and sampler configurations within a training
+seed. Scheduler timestep arrays are saved. Images are clamped, quantized to
+8-bit pixels, and only then classified and embedded, so stored pixels reproduce
+the measurements. Features are the first classifier's 128-dimensional hidden
+layer.
+
+\paragraph{Statistics and quality constraints.}
+Semantic occupancy uses all 10,000 reference test images and the same eleven
+consensus/rejection cells. The exact certificate allocates
+$\alpha_{\rm semantic}=0.025$ over $11\times165$ declared cell--arm comparisons,
+with retention 0.5 and minimum reference mass 0.01. The additional generic
+feature audit uses 3,000 test images for PCA/partition fitting, the next 2,000
+for support calibration, and the final 5,000 for evaluation. Its occupancy and
+support allocations are 0.0125 each. Semantic conditional spread is a separately
+frozen secondary analysis in unwhitened reference-fit PCA32 coordinates,
+using the final 5,000 reference images and at least 30 images per semantic cell.
+Its log-influence intervals use nominal level $0.05/(10\times165)$ and retain
+their approximate status.
+
+Nearest-neighbor fidelity and coverage use five disjoint, paired 1,000-image
+panels, with $k=5$. The primary uncertainty unit is the independent training
+seed, not a generated image. We average panel metrics within each seed, then
+use paired Student-$t$ intervals across the three seeds. These intervals
+condition on the shared real-data reference and are approximate
+under a normal paired-effect assumption with only two degrees of freedom.
+The primary comparisons
+are targeted restoration versus continued withholding, ordinary restoration
+versus continued withholding, and targeted versus ordinary restoration.
+Digit-3 occupancy contrasts use Bonferroni 98.333\% intervals for this three-test
+family. Ordinary 95\% intervals for the other reported metrics are descriptive.
+The ten-region mass error is the mean absolute difference from real consensus
+region probabilities, without renormalizing accepted images. It exposes any
+loss in other digit regions when missing-class mass increases.
+
+The resolved full-data model supplies a learned-model fidelity baseline. A
+repair passes the predeclared noninferiority criterion only if the paired
+95\% lower confidence bounds for both feature precision and consensus acceptance
+are at least $-0.05$ relative to this baseline. An upper bound below $-0.05$
+fails the criterion; all other cases are inconclusive. With three training
+seeds these intervals can remain broad. The protocol preserves that uncertainty
+and reports real-data support separately.
+
+\paragraph{Qualitative selection and exclusions.}
+The independent seed-98 pilot is excluded from every reported training-seed
+interval. Qualitative grids show the first twelve generation indices of seed
+10 for every declared row, with no quality ranking. Complete samples,
+probabilities, features, and configurations accompany the results.
+
+\subsection{Ordinary restoration recovers the missing region}
+All 15 training branches reached their frozen endpoints, and all 165
+5,000-image evaluations passed metadata, count, and checksum validation before
+analysis. The study performs 246,000 optimization updates (31,488,000 training
+example evaluations) and samples 825,000 images using 11,250,000 denoiser-image
+calls. Summed recorded training-process time is 18,565 seconds, with 1,891
+additional seconds for generation, feature extraction, and saving. Three jobs
+share one H200, so summed process times are not dedicated-device elapsed hours.
+The checkpoint/log manifest preserves each recorded segment and hash.
+
+The ordinary restoration result is the strongest balanced repair. At DPM++25,
+its ten-region mass error is $0.00953\pm0.00254$, compared with
+$0.01471\pm0.00306$ for continued withholding and $0.00849\pm0.00110$ for
+full-data training. Coverage is $0.7771\pm0.0145$, compared with
+$0.7274\pm0.0177$ and $0.7881\pm0.0122$, respectively. Ordinary restoration
+has precision $0.7407\pm0.0123$, a paired loss of 0.01407
+[0.01076,0.01737] versus continued withholding. Relative to the full-data
+baseline, its precision difference is $-0.01013$ [$-0.02131,0.00105$]
+and consensus-acceptance difference is $-0.00933$ [$-0.02502,0.00635$].
+Both meet the declared $-0.05$ lower-bound criterion. The same conjunction
+passes for DDIM25 and DDIM50. These are the predeclared per-comparison
+constraints, not a simultaneous all-sampler noninferiority statement.
+
+Targeted restoration is a material counterexample to maximizing missing-region
+mass. Its digit-3 mass is 0.1618, compared with the real reference's 0.0983,
+and its ten-region error rises to $0.02150\pm0.00349$. Its coverage
+($0.7761\pm0.0128$) is similar to ordinary restoration. The complete primary
+contrasts preserve both its larger digit-3 gain and its worse overall class-mass
+balance. Reject probabilities remain in every denominator.
+
+The secondary semantic-spread control also detects crossing mechanisms.
+At leading DDIM2, withheld models exhibit conditional contraction in eight
+eligible digit cells in every seed, together with persistent digit-3 depletion;
+two cells per seed lack sufficient samples. At DPM++25, those eight
+contractions are no longer flagged, but the depleted digit remains ineligible
+for spread. Full-data leading-DDIM2 models show eight or nine contractions,
+whereas their DPM++25 outputs show no contraction (one seed has one expansion).
+These approximate, fixed-family measurements motivate a mixed interpretation;
+an ineligible cell does not establish absence of contraction.
+
+\input{generated_tables/mnist_final_report/tables.tex}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_final_primary.pdf}
+\caption{Completed original confirmation at DPM++25. All five checkpoint states
+and the predeclared quality differences are retained. Small dots show
+individual seed outcomes. Intervals are descriptive
+95\% Student-$t$ intervals across three independent training seeds; the quality panel's dashed line is the
+five-percentage-point noninferiority margin. Ordinary restoration improves
+balanced support; targeted restoration overshoots the missing region.}
+\label{fig:mnist_primary_supp}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_final_class_masses.pdf}
+\caption{All ten consensus-region mass ratios relative to real data. This
+complete class accounting exposes the targeted intervention's overcorrection.
+Rejected samples remain in the denominator; class probabilities are not
+renormalized over accepted images.}
+\label{fig:mnist_masses_supp}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_final_solver_persistence.pdf}
+\caption{Complete sampler comparison from the original frozen study.
+The missing region persists at resolved step budgets under both DDIM and
+DPM++, while ordinary data restoration improves its mass. Intervals are
+descriptive 95\% Student-$t$ intervals across three training seeds and do not
+treat generated panels as independent models.}
+\label{fig:mnist_persistence_supp}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_final_mixed_mechanisms.pdf}
+\caption{Secondary conditional-spread measurements in independently fitted
+PCA32 coordinates and validated semantic cells. Minimum counts and all
+ineligible cells are retained. Displayed values are point ratios. Complete interval-based statuses use the
+approximate influence-function construction with the declared 1,650-cell
+family; they are not exact certificates.}
+\label{fig:mnist_mixed_supp}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_final_qualitative.pdf}
+\caption{First twelve noise indices from training seed 10 under DPM++25,
+paired across every checkpoint state. No example is ranked or excluded.
+Annotations beneath the images show the fixed classifier-consensus digit or rejection; they
+allow inspection of the measurement and do not replace visual fidelity.}
+\label{fig:mnist_qualitative_supp}
+\end{figure*}
+
+\subsection{Signed mass supports an equal-update repair of overcorrection}
+\label{sec:mnist_balance_supp}
+Ordinary continuation reduces ten-class mass error by 58.7\% and target-digit
+absolute error by 89.1\% relative to continued targeting at equal update
+budget. This separate follow-up uses a two-sided mass audit to identify
+excess probability even when every digit remains represented. Its audit and
+matched-update comparison were frozen before follow-up training or generation.
+The original restoration results and the 30 crossed-probe routing decisions
+(Sec.~\ref{supp:mnist_routing}) remain unchanged. The controlled comparison
+tests a repair of measured imbalance without identifying a unique historical cause.
+
+\paragraph{Matched training branches and fresh evaluation.}
+Each of the three targeted-restoration checkpoints branches into two further
+8,000-update runs. Ordinary continuation draws uniformly from the 60,000
+training images. Continued targeted sampling draws from the same images plus
+one duplicate of each of the 6,131 digit-3 training images. Both branches
+start from identical model, EMA, AdamW, and CUDA random states; the global EMA
+counter continues from 33,000 to 41,000 updates. Branch receipts verify these
+loaded states. Batch size, learning rate,
+optimizer, precision, architecture, and loss are unchanged. No evaluation
+occurs during training. The original 33,000-update full-data models are
+fixed fidelity controls, not equal-update intervention branches.
+
+All four checkpoint states---targeted parent, ordinary continuation, targeted
+continuation, and full-data control---are evaluated under trailing DDIM25,
+trailing DDIM50, and second-order DPM++25 for all three training seeds.
+Each of these 36 arms receives 16,000 diagnosis samples and 2,000 independent
+outcome samples. Noise seeds are paired across arms and are disjoint from
+every earlier study. All diagnosis artifacts and their complete decisions
+are saved and hashed before outcome generation. Semantic probabilities use
+the same frozen classifier-consensus event and all 10,000 real test images;
+the denominator includes rejected images. Geometric fidelity retains the
+disjoint 3,000/2,000/5,000 real fit/calibration/evaluation split.
+
+\paragraph{Exact two-sided mass bounds.}
+For each digit, let $p$ and $q$ be real and generated unconditional consensus
+probabilities. We construct Clopper--Pearson intervals $[p_L,p_U]$ and
+$[q_L,q_U]$, then report
+\begin{equation}
+  q-p\in[q_L-p_U,\;q_U-p_L].
+\label{eq:supp_mnist_mass_difference}
+\end{equation}
+The mass error budget is $\alpha_m=0.025$. Half is allocated once across
+the ten shared real-reference intervals, and half across all 360 generated
+digit--arm intervals. Thus each reference tail has error
+$\alpha_m/(4\cdot10)$ and each generated tail
+$\alpha_m/(4\cdot360)$. A union bound gives simultaneous coverage at least
+$1-\alpha_m$ for the declared differences, conditional on the fixed
+semantic regions and trained models. Shared references and paired-noise
+dependence across arms do not invalidate this bound.
+
+At the prespecified absolute tolerance $\delta=0.03$, a class is excessive if
+the difference interval lies above $\delta$, depleted if it lies below $-\delta$,
+equivalent if it lies wholly within $[-\delta,\delta]$, and otherwise inconclusive.
+Three percentage points is an explicit MNIST-scale practical resolution,
+about 30\% of a nominal balanced class; it is not a universal semantic
+threshold. Every class is retained, and the same intervals are evaluated
+at $\delta=0.02$ and $0.04$ for sensitivity. Rejection is governed by fidelity,
+not treated as a semantic digit.
+
+Synthetic sample planning preceded training. Across 20,000 multinomial
+trials per setting, 16,000 generated samples with the fixed-size 10,000-image
+reference detect a digit-3 mass of 0.16 as excessive with 99.23\% probability
+([99.10,99.35]\% Monte Carlo interval)
+and certify all-ten-class equivalence at exactly matching probabilities
+with 95.58\% probability ([95.29,95.86]\%). At a digit-3 mass of 0.087,
+all-class equivalence power is only 45.12\% ([44.42,45.81]\%); inconclusive
+decisions remain expected near the resolution boundary. These planning
+calculations concern one sampler, not the three-probe intersection. Its
+power also depends on dependence across probes. They are not measured model
+performance.
+
+\paragraph{Qualification and persistence.}
+The two relative-fidelity events are membership in fixed real-fit
+five-neighbor balls and classifier-consensus acceptance. All 27 non-control
+arms are paired with the same-seed, same-sampler full-data control. The exact
+paired Bernoulli construction in Sec.~\ref{supp:mnist_paired_quality} uses $\alpha_f=0.0125$ across 54 metric
+comparisons and a five-percentage-point noninferiority margin. Full-data
+self-comparisons are structural zero-difference reference anchors; they do
+not establish absolute perceptual fidelity. A checkpoint receives a
+persistent-imbalance decision only when at least one same digit is excessive
+or depleted under all three resolved samplers and all their fidelity gates
+pass. Balanced-at-resolution requires every digit to be equivalent under
+all three samplers with the same qualification. All other outcomes are
+inconclusive. The calibrated real-support tail is separately reported with
+$\alpha_s=0.0125$ across 36 comparisons; it is not silently added as a third
+qualification gate. The three exact families sum to 0.05. This simultaneous
+statement does not include the approximate training-seed outcome intervals.
+
+\paragraph{Prespecified independent outcomes.}
+The two primary comparisons are ordinary minus targeted continuation under
+DPM++25 for ten-class mean absolute mass error and digit-3 absolute mass
+error. Each receives a 97.5\% paired Student-$t$ interval across the three
+training seeds (Bonferroni correction for two comparisons, two degrees of
+freedom). These intervals assume approximately normal seed effects and
+condition on the common fixed real reference. All other sampler, class,
+coverage, precision, support, and variance measurements are reported with
+descriptive uncertainty. Four five-percentage-point fidelity constraints
+compare ordinary continuation with both continued targeting and the
+full-data control for the two declared events; the conjunction passes only
+if every paired 95\% interval has lower bound at least $-0.05$.
+The 2,000-image outcomes issue no new semantic certificates and do not tune
+thresholds, select a sampler, or change diagnosis decisions.
+
+\paragraph{Complete frozen diagnosis.}
+The signed audit certifies persistent digit-3 excess in all three targeted
+parents and all three continued-targeting checkpoints at $\delta=0.03$.
+Digit~3 is equivalent within the same tolerance in all nine ordinary-
+continuation probe arms and all nine full-data probe arms. Thus the
+specifically identified regional excess is resolved at the declared
+resolution, while broader balance remains a separate question.
+Every non-control arm passes both relative-fidelity gates (27/27), while
+the nine full-data arms retain their explicit anchor status. Ordinary
+continuations and full-data controls are all inconclusive for all-ten-class
+balance at this resolution; none is labeled data-adequate. At $\delta=0.04$,
+ordinary and full-data checkpoints from seeds 10 and 11 receive equivalence
+certificates, while both seed-12 checkpoints remain inconclusive. The
+seed-10 targeted parent becomes inconclusive for excess at this larger
+margin; the other five targeted checkpoints retain persistent excess.
+At $\delta=0.02$, the six targeted checkpoints retain excess and the other six
+remain inconclusive. Table~\ref{tab:mnist_balance_diagnosis} includes every
+checkpoint and sensitivity decision.
+
+The separate support-tail gate passes in 34 of 36 arms. Its two inconclusive
+cases are seed-10 targeted-parent DDIM50 and seed-11 full-data DDIM50, with
+excess-tail differences 0.03129 [0.01047,0.05085] and
+0.03066 [0.00987,0.05020], respectively, against the 0.05 margin.
+Neither is a support failure, and neither is silently counted as a pass.
+An independent reconstruction of raw semantic counts, paired-fidelity
+discordances, support events, and all declared interval/decision formulas
+matches the saved diagnosis in all 653 numerical comparisons.
+
+\input{mnist_balance_diagnosis_table.tex}
+
+\paragraph{Independent outcomes and retained tradeoffs.}
+Both prespecified primary comparisons favor ordinary continuation.
+At DPM++25, ten-class mass error is 0.00900 versus 0.02177 for continued
+targeting; the paired difference is $-0.01277$
+[$-0.01878,-0.00676$]. Digit-3 absolute error is 0.00747 versus 0.06837,
+with difference $-0.06090$ [$-0.11814,-0.00366$]. These are the two
+97.5\% adjusted three-seed intervals. The corresponding class-3 masses are
+0.09083 and 0.16667 against the real reference's 0.0983. The complete
+DDIM25 and DDIM50 comparisons agree in direction: ordinary-minus-targeted
+mass-error changes are $-0.01268$ [$-0.01546,-0.00990$] and
+$-0.01227$ [$-0.01551,-0.00903$], and class-3 absolute-error changes are
+$-0.06173$ [$-0.09812,-0.02534$] and
+$-0.06140$ [$-0.09922,-0.02358$]. These secondary intervals are descriptive
+95\% intervals, without a simultaneous all-sampler claim.
+
+The four primary fidelity constraints pass. Ordinary-minus-targeted
+fixed-neighborhood precision is $+0.00650$ [$-0.00336,0.01636$], while
+consensus acceptance changes by $-0.00617$ [$-0.02481,0.01248$].
+Against full-data controls, the corresponding changes are $+0.00683$
+[$-0.00388,0.01754$] and $+0.00117$ [$-0.03085,0.03318$]. Every lower
+bound exceeds $-0.05$. Ordinary continuation has consensus acceptance
+0.87383, versus 0.88000 for continued targeting, 0.87267 for full-data
+controls, and 0.95460 for real data. The relative-fidelity comparison does
+not erase this real/generated difference. Classifier rejection contributes
+to the unresolved all-class balance shown in
+Fig.~\ref{fig:mnist_balance_allclass}.
+
+Conventional PRDC yields additional, less decisive comparisons. At DPM++25,
+ordinary-minus-targeted precision is $-0.00600$ [$-0.02111,0.00911$], and
+coverage is $+0.00393$ [$-0.02911,0.03698$]. Thus the mass repair does not
+establish broad quality or coverage superiority. PRDC uses the independent
+5,000-image real evaluation pool against 2,000 generated outcomes; fixed-
+neighborhood precision instead uses 3,000 real-fit anchors. Neither is the
+original 165-arm study's five disjoint 1,000-image PRDC panels, so these
+absolute values should not be compared across studies without that distinction.
+Table~\ref{tab:mnist_balance_all} and the result files retain all 36 arms,
+every class, all six checkpoint-pair comparisons under each sampler, and
+their three-seed intervals.
+
+\paragraph{Compute and verification.}
+The six branches use 48,000 new optimizer updates, or 6.144 million training
+batch examples. Three paired workers complete training in approximately
+22.4 minutes while sharing an H200; their summed elapsed times are 4,028.7
+seconds and are not an exclusive-GPU measurement. Diagnosis generates
+576,000 images using 19.2 million denoiser-image calls; independent outcomes
+generate 72,000 images using 2.4 million calls. Recorded sampling times are
+882.5 and 113.9 seconds, respectively, and CPU diagnosis takes 79.7 seconds.
+Per checkpoint, the audit requires 48,000 diagnosis images and 1.6 million
+calls across three probes. It is an amortizable checkpoint audit, not a
+cheap per-image operation. Generation moves to the second H200 only after
+an unrelated old-checkpoint parity check produces exactly identical images,
+features, and probabilities on both devices, with all numerical settings
+unchanged. Timing is descriptive under concurrent workloads.
+
+The manifest verifies all 72 archives, checkpoint/protocol identities, and
+paired seeds. Independent reconstruction matches all 1,661 outcome
+comparisons, including PRDC, within $1.78\times10^{-15}$.
+Figure~\ref{fig:mnist_balance_grid} retains every state's first twelve
+paired outcome seeds.
+
+\input{generated_tables/mnist_balance/all_arms_table.tex}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_balance.pdf}
+\caption{Complete balanced-restoration outcome comparisons.
+(a,b) All four checkpoint states and all three resolved samplers, with
+descriptive 95\% intervals across three training seeds. The dashed line is
+the real digit-3 consensus mass.
+(c) Both prespecified DPM++25 differences with 97.5\% paired intervals
+(two-comparison adjustment). Intervals condition on the shared fixed real
+reference and use the approximate three-seed Student-$t$ model.}
+\label{fig:mnist_balance_results}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_balance_allclass.pdf}
+\caption{Every class and the rejection cell at the prespecified DPM++25
+sampler. Points are generated-minus-real unconditional masses; intervals
+are descriptive 95\% Student-$t$ intervals across three seeds. Digit~3 is
+highlighted; the pale band marks the $\pm3$ percentage-point tolerance for
+context. These outcome intervals are distinct from the exact diagnosis
+bounds. Ordinary continuation resolves the targeted digit's excess while
+other regional differences and excess rejection remain visible.}
+\label{fig:mnist_balance_allclass}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_balance_qualitative.pdf}
+\caption{Uncurated balanced-restoration outcomes: the first twelve fresh
+DPM++25 noise seeds for training seed 10, paired across all four checkpoint
+states. The two continuation branches each receive 8,000 updates from the
+same targeted parent. The separately trained full-data model is a quality
+control. Ambiguous images remain in the grid; none is selected by quality
+or classifier label.}
+\label{fig:mnist_balance_grid}
+\end{figure*}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figures/mnist_actionable.pdf}
+\par\smallskip\input{mnist_panels_table}
+\caption{Signed measurements support a verified repair of overcorrection.
+Both panels use DPM++25. (a) Original ordinary restoration recovers missing
+digit-3 mass; targeted restoration overshoots the real-data target (dashed
+line). Whiskers show ordinary 95\% Student-$t$ intervals over three training
+seeds. (b) A separately frozen follow-up compares equal 8,000-update branches
+from each targeted parent. Lines join outcomes from the same seed.
+The table gives seed-level values and means.}
+\label{fig:mnist_actionable}
+\end{figure}
+
+\subsection{Crossed numerical and data probes}
+\label{supp:mnist_routing}
+The original experiment crosses five checkpoint states with eleven samplers.
+We additionally freeze a prospective routing evaluation before generating new
+samples. It reuses the three trained seeds and all five states, with leading
+DDIM2, trailing DDIM4/25/50, and DPM++25. Each of these 75 arms generates
+8,000 diagnosis images and then 2,000 independent outcome images. Every
+image uses noise seed $71{,}000{,}000+100{,}000s+i$, with indices 0--7,999
+for diagnosis and 8,000--9,999 for outcomes; indices are paired across states
+and samplers. All diagnostic routes and policy actions are saved before any
+outcome generation begins. No checkpoint is trained further for this study.
+
+\paragraph{Two references and fixed measurements.}
+For each short sampler, the same checkpoint's DPM++25 output is its
+teacher-relative reference. The data reference uses the final 5,000 real test
+images; the first 3,000 fit the geometry and the next 2,000 calibrate its
+support threshold. Semantic regions remain the validated classifier-consensus
+cells. A fixed real-neighborhood precision event accepts a generated feature
+inside the union of real-fit feature balls, each with its fifth-neighbor
+radius. This makes each image's precision indicator independent of other
+generated images, enabling a paired Bernoulli interval. It differs from
+sample-dependent recall and coverage; complete conventional PRDC metrics are
+also reported on outcomes.
+The fresh outcome PRDC compares 2,000 generated images against all 5,000
+reference-evaluation images. This differs from the original study's five
+1,000-by-1,000 PRDC panels and its 10,000-image semantic reference. Fresh
+semantic masses use only the 5,000 evaluation reference images. Consequently,
+absolute nearest-neighbor metrics and finite-reference class masses should
+not be compared across the two protocols as if their evaluation sets matched.
+
+\paragraph{Exact paired quality intervals.}\label{supp:mnist_paired_quality}
+For each shared-noise pair, let $D=I_{\rm candidate}-I_{\rm reference}$
+for consensus acceptance or fixed real-neighborhood precision. Write
+$\eta=\Pr(D\ne0)$ and $\pi=\Pr(D=1\mid D\ne0)$. Then the quality
+difference is $\Delta=\eta(2\pi-1)$. Clopper--Pearson intervals for
+$\eta$ and $\pi$, with tail error $\alpha/(4M)$, give a rectangle;
+the minimum and maximum of $\eta(2\pi-1)$ over its four corners bound
+$\Delta$. Conditional binomial coverage holds for every random discordance
+count, so a union bound proves simultaneous coverage over the declared family.
+For zero discordances, the conditional interval is $[0,1]$, giving
+$[-\eta^+,\eta^+]$. Both quantities are bounded rather than substituting
+a potentially invalid plug-in discordance estimate~\cite{newcombe1998paired};
+we do not propose a new paired-proportion estimator.
+The same finite-sample calculation is applied to full-data identity controls.
+Noninferiority passes only when the lower bound is at least $-0.05$.
+Synthetic multinomial simulations and an independent implementation validate
+coverage, boundary behavior, and interval arithmetic before learned-model
+sampling. At 8,000 pairs, 20,000 synthetic trials with reference acceptance 0.85,
+a $-0.01$ difference, and discordance 0.255 give 99.17\% passing probability
+(95\% simulation interval 99.03--99.29\%). A $-0.025$ difference gives only
+37.91\% power: acceptable differences nearer the margin can remain inconclusive.
+
+\paragraph{Frozen families and route.}
+The semantic family contains 1,155 cells: 30 short/data, 30 short/teacher,
+and 45 resolved/data comparisons, each with eleven cells and total error
+0.025. The paired fidelity family has 150 metric comparisons: the 45 resolved
+arms against full-data at the same sampler, plus the 30 short/teacher pairs,
+each with two metrics and error 0.0125. Separately, 75 absolute data-support
+and 30 paired teacher-support comparisons share error 0.0125. These three
+exact families sum to 0.05. Conditional spread uses 300 separately labeled
+approximate intervals, one per digit in each short/teacher pair, in unwhitened
+PCA32 coordinates. Its paired influence function preserves shared-noise
+covariance even when the two samples enter different semantic cells.
+
+A resolved probe is adequate only if both fidelity metrics pass relative to
+the corresponding full-data sampler. A data route requires the same digit's
+certified depletion under all three resolved probes and adequacy of all three.
+A numerical route requires an adequate DPM++25 teacher and short/teacher
+regional depletion, conditional contraction, fidelity failure, or support-tail
+failure. Both signals produce a combined route; neither yields inconclusive.
+Reject-cell depletion does not establish a missing semantic region. Absolute
+real-support flags remain visible, including defects shared by the full-data
+benchmark; they are not silently promoted to an additional eligibility test.
+Because numerical routing can use approximate spread intervals, the entire
+routing decision is not an exact 95\% certificate. These are qualified
+recommendations for intervention tests, not unique causal identifications.
+
+\paragraph{All policies and independent outcomes.}
+For the six original-withheld cases, available data interventions are precisely
+the equal-8,000-update continuation branches. A numerical route chooses
+continued withholding with DPM++25; a data route chooses ordinary restoration
+with the original short sampler; a combined route chooses ordinary restoration
+with DPM++25. An inconclusive route uses the continued-withheld short control.
+Thus the policy named ``no change'' denotes matched additional training on
+withheld data, not the unchanged 25,000-update origin. Comparators are this
+control, occupancy-only routing, always numerical, always data, always
+combined, targeted restoration at the short sampler, and targeted restoration
+with DPM++25. Occupancy-only chooses ordinary restoration whenever any baseline
+data-relative digit deficit is certified. All eight policies and all 75 outcome
+arms are reported. For every one of the 30 crossed cases we also report the
+short-to-DPM++25 outcome change, without inventing a new training transition
+from checkpoints that already received restoration.
+Numerical repair increases inference cost from 2 or 4 calls to 25; these
+comparisons measure the benefit of resolving the sampler, not a free or
+matched-budget gain.
+
+Policy intervals average the two short settings within each trained seed,
+then use paired Student-$t$ intervals over three seeds. They condition on the
+shared real reference and assume approximately normal training-seed effects;
+there is no simultaneous superiority claim over policies. The diagnostic
+cost is substantial: 600,000 images and 12.72 million denoiser calls across
+15 checkpoints, followed by 150,000 independent outcome images. This is a
+checkpoint-level audit whose cost can be amortized over deployment, not a
+cheap per-prompt diagnostic.
+The 8,000 diagnosis samples are per sampler arm: across five samplers this is
+40,000 images and 848,000 denoiser-image calls per checkpoint.
+
+\subsection{Crossed-probe outcomes and limits}
+All 150 diagnosis/outcome files passed configuration, row-count, pairing,
+checkpoint-hash, and sample-checksum validation. The 30 routes were frozen
+before any outcome generation. All three resolved probes pass both declared
+quality constraints in every checkpoint. The twelve short-sampler cases from
+withheld or continued-withheld checkpoints retain the same deficient digit~3
+under all three probes and receive the combined route. The eighteen cases from
+ordinary restoration, targeted restoration, or full-data training have no
+qualified persistent digit depletion and receive the numerical recommendation, which does not certify balanced mass. Training
+absence or restoration labels are never inputs to the routing computation.
+
+Occupancy-only routing raises a data flag in nine of the eighteen latter
+cases, compared with zero persistent-reference depletion flags. This is a disagreement
+in recommendations relative to the known training intervention, not a
+classification accuracy or false-positive certificate: targeted restoration,
+for example, changes other class probabilities and overrepresents digit~3.
+Table~\ref{tab:mnist_all_routes} retains every decision and actual digit counts.
+All 30 cases also have exact relative-fidelity evidence for their numerical
+signal, although the general rule admits the separately approximate spread
+test. No inconclusive outcome occurred in these particular checkpoints;
+the implementation and synthetic controls retain that outcome.
+
+The independent short-to-DPM++25 comparison improves class-mass error,
+coverage, and consensus acceptance in every one of the eighteen
+numerical-only cases. Across ordinary-restored, targeted, and full-data
+checkpoints, mean mass-error changes are respectively $-0.05022$, $-0.03783$,
+and $-0.05097$ from leading DDIM2, and $-0.01781$, $-0.01772$, and $-0.01804$
+from trailing DDIM4. Precision has a meaningful tradeoff: fixed-neighborhood
+membership improves from the two-call sampler but decreases from trailing
+DDIM4 by 0.01133, 0.02150, and 0.01950, respectively. All 75 arms and all
+30 paired changes, including their three-seed intervals, remain in the result
+files. These observed numerical improvements use existing checkpoints. They do not
+establish that all eighteen checkpoints need no data intervention: the six
+targeted-checkpoint cases retain excess digit-3 mass, which the depletion-only
+rule does not test. Of the nine nonpersistent occupancy flags, three come
+from leading-DDIM2 targeted cases with this distinct imbalance. We therefore
+do not count nine correct avoided training interventions or claim measured
+counterfactual training savings.
+
+For the six original-withheld origins, the audit chooses ordinary restoration
+plus DPM++25 and therefore equals always-combined exactly. Its digit-3 mass is
+$0.08567\pm0.01120$, versus $0.00067\pm0.00072$ for numerical repair alone.
+Mass error is $0.01162\pm0.00117$, versus $0.04563\pm0.00191$ for data-only
+repair and $0.01493\pm0.00379$ for numerical-only repair. Audit-minus-numerical
+mass error is $-0.00331$ [$-0.00683,0.00020$], so superiority on this endpoint
+is unresolved. Audit-minus-data-only error is $-0.03402$
+[$-0.03555,-0.03248$]. Targeted restoration plus DPM++25 again overshoots,
+with digit-3 mass 0.1650 and error 0.02348. All eight policies are retained in
+Table~\ref{tab:mnist_routing_policies}; these are descriptive paired
+three-training-seed comparisons, not a simultaneous best-policy claim.
+
+Sampling takes 924.8 seconds for diagnosis and 221.1 seconds for outcomes;
+CPU routing and outcome measurement take approximately 86 and 188 seconds.
+No additional training is performed. Figure~\ref{fig:mnist_routing_grid_supp}
+retains the first twelve fresh outcome noise indices from seed 10 for every
+listed arm, including classifier rejections.
+
+\input{generated_tables/mnist_routing/policy_table.tex}
+\input{generated_tables/mnist_routing/all_cases_table.tex}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_routing.pdf}
+\caption{Complete independent outcomes of the depletion-only routing
+study: all eight policies for six original-withheld origins. Both short settings
+are averaged within each training seed; intervals are descriptive 95\%
+Student-$t$ intervals over three seeds. (a) Mean absolute class-mass error.
+(b) Membership in fixed real-fit five-neighbor balls. Numerical repair uses
+25 calls versus the original 2/4; audit and always-combined coincide.
+All 30 frozen recommendations remain in Table~\ref{tab:mnist_all_routes}.
+A numerical recommendation does not certify balanced mass.}
+\label{fig:mnist_routing}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_routing_numerical.pdf}
+\caption{Every checkpoint state's independent short-to-resolved comparison.
+All changes use the same checkpoint and paired fresh noise; intervals are
+approximate 95\% paired Student-$t$ intervals across three trained seeds.
+Numerical improvement cannot recover the withheld digit's data-relative mass;
+restoration is needed for that deficit. Complete precision and support
+outcomes accompany these plots in the saved result tables.}
+\label{fig:mnist_routing_numerical_supp}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/mnist_routing_qualitative.pdf}
+\caption{Uncurated fresh outcomes: first twelve noise indices of training
+seed 10, paired across all five checkpoint states and the two short samplers
+plus DPM++25. Labels beneath the images are fixed classifier-consensus assignments or rejection.
+Numerical resolution sharpens samples and increases acceptance; restored
+data changes which semantic outcomes the checkpoint produces. Imperfect
+digits and classifier disagreements remain visible.}
+\label{fig:mnist_routing_grid_supp}
+\end{figure*}

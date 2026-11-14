@@ -1,0 +1,97 @@
+\section{Independent reward-model sensitivity}
+\label{supp:imagereward}
+ImageReward-v1.0\cite{xu2023imagereward} was prespecified as a secondary outcome-only check before analyzing held-out text-to-image outcomes. Its BLIP-based reward was never used to develop or select the audit policies. Scores use the official FP32 model, normalization and preprocessing; batched and official scalar-loop scores agreed within $9.3\times10^{-7}$. Both ImageReward and PickScore are learned proxies rather than a human evaluation. All arms and policies are retained below. Mean scalar rewards are unchanged
+by the pairing used for cross-method comparisons; the paired win fractions
+retain their stated coupled-sample interpretation.
+For each of 128 held-out prompts, we average the 16 separate outcome replicas. Descriptive 95\% intervals resample prompts jointly across arms. The four prespecified audit-minus-fixed/fallback scalar-reward contrasts across the two model families use 98.75\% Bonferroni intervals. Pairwise win fractions are descriptive, with ties counted as one half; normalized scalar differences are not human preference probabilities.
+\begin{table*}[t]\centering\small
+\caption{SD1.5 ImageReward arms. All comparisons use the common declared reference. Win is the fraction of paired images with higher predicted reward; brackets are descriptive 95\% prompt-bootstrap intervals.}
+\begin{tabular}{lccc}\toprule
+Configuration & Reward & Difference from reference & Paired win \\\midrule
+DDIM50 (CFG7.5) & 0.210 [0.065, 0.350] & 0.000 [0.000, 0.000] & 0.500 [0.500, 0.500] \\
+DDIM4 & -1.091 [-1.205, -0.974] & -1.301 [-1.425, -1.177] & 0.111 [0.089, 0.135] \\
+DDIM8 & -0.146 [-0.285, -0.009] & -0.356 [-0.414, -0.297] & 0.298 [0.269, 0.329] \\
+Trailing DDIM4 & -0.392 [-0.527, -0.257] & -0.602 [-0.682, -0.522] & 0.209 [0.179, 0.240] \\
+Trailing DDIM8 & 0.072 [-0.072, 0.216] & -0.138 [-0.174, -0.101] & 0.350 [0.325, 0.376] \\
+Stochastic DDIM4 & -1.393 [-1.493, -1.288] & -1.603 [-1.727, -1.478] & 0.061 [0.046, 0.078] \\
+Stochastic DDIM8 & -0.221 [-0.362, -0.083] & -0.431 [-0.491, -0.371] & 0.275 [0.247, 0.305] \\
+DDIM4 (CFG3) & -1.534 [-1.630, -1.435] & -1.744 [-1.872, -1.614] & 0.051 [0.036, 0.070] \\
+DDIM8 (CFG3) & -0.645 [-0.776, -0.512] & -0.855 [-0.948, -0.761] & 0.168 [0.141, 0.198] \\
+DPM++4 & -0.342 [-0.475, -0.211] & -0.552 [-0.625, -0.480] & 0.211 [0.185, 0.240] \\
+DPM++8 & 0.109 [-0.039, 0.257] & -0.101 [-0.133, -0.069] & 0.383 [0.361, 0.406] \\
+UniPC4 & -0.340 [-0.472, -0.211] & -0.550 [-0.621, -0.481] & 0.221 [0.194, 0.250] \\
+UniPC8 & 0.105 [-0.040, 0.250] & -0.104 [-0.136, -0.072] & 0.376 [0.354, 0.399] \\
+CADS--DDIM4 & -1.238 [-1.349, -1.120] & -1.447 [-1.576, -1.321] & 0.099 [0.079, 0.120] \\
+CADS--DDIM8 & -0.593 [-0.723, -0.459] & -0.803 [-0.906, -0.703] & 0.206 [0.176, 0.236] \\
+CADS--DPM++4 & -1.061 [-1.165, -0.954] & -1.271 [-1.386, -1.157] & 0.118 [0.096, 0.142] \\
+CADS--DPM++8 & -0.607 [-0.726, -0.484] & -0.817 [-0.910, -0.726] & 0.213 [0.187, 0.239] \\
+DDIM50 (CFG1.75) & -0.576 [-0.704, -0.450] & -0.786 [-0.860, -0.710] & 0.173 [0.150, 0.198] \\
+DDIM50 (CFG1) & -1.250 [-1.345, -1.154] & -1.460 [-1.566, -1.351] & 0.084 [0.066, 0.105] \\
+LCM4 & -0.169 [-0.331, -0.007] & -0.378 [-0.453, -0.306] & 0.324 [0.292, 0.356] \\
+LCM8 & -0.247 [-0.409, -0.081] & -0.456 [-0.543, -0.372] & 0.328 [0.294, 0.362] \\
+Hybrid LCM4 & -0.273 [-0.424, -0.121] & -0.483 [-0.558, -0.413] & 0.312 [0.287, 0.339] \\
+Hybrid LCM8 & -0.197 [-0.354, -0.037] & -0.406 [-0.491, -0.328] & 0.347 [0.315, 0.378] \\
+DMD2 & -0.193 [-0.327, -0.057] & -0.403 [-0.481, -0.326] & 0.332 [0.302, 0.362] \\
+DPM++16 & 0.193 [0.047, 0.337] & -0.017 [-0.041, 0.006] & 0.464 [0.440, 0.487] \\
+UniPC16 & 0.179 [0.032, 0.325] & -0.031 [-0.054, -0.007] & 0.451 [0.426, 0.477] \\
+Trailing DDIM16 & 0.190 [0.043, 0.338] & -0.019 [-0.044, 0.006] & 0.443 [0.420, 0.465] \\
+CADS--DPM++16 & -0.241 [-0.378, -0.105] & -0.451 [-0.525, -0.378] & 0.316 [0.288, 0.346] \\
+Tuned CADS--DPM++8 & -0.101 [-0.235, 0.032] & -0.311 [-0.356, -0.265] & 0.323 [0.298, 0.349] \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table*}[t]\centering\small
+\caption{SD1.5 ImageReward policies. All comparisons use the common declared reference. Win is the fraction of paired images with higher predicted reward; brackets are descriptive 95\% prompt-bootstrap intervals.}
+\begin{tabular}{lccc}\toprule
+Configuration & Reward & Difference from reference & Paired win \\\midrule
+Audit & 0.184 [0.038, 0.329] & -0.026 [-0.051, -0.001] & 0.444 [0.421, 0.468] \\
+Preference + alignment & 0.163 [0.016, 0.308] & -0.047 [-0.074, -0.019] & 0.428 [0.404, 0.452] \\
+Quality + Vendi & 0.162 [0.015, 0.307] & -0.048 [-0.075, -0.021] & 0.427 [0.403, 0.451] \\
+Vendi only & 0.111 [-0.035, 0.256] & -0.099 [-0.131, -0.066] & 0.382 [0.359, 0.405] \\
+PRDC harmonic & 0.113 [-0.034, 0.260] & -0.097 [-0.128, -0.065] & 0.380 [0.357, 0.402] \\
+Random shortlist & 0.188 [0.044, 0.332] & -0.022 [-0.046, 0.003] & 0.459 [0.437, 0.482] \\
+Exhaustive & 0.163 [0.015, 0.312] & -0.047 [-0.077, -0.018] & 0.437 [0.414, 0.460] \\
+Fixed DPM++8 & 0.109 [-0.039, 0.257] & -0.101 [-0.133, -0.069] & 0.383 [0.361, 0.406] \\
+Fixed UniPC8 & 0.105 [-0.040, 0.250] & -0.104 [-0.136, -0.072] & 0.376 [0.354, 0.399] \\
+Fixed DPM++16 & 0.193 [0.047, 0.337] & -0.017 [-0.041, 0.006] & 0.464 [0.440, 0.487] \\
+Fixed UniPC16 & 0.179 [0.032, 0.325] & -0.031 [-0.054, -0.007] & 0.451 [0.426, 0.477] \\
+Same-count shuffle & 0.169 [0.021, 0.317] & -0.041 [-0.069, -0.014] & 0.437 [0.411, 0.463] \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table*}[t]\centering\small
+\caption{Sana ImageReward arms. All comparisons use the common declared reference. Win is the fraction of paired images with higher predicted reward; brackets are descriptive 95\% prompt-bootstrap intervals.}
+\begin{tabular}{lccc}\toprule
+Configuration & Reward & Difference from reference & Paired win \\\midrule
+Flow-DPM++50 & 1.225 [1.103, 1.342] & 0.000 [0.000, 0.000] & 0.500 [0.500, 0.500] \\
+Flow-DPM++20 & 1.225 [1.104, 1.342] & 0.001 [-0.007, 0.009] & 0.473 [0.449, 0.497] \\
+DPM++4 & 0.607 [0.469, 0.741] & -0.618 [-0.719, -0.522] & 0.176 [0.144, 0.209] \\
+DPM++8 & 1.154 [1.032, 1.270] & -0.071 [-0.096, -0.048] & 0.406 [0.377, 0.435] \\
+Euler4 & 0.063 [-0.099, 0.225] & -1.162 [-1.314, -1.014] & 0.110 [0.081, 0.143] \\
+Euler8 & 1.121 [0.997, 1.241] & -0.103 [-0.137, -0.073] & 0.361 [0.330, 0.392] \\
+CADS--DPM++8 & 0.672 [0.542, 0.801] & -0.553 [-0.621, -0.488] & 0.194 [0.170, 0.220] \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table*}[t]\centering\small
+\caption{Sana ImageReward policies. All comparisons use the common declared reference. Win is the fraction of paired images with higher predicted reward; brackets are descriptive 95\% prompt-bootstrap intervals.}
+\begin{tabular}{lccc}\toprule
+Configuration & Reward & Difference from reference & Paired win \\\midrule
+Audit & 1.199 [1.077, 1.316] & -0.025 [-0.042, -0.010] & 0.448 [0.420, 0.476] \\
+Preference + alignment & 1.193 [1.073, 1.308] & -0.032 [-0.051, -0.013] & 0.435 [0.407, 0.463] \\
+Quality + Vendi & 1.189 [1.066, 1.307] & -0.035 [-0.054, -0.018] & 0.437 [0.409, 0.466] \\
+Vendi only & 1.136 [1.011, 1.256] & -0.089 [-0.115, -0.064] & 0.384 [0.356, 0.415] \\
+PRDC harmonic & 1.151 [1.029, 1.268] & -0.074 [-0.098, -0.051] & 0.393 [0.364, 0.421] \\
+Random shortlist & 1.201 [1.078, 1.316] & -0.024 [-0.040, -0.009] & 0.447 [0.419, 0.474] \\
+Exhaustive & 1.199 [1.077, 1.316] & -0.025 [-0.042, -0.010] & 0.448 [0.420, 0.476] \\
+Fixed DPM++8 & 1.154 [1.032, 1.270] & -0.071 [-0.096, -0.048] & 0.406 [0.377, 0.435] \\
+Fixed Euler8 & 1.121 [0.997, 1.241] & -0.103 [-0.137, -0.073] & 0.361 [0.330, 0.392] \\
+Fixed native20 & 1.225 [1.104, 1.342] & 0.001 [-0.007, 0.009] & 0.473 [0.449, 0.497] \\
+Same-count shuffle & 1.194 [1.072, 1.309] & -0.031 [-0.049, -0.013] & 0.469 [0.443, 0.496] \\
+\bottomrule\end{tabular}\end{table*}
+\begin{table*}[t]\centering\small
+\caption{Secondary cross-family ImageReward contrasts. Four jointly Bonferroni-adjusted comparisons; no policy or quality gate was changed using these outcomes.}
+\begin{tabular}{llc}\toprule
+Model & Audit minus baseline & Scalar reward difference [98.75\% interval] \\\midrule
+SD1.5 & Fixed DPM++8 & 0.075 [0.044, 0.107] \\
+SD1.5 & Fixed DPM++16 & -0.009 [-0.029, 0.009] \\
+Sana & Fixed DPM++8 & 0.046 [0.022, 0.072] \\
+Sana & Fixed native20 & -0.026 [-0.046, -0.009] \\
+\bottomrule\end{tabular}\end{table*}
+LCM4 and LCM8 improve scalar ImageReward relative to the CFG1 sensitivity
+reference by 1.081 [0.962, 1.205] and 1.004 [0.879, 1.132], respectively.
+DMD2 improves relative to its matched CFG1.75 teacher by 0.383 [0.309, 0.460].

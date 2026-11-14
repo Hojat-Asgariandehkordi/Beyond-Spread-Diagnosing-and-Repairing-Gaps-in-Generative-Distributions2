@@ -1,0 +1,35 @@
+Table~\ref{tab:repair-summary} summarizes the two controlled repairs.
+On CIFAR-10, changing the initial covariance at a fixed denoising budget
+improves agreement with real images, while a large share of generated
+images still falls in a single teacher region. On MNIST, the comparison
+starts from the same targeted parent and holds the update budget fixed.
+Returning to ordinary training addresses the diagnosed excess and improves
+mass balance across digits, with all-class equivalence unresolved.
+
+\begin{table*}[t]
+\centering
+\caption{Matched-budget outcomes for the two repairs. CIFAR-10 pairs five
+fresh generated panels from one checkpoint. The KID interval has nominal
+95\% simultaneous coverage across five contrasts under the panel-effect
+approximation. MNIST pairs three training
+seeds and uses 97.5\% intervals for each of two prespecified outcomes.
+Intervals condition on the fixed evaluation references. The coverage row
+reports an ordinary paired 95\% interval. The largest teacher region has
+reference mass 0.3535. Its row reports pooled masses.}
+\label{tab:repair-summary}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrr@{}}
+\toprule
+Study and matched budget & Outcome & Control & Repair & Paired difference [interval] \\
+\midrule
+CIFAR-10, two denoiser calls & Kernel Inception Distance $\downarrow$ &
+0.1858 & 0.1264 & $-0.05938\;[-0.06138,-0.05739]$ \\
+& Real-data coverage $\uparrow$ & 0.206 & 0.288 & $+0.0821\;[0.0672,0.0970]$ \\
+& Largest teacher-region mass & 0.9730 & 0.9129 & \textemdash \\
+\addlinespace
+MNIST, 8,000 updates & Mean digit-mass error $\downarrow$ &
+0.02177 & 0.00900 & $-0.01277\;[-0.01878,-0.00676]$ \\
+& Digit-3 mass error $\downarrow$ & 0.06837 & 0.00747 &
+$-0.06090\;[-0.11814,-0.00366]$ \\
+\bottomrule
+\end{tabular*}
+\end{table*}

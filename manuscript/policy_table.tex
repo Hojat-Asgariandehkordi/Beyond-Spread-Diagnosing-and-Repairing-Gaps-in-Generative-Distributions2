@@ -1,0 +1,41 @@
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3.4pt}
+\caption{Operating points of unchanged policies. Absolute outcomes
+show saved descriptive 95\% paired prompt-bootstrap intervals over 128
+prompts. Preference excludes shared-noise pairs; DINO coverage uses disjoint
+eight-sample halves, averaged in both directions. The contrast block uses
+99.5\% preference intervals (ten comparisons) and 99.375\% coverage intervals
+(eight comparisons). These sensitivities were specified after access to
+original outcomes. Inference calls exclude 528 diagnosis calls/prompt and
+reusable preparation; fallbacks are SD DPM++16 and Sana native20.}
+\label{tab:policy}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}llrrrrr@{}}
+\toprule
+& & & \multicolumn{2}{c}{Learned preference $\uparrow$}
+    & \multicolumn{2}{c@{}}{DINO coverage $\uparrow$} \\
+\cmidrule(lr){4-5}\cmidrule(l){6-7}
+Model & Policy or comparator & Calls/image & Estimate & Interval & Estimate & Interval \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Absolute outcomes}} \\
+SD1.5 & \textbf{Audit} & $14.06$ & $0.484$ & $[0.479,\,0.489]$ & $0.913$ & $[0.897,\,0.928]$ \\
+ & Quality + Vendi & $12.62$ & $0.479$ & $[0.474,\,0.484]$ & $0.902$ & $[0.883,\,0.920]$ \\
+ & Same-count shuffle & $14.06$ & $0.478$ & $[0.471,\,0.484]$ & $0.912$ & $[0.897,\,0.927]$ \\
+ & Fixed DPM++8 & $8.00$ & $0.451$ & $[0.444,\,0.459]$ & $0.895$ & $[0.876,\,0.913]$ \\
+ & Fallback (DPM++16) & $16.00$ & $0.491$ & $[0.486,\,0.495]$ & $0.927$ & $[0.914,\,0.940]$ \\
+\addlinespace[2pt]
+Sana & \textbf{Audit} & $14.28$ & $0.502$ & $[0.498,\,0.506]$ & $0.840$ & $[0.810,\,0.867]$ \\
+ & Quality + Vendi & $11.94$ & $0.503$ & $[0.498,\,0.508]$ & $0.789$ & $[0.750,\,0.825]$ \\
+ & Same-count shuffle & $14.28$ & $0.495$ & $[0.488,\,0.502]$ & $0.844$ & $[0.816,\,0.870]$ \\
+ & Fixed DPM++8 & $8.00$ & $0.480$ & $[0.472,\,0.487]$ & $0.775$ & $[0.743,\,0.807]$ \\
+ & Fallback (native20) & $20.00$ & $0.510$ & $[0.507,\,0.512]$ & $0.906$ & $[0.889,\,0.922]$ \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Audit minus comparator}} \\
+SD1.5 & Quality + Vendi & $+1.44$ & $+0.0053$ & $[0.0019,\,0.0097]$ & $+0.0107$ & $[-0.0015,\,0.0269]$ \\
+ & Same-count shuffle & $0.00$ & $+0.0063$ & $[-0.0025,\,0.0150]$ & $+0.0010$ & $[-0.0132,\,0.0161]$ \\
+Sana & Quality + Vendi & $+2.34$ & $-0.0014$ & $[-0.0057,\,0.0024]$ & $+0.0508$ & $[0.0148,\,0.0947]$ \\
+ & Same-count shuffle & $0.00$ & $+0.0068$ & $[-0.0038,\,0.0190]$ & $-0.0039$ & $[-0.0453,\,0.0365]$ \\
+\bottomrule
+\end{tabular*}
+\end{table*}

@@ -1,0 +1,27 @@
+\begin{table*}[t]
+\centering\footnotesize
+\begin{tabular}{llrrrrr}
+\toprule
+Family & Method & Calls & \shortstack{Generation\\ms/image} & \shortstack{Text\\ms/image} & \shortstack{Decode\\ms/image} & \shortstack{Features\\ms/image} \\
+\midrule
+SD & DDIM50 (CFG7.5) & 50 & 393.03 $\pm$ 0.48 & 1.02 & 22.45 & 13.39 \\
+SD & DDIM8 & 8 & 82.98 $\pm$ 0.28 & 1.06 & 22.48 & 13.03 \\
+SD & Trailing DDIM8 & 8 & 82.88 $\pm$ 0.30 & 1.03 & 22.45 & 12.92 \\
+SD & Stochastic DDIM8 & 8 & 82.86 $\pm$ 0.07 & 1.00 & 22.47 & 12.97 \\
+SD & CFG3 DDIM8 & 8 & 83.10 $\pm$ 0.33 & 1.01 & 22.46 & 13.42 \\
+SD & DPM++8 & 8 & 82.53 $\pm$ 0.08 & 1.00 & 22.47 & 12.78 \\
+SD & UniPC8 & 8 & 83.15 $\pm$ 0.38 & 1.00 & 22.47 & 12.93 \\
+SD & CADS--DDIM8 & 8 & 83.12 $\pm$ 0.32 & 1.01 & 22.47 & 13.12 \\
+SD & CADS--DPM++8 & 8 & 82.70 $\pm$ 0.05 & 1.00 & 22.45 & 12.96 \\
+SD & DPM++16 & 16 & 141.36 $\pm$ 0.09 & 1.01 & 22.46 & 13.17 \\
+SD & UniPC16 & 16 & 142.41 $\pm$ 0.39 & 1.00 & 22.44 & 12.63 \\
+Sana & Flow-DPM++50 & 50 & 233.05 $\pm$ 0.38 & 12.28 & 14.53 & 8.92 \\
+Sana & Flow-DPM++20 & 20 & 110.20 $\pm$ 0.25 & 12.19 & 14.53 & 8.72 \\
+Sana & DPM++8 & 8 & 60.89 $\pm$ 0.48 & 12.25 & 14.54 & 8.67 \\
+Sana & Euler8 & 8 & 60.78 $\pm$ 0.06 & 12.28 & 14.53 & 8.91 \\
+Sana & CADS--DPM++8 & 8 & 61.39 $\pm$ 0.17 & 12.25 & 14.54 & 8.73 \\
+\bottomrule
+\end{tabular}
+\caption{Controlled throughput on one H200 using the same batch of 16 development prompts, one warmup per arm and three alternating-order repetitions. Generation reports mean and standard deviation across repetitions; components report means and are already included in generation, except neural feature extraction. These are milliseconds per image at batch 16, not single-image latency. Prompt embeddings are recomputed for both families. Every displayed arm uses two CFG branch examples per denoiser call. Model loading and saved-image writing are excluded. Background GPU processes, re-encoding, and separate warm-text-cache PickScore timings are retained in the ledger.}
+\label{tab:t2i_controlled_timing}
+\end{table*}

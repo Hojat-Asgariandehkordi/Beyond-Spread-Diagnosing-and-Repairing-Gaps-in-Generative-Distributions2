@@ -1,0 +1,21 @@
+\paragraph{Agreements and quality tradeoffs.}
+ImageReward corroborates the primary policies' gains over fixed DPM++8:
+the mean normalized reward increases by 0.0748 [0.0435,0.1065] on SD1.5
+and 0.0458 [0.0221,0.0722] on Sana, using the four-comparison adjustment.
+The audit-minus-fallback difference is unresolved on SD1.5,
+$-0.0089$ [$-0.0293,0.0091$], but negative on Sana,
+$-0.0261$ [$-0.0461,-0.0093$]. Thus reduced inference cost has a measurable
+quality tradeoff relative to Sana's strong 20-call fallback, even though the
+prespecified PickScore-based acceptance margin passes. No ImageReward
+noninferiority margin was prespecified, and passing the earlier gates does
+not establish reward equivalence. Descriptive differences from the 50-call
+common references are also negative for both selected policies.
+
+The reference dependence of native DMD2 persists under this second reward
+model. Its scalar reward difference is $+0.3826$ [0.3088,0.4602] against
+the matched CFG1.75 teacher and $-0.4032$ [$-0.4808,-0.3257$] against
+CFG7.5. These descriptive 95\% intervals accompany all native-reference
+sensitivities above. Both learned reward models therefore support the
+matched-reference quality improvement while the image-feature and latent
+spread changes have opposing directions. These agreements validate the
+stated proxy measurements; neither model substitutes for a human study.

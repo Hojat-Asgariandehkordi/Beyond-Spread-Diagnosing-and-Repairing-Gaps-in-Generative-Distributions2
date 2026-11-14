@@ -1,0 +1,37 @@
+\begin{table*}[t]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{All 30 fresh depletion-only routing cases. The occupancy flag uses short-sampler data-relative digit depletion; persistence requires the same digit under all three quality-qualified resolved probes. Digit-3 counts are paired short/DPM++25 counts, out of8,000 for diagnosis and2,000 for independent outcomes. N denotes a numerical recommendation and D a data recommendation; N does not certify balanced data-relative mass. Training-state names are reporting labels, not inputs to the rule.}
+\label{tab:mnist_all_routes}
+\begin{tabular}{llrrrrrrr}\toprule
+State & Seed & Calls & Occupancy flag & Persistent flag & Route & Diagnosis 3 & Outcome 3 & $\Delta$ mass error \\\midrule
+Withheld & 10 & 2 & 1 & 1 & N+D & 6/8 & 0/3 & -0.0460 \\
+Withheld & 10 & 4 & 1 & 1 & N+D & 16/8 & 2/3 & -0.0133 \\
+Continue & 10 & 2 & 1 & 1 & N+D & 6/6 & 1/1 & -0.0475 \\
+Continue & 10 & 4 & 1 & 1 & N+D & 8/6 & 3/1 & -0.0155 \\
+Restore & 10 & 2 & 1 & 0 & N & 509/710 & 140/172 & -0.0483 \\
+Restore & 10 & 4 & 0 & 0 & N & 700/710 & 176/172 & -0.0183 \\
+Targeted & 10 & 2 & 1 & 0 & N & 902/1312 & 243/344 & -0.0375 \\
+Targeted & 10 & 4 & 0 & 0 & N & 1299/1312 & 337/344 & -0.0173 \\
+Full & 10 & 2 & 1 & 0 & N & 524/746 & 146/170 & -0.0483 \\
+Full & 10 & 4 & 0 & 0 & N & 727/746 & 191/170 & -0.0171 \\
+Withheld & 11 & 2 & 1 & 1 & N+D & 9/8 & 2/3 & -0.0463 \\
+Withheld & 11 & 4 & 1 & 1 & N+D & 23/8 & 3/3 & -0.0166 \\
+Continue & 11 & 2 & 1 & 1 & N+D & 2/11 & 2/2 & -0.0448 \\
+Continue & 11 & 4 & 1 & 1 & N+D & 19/11 & 5/2 & -0.0148 \\
+Restore & 11 & 2 & 1 & 0 & N & 468/684 & 121/180 & -0.0514 \\
+Restore & 11 & 4 & 0 & 0 & N & 682/684 & 194/180 & -0.0170 \\
+Targeted & 11 & 2 & 1 & 0 & N & 809/1278 & 199/325 & -0.0378 \\
+Targeted & 11 & 4 & 0 & 0 & N & 1312/1278 & 337/325 & -0.0175 \\
+Full & 11 & 2 & 1 & 0 & N & 531/768 & 146/192 & -0.0527 \\
+Full & 11 & 4 & 0 & 0 & N & 735/768 & 191/192 & -0.0191 \\
+Withheld & 12 & 2 & 1 & 1 & N+D & 10/6 & 4/3 & -0.0481 \\
+Withheld & 12 & 4 & 1 & 1 & N+D & 13/6 & 3/3 & -0.0144 \\
+Continue & 12 & 2 & 1 & 1 & N+D & 8/9 & 1/1 & -0.0469 \\
+Continue & 12 & 4 & 1 & 1 & N+D & 12/9 & 4/1 & -0.0134 \\
+Restore & 12 & 2 & 1 & 0 & N & 541/702 & 115/162 & -0.0510 \\
+Restore & 12 & 4 & 0 & 0 & N & 743/702 & 163/162 & -0.0180 \\
+Targeted & 12 & 2 & 1 & 0 & N & 993/1358 & 211/321 & -0.0381 \\
+Targeted & 12 & 4 & 0 & 0 & N & 1422/1358 & 321/321 & -0.0183 \\
+Full & 12 & 2 & 1 & 0 & N & 543/784 & 113/192 & -0.0519 \\
+Full & 12 & 4 & 0 & 0 & N & 834/784 & 187/192 & -0.0179 \\
+\bottomrule\end{tabular}\end{table*}

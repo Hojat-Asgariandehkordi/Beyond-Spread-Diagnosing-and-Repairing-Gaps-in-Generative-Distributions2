@@ -1,0 +1,44 @@
+\begin{table*}[t]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Untouched CIFAR-10.1v6 reference evaluation. All 32 frozen candidate arms are retained. Mean $\pm$95\% interval over five independent generated panels, conditional on the same fixed 2,000-image external reference. DINO precision and coverage are descriptive. P/C/A/V2 denote primary/CAS/initializer ablation/fresh initializer confirmation.}
+\label{tab:cifar101_all}
+\begin{tabular}{llrrr}
+\toprule
+Study & Arm & KID$\times10^3\downarrow$ & Precision$\uparrow$ & Coverage$\uparrow$ \\
+\midrule
+P & Output covariance 4 & $100.825\pm0.422$ & $0.948\pm0.002$ & $0.481\pm0.005$ \\
+P & Output covariance 8 & $48.546\pm0.898$ & $0.909\pm0.007$ & $0.715\pm0.014$ \\
+P & DPM++ 2 & $232.929\pm3.237$ & $0.614\pm0.016$ & $0.154\pm0.024$ \\
+P & DPM++ 4 & $76.362\pm1.481$ & $0.904\pm0.006$ & $0.646\pm0.014$ \\
+P & DPM++ 8 & $25.346\pm0.446$ & $0.852\pm0.008$ & $0.790\pm0.010$ \\
+P & Stochastic DDIM 4 & $163.798\pm2.586$ & $0.864\pm0.007$ & $0.446\pm0.024$ \\
+P & Stochastic DDIM 8 & $72.596\pm2.015$ & $0.884\pm0.011$ & $0.653\pm0.012$ \\
+P & Initial mean+cov. 1 & $316.809\pm1.891$ & $0.973\pm0.004$ & $0.132\pm0.007$ \\
+P & Initial mean+cov. 2 & $141.748\pm1.833$ & $0.949\pm0.006$ & $0.437\pm0.014$ \\
+P & Initial mean+cov. 4 & $92.056\pm1.769$ & $0.919\pm0.009$ & $0.619\pm0.012$ \\
+P & Initial mean+cov. 8 & $36.878\pm0.972$ & $0.881\pm0.007$ & $0.761\pm0.016$ \\
+P & Leading DDIM 1 & $595.636\pm2.339$ & $0.000\pm0.000$ & $0.000\pm0.000$ \\
+P & Leading DDIM 2 & $189.848\pm2.061$ & $0.979\pm0.005$ & $0.322\pm0.020$ \\
+P & Leading DDIM 4 & $90.125\pm1.802$ & $0.922\pm0.008$ & $0.608\pm0.011$ \\
+P & Leading DDIM 8 & $35.464\pm1.075$ & $0.884\pm0.013$ & $0.763\pm0.015$ \\
+P & Trailing DDIM 1 & $353.858\pm1.587$ & $0.390\pm0.017$ & $0.022\pm0.009$ \\
+P & Trailing DDIM 2 & $199.990\pm2.138$ & $0.791\pm0.016$ & $0.195\pm0.012$ \\
+P & Trailing DDIM 4 & $113.551\pm3.041$ & $0.876\pm0.007$ & $0.569\pm0.017$ \\
+P & Trailing DDIM 8 & $42.641\pm1.168$ & $0.869\pm0.008$ & $0.741\pm0.018$ \\
+P & UniPC 2 & $232.929\pm3.237$ & $0.614\pm0.016$ & $0.154\pm0.024$ \\
+P & UniPC 4 & $68.309\pm1.436$ & $0.899\pm0.005$ & $0.665\pm0.014$ \\
+P & UniPC 8 & $23.633\pm0.536$ & $0.845\pm0.014$ & $0.790\pm0.009$ \\
+C & CAS ceiling 4 & $297.637\pm2.479$ & $0.753\pm0.011$ & $0.107\pm0.010$ \\
+C & CAS ceiling 8 & $246.371\pm5.967$ & $0.971\pm0.005$ & $0.357\pm0.007$ \\
+A & Initial covariance 2 & $127.881\pm1.205$ & $0.959\pm0.005$ & $0.433\pm0.015$ \\
+A & Initial mean 2 & $207.572\pm1.883$ & $0.962\pm0.003$ & $0.331\pm0.012$ \\
+V2 & DPM++ 2 & $232.202\pm1.627$ & $0.614\pm0.006$ & $0.152\pm0.010$ \\
+V2 & Initial covariance 2 & $128.321\pm1.914$ & $0.958\pm0.007$ & $0.427\pm0.012$ \\
+V2 & Initial mean+cov. 2 & $141.036\pm2.629$ & $0.950\pm0.004$ & $0.434\pm0.013$ \\
+V2 & Leading DDIM 2 & $190.602\pm2.626$ & $0.976\pm0.002$ & $0.322\pm0.011$ \\
+V2 & Trailing DDIM 2 & $200.159\pm2.041$ & $0.788\pm0.019$ & $0.188\pm0.006$ \\
+V2 & UniPC 2 & $232.202\pm1.627$ & $0.614\pm0.006$ & $0.152\pm0.010$ \\
+\bottomrule
+\end{tabular}
+\end{table*}

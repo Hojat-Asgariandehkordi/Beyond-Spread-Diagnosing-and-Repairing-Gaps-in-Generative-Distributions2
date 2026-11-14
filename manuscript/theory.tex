@@ -1,0 +1,46 @@
+To explain why the starting covariance matters, consider a centered clean
+Gaussian coordinate $X_0$ with variance
+$\lambda>0$. Variance-preserving noising gives
+$X_t=\sqrt{\bar\alpha_t}X_0+\sqrt{1-\bar\alpha_t}\,\epsilon$ at
+timestep $t$, with cumulative signal coefficient $\bar\alpha_t\in[0,1]$
+and independent $\epsilon\sim\mathcal N(0,1)$. Write
+$v_t=\bar\alpha_t\lambda+1-\bar\alpha_t$ for the noisy variance and
+$u_t=(\sqrt{\bar\alpha_t\lambda},\sqrt{1-\bar\alpha_t})$.
+With the conditional mean noise predictor $\mathbb E[\epsilon\mid X_t]$
+and no clipping, a deterministic DDIM
+transition to an earlier timestep $s$ multiplies the coordinate by
+$\sqrt{v_s/v_t}\cos\angle(u_s,u_t)$. The variance factors telescope on a
+fixed grid to the clean endpoint:
+\begin{equation}
+\frac{\operatorname{Var}(X_{\rm out})}{\lambda}
+=\underbrace{\frac{\nu_{\rm start}}{v_{\rm start}}}_{\text{initialization}}
+\underbrace{\prod_{t\rightarrow s}\cos^2\angle(u_s,u_t)}_{\text{integration}},
+\label{eq:gaussian}
+\end{equation}
+where $X_{\rm out}$ is the final coordinate, $\nu_{\rm start}$ and
+$v_{\rm start}$ are actual and matched starting variances, and the product
+runs over adjacent grid transitions~\cite{benita2025spectral,pierret2025gaussian}.
+Matching the noisy marginal sets the first factor to one. Refining the same
+endpoints improves the second factor by $\cos b\cos c\geq\cos(b+c)$
+for nonnegative angles $b,c$ with $b+c\leq\pi/2$. Changing the leading-grid
+budget also changes the starting timestep. The saved Gaussian predictions
+give standard-normal to matched aggregate variance ratios 0.216, 0.800,
+and 0.968 at two, four, and eight calls.
+
+For a leading grid starting at timestep $t_0$, the tested initializer is
+\begin{equation}
+X_{\rm start}=
+\big[(1-\bar\alpha_{t_0})I+\bar\alpha_{t_0}\widehat C\big]^{1/2}Z,
+\qquad Z\sim\mathcal N(0,I),
+\label{eq:covariance_start}
+\end{equation}
+where $X_{\rm start}$ is the initial noisy image, $Z$ is standard Gaussian
+noise, and $I$ is the identity in 3,072-dimensional pixel space. The clean
+covariance estimate $\widehat C$ uses 128 teacher-fit pixel components
+and an isotropic residual. The square root is symmetric.
+The two-call grid starts at $t_0=500$. The initializer changes the start
+with no additional denoiser calls. Equation~\ref{eq:gaussian} extends
+directionwise to shared eigenvectors. Learned trajectories at four/eight
+calls correlate with the Gaussian prediction (Spearman 0.938/0.894), but
+also exhibit mixing. The exact Gaussian derivation and the learned-model
+checks are in Supp.~Secs.~D--F.

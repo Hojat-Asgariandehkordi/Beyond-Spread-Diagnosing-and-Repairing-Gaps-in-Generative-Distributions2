@@ -1,0 +1,140 @@
+\section{A fixed-reference audit for distribution repair}
+\label{sec:method}
+Figure~\ref{fig:pipeline} summarizes the audit, from a fixed reference
+to a controlled intervention test.
+Let $P$ be the reference law and $Q_a$ the output law of configuration $a$,
+which specifies the checkpoint, schedule, guidance, solver, and randomization.
+Use the law $P_T$ of a resolved teacher to measure sampler-relative change
+or the observed-data law $P_D$ to measure data-relative representation.
+Declare the representation, regions, effect sizes, fidelity margins, comparison
+family, and budget. Disjoint reference pools $R_{\rm fit}$, $R_{\rm cal}$,
+and $R_{\rm eval}$ fit the regions and support score, calibrate its threshold,
+and estimate reference outcomes, respectively. Candidate evaluation images
+enter neither fit nor calibration. We use a diagnosis pool to choose the
+intervention and a separate outcome pool to test the frozen comparison.
+The audit returns a regional decision and uncertainty interval, a
+conditional spread estimate, and fidelity and cost measurements for each
+tested configuration. An unresolved certificate leaves open both the
+presence and the absence of a practically meaningful deficit.
+
+Let $\mathcal X$ be the image space and $\phi:\mathcal X\to\mathbb R^d$
+the representation with $d$ features. Reference-fit principal component
+analysis (PCA) gives a mean $m$, an orthonormal
+basis $U\in\mathbb R^{d\times k}$ with up to $k=32$ retained directions,
+and coordinates $z(x)=U^\top(\phi(x)-m)$. For feature regions, fit
+$K=10$ $K$-means cells after scaling each coordinate by its reference-fit
+standard deviation. The fixed assignment $J(x)\in\{1,\ldots,K\}$ defines
+$A_j=\{x:J(x)=j\}$. Pixel, latent, DINOv2, and CLIP features offer
+different views of the images~\cite{oquab2024dinov2,radford2021clip}.
+For semantic regions, apply the same classifier and rejection rule to
+both laws. The partition includes rejection, and rejected images stay
+in the denominator of each region's probability. Held-out real
+accuracy validates the labeling rule on real images. Feature fidelity
+and uncurated samples help assess its interpretation on generated images.
+
+For image $X$ under $P$, let $Y=\phi(X)$. Write $p_j=P(X\in A_j)$ and
+$q_{aj}=Q_a(X\in A_j)$. Let $\mu$ be the mean of $Y$ under $P$, and let
+$\mu_j$ and $\Sigma_j$ be its mean and covariance conditional on $A_j$.
+Then
+\begin{equation}
+\operatorname{Cov}_{P}(Y)
+=\sum_j p_j\Sigma_j+\sum_j p_j(\mu_j-\mu)(\mu_j-\mu)^\top.
+\label{eq:totalcov}
+\end{equation}
+Terms with zero mass contribute zero. The first term averages within-region covariance. The second measures
+separation of regional means. Either term can change with regional mass,
+which explains why pooled spread alone cannot identify a deficit.
+
+To certify a regional change, fix all events before drawing evaluation
+images independently within each law. Reference and candidate draws may
+be paired across laws. The guarantee assumes fixed evaluation sizes.
+Pooling samples drawn under different prompts requires a sampling model
+for the prompt mixture. We report prompt-level uncertainty separately.
+Let $M$ count all declared region, condition, configuration, and
+representation comparisons. Let $[p_j^-,p_j^+]$ and $[q_{aj}^-,q_{aj}^+]$
+be exact binomial intervals with per-tail error
+$\varepsilon=\alpha_{\rm occ}/(4M)$~\cite{clopper1934confidence}, where
+$\alpha_{\rm occ}$ is the family error budget. The union bound yields
+intervals for $q_{aj}/p_j$ in all positive-mass regions with simultaneous coverage at least
+$1-\alpha_{\rm occ}$:
+\begin{equation}
+\left[q_{aj}^-/p_j^+,\ q_{aj}^+/p_j^-\right].
+\label{eq:occupancy}
+\end{equation}
+For $p_j>0$, the upper endpoint is infinite when $p_j^-=0$.
+Only eligible regions receive a ratio decision. An eligible region has
+$p_j^-\geq\pi_{\min}$, a minimum reference mass. An upper endpoint below
+the ratio threshold $\rho$ certifies \emph{depletion}; a lower endpoint
+above $\rho$ certifies \emph{retention} at that resolution. Otherwise the
+test is unresolved. Defaults are $\rho=0.5$ and $\pi_{\min}=0.01$.
+For signed mass balance, bound $q_{aj}-p_j$ by
+$[q_{aj}^--p_j^+,q_{aj}^+-p_j^-]$. The interval must lie below, above,
+or within $[-\delta,\delta]$ to certify depletion, excess, or equivalence,
+respectively. The digit study uses $\delta=0.03$ and charges the shared
+reference bounds once (Supp.~Sec.~C.8).
+
+With zero observations among $n_Q$ candidate draws,
+$q_{aj}^+=1-\varepsilon^{1/n_Q}$. For an eligible region and
+$0<\rho p_j^-<1$, certifying depletion in \cref{eq:occupancy} requires
+\begin{equation}
+n_Q>\frac{\log\varepsilon}{\log(1-\rho p_j^-)}.
+\label{eq:planning}
+\end{equation}
+Rare regions and broad comparison families therefore demand more samples.
+Even zero candidate counts cannot certify depletion in an ineligible region.
+
+To measure variation separately from mass, compare the covariance traces
+of the unwhitened coordinates within $A_j$:
+\begin{equation}
+r_{aj}=\frac{\operatorname{tr}\operatorname{Cov}_{Q_a}[z(X)\mid A_j]}
+{\operatorname{tr}\operatorname{Cov}_{P}[z(X)\mid A_j]}.
+\label{eq:spread}
+\end{equation}
+This ratio is defined when the region has positive mass under both laws
+and the reference trace is positive. The trace sums coordinate variances
+after centering each law separately.
+A finite estimated log-ratio interval requires at least 30 samples from
+each law and positive sample trace in both. Approximate influence-function intervals
+wholly below 0.9 or above 1.1 flag contraction or expansion. For text-to-image,
+we divide mean within-prompt trace for the candidate by that of the reference
+in each representation and bootstrap whole matched prompts.
+
+A support score $S(x)$ combines the whitened distance to the nearest
+reference-fit point and the scaled PCA residual norm in quadrature.
+The residual captures departures in directions discarded by projection,
+and its scale is the median fit residual, floored at $10^{-6}$.
+In the notation above the score is
+\begin{equation}
+S(x)=\sqrt{d_{\rm NN}(x)^2+
+\bigl(\|\phi(x)-m-Uz(x)\|_2/s_{\rm res}\bigr)^2},
+\label{eq:support}
+\end{equation}
+where $d_{\rm NN}(x)$ is the nearest fit-sample distance in whitened PCA
+coordinates and $s_{\rm res}$ is the residual scale (Supp.~Sec.~C.1). With $n_{\rm cal}$
+exchangeable reference calibration samples, its threshold $\tau$ is
+the $\lceil(n_{\rm cal}+1)0.95\rceil$-th score in ascending order
+\cite{vovk2013conditional}. If this rank is unavailable, the gate is unresolved.
+Independent evaluations estimate $Q_a(S>\tau)-P(S>\tau)$.
+Exact binomial endpoints bound this excess tail probability (Supp.~Sec.~A.3).
+The gate passes if its upper bound is at most 0.05 and fails if its lower
+bound exceeds 0.05. Otherwise it is unresolved. The feature-only default
+gives occupancy and support error budgets of 0.025 each. The approximate
+spread intervals are outside that exact error guarantee. Signed-balance
+and routing follow-ups allocate 0.025/0.0125/0.0125 to mass/fidelity/support.
+CIFAR selection also checks teacher precision, text-to-image checks alignment
+and learned preference, and digits use classifier consensus and feature
+precision. Expansion with a failed support gate is off-reference expansion.
+
+For the same semantic event, let $p_{D,j}=P_D(A_j)$ and $p_{T,j}=P_T(A_j)$.
+When both are positive, $q_{aj}/p_{D,j}=(q_{aj}/p_{T,j})(p_{T,j}/p_{D,j})$
+separates sampler--teacher from teacher--data mass differences.
+Teacher-relative deficits motivate changing the starting noise with the
+denoiser, grid, and call budget fixed, or changing the grid or solver under
+the same conditioning. A validated data-relative imbalance that persists
+across qualified samplers motivates comparing ordinary and targeted
+continuations from the same parent at equal update budgets. Persistence across adequate
+samplers motivates a training comparison because the tested
+longer samplers did not resolve the deficit. Freeze the
+comparison after diagnosis and evaluate its targeted outcome, fidelity,
+coverage, and cost on independent samples. Final-sample deficits can have
+several causes. These controls test the effect of one specified change.
